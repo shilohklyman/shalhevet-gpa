@@ -173,7 +173,13 @@
         /* College */
         .college-add-form { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 14px; padding: 20px 24px; align-items: end; }
         .college-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; padding: 20px 24px; }
-        .college-card { border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; transition: 0.2s; background: white; }
+        .college-card { border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; transition: 0.2s; background: white; cursor: default; }
+        .college-card.dragging { opacity: 0.4; border: 1.5px dashed var(--red); }
+        .college-card.drag-over { border: 1.5px solid var(--red); box-shadow: 0 0 0 3px rgba(204,0,0,0.12); }
+        .drag-handle { position:absolute; top:8px; right:10px; color:#ccc; font-size:14px; cursor:grab; user-select:none; line-height:1; padding:2px 4px; }
+        .drag-handle:hover { color:#aaa; }
+        body.dark .drag-handle { color:#444; }
+        body.dark .drag-handle:hover { color:#666; }
         .college-card:hover { border-color: #ccc; box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
         .college-card-top { padding: 15px 17px 12px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; border-bottom: 1px solid #f5f5f5; }
         .college-card-name { font-weight: 800; font-size: 0.95rem; }
@@ -187,6 +193,18 @@
         .college-card-footer { padding: 10px 17px; border-top: 1px solid #f5f5f5; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
         .college-status select { width: auto; font-size: 11px; padding: 5px 8px; border-radius: 7px; border-color: #eee; color: #666; }
         .college-empty { padding: 50px 24px; text-align: center; color: #ccc; font-size: 13px; }
+        .rank-badge { width: 28px; height: 28px; border-radius: 50%; background: var(--red); color: white; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .rank-unset { background: #eee; color: #bbb; }
+        body.dark .rank-unset { background: #2a2d33; color: #555; }
+        .rank-input { width: 44px; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 4px 6px; font-family: inherit; font-size: 12px; font-weight: 800; text-align: center; color: var(--red); outline: none; }
+        .rank-input:focus { border-color: var(--red); }
+        body.dark .rank-input { background: #2a2d33; border-color: #3a3d44; color: var(--red); }
+        .rank-badge { width: 28px; height: 28px; border-radius: 50%; background: var(--red); color: white; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .rank-input { width: 36px; height: 36px; border-radius: 50%; border: 2px dashed #ddd; text-align: center; font-family: inherit; font-size: 13px; font-weight: 800; color: var(--red); outline: none; background: transparent; cursor: pointer; transition: 0.18s; padding: 0; }
+        .rank-input:focus { border-color: var(--red); background: #fff5f5; }
+        .rank-input::placeholder { color: #ddd; font-weight: 400; font-size: 11px; }
+        body.dark .rank-input { border-color: #333; color: var(--red); }
+        body.dark .rank-input:focus { background: #2a2020; border-color: var(--red); }
         .rank-reach { background: #fff0f0; color: #cc0000; }
         .rank-target { background: #fff8e6; color: #b07000; }
         .rank-safety { background: #edfff4; color: #1a8a45; }
@@ -828,9 +846,20 @@ function renderCollege() {
     document.getElementById('c-researching').textContent=collegeData.filter(c=>c.status==='Researching').length;
     const grid=document.getElementById('college-grid');
     if(!collegeData.length){grid.innerHTML=`<div class="college-empty" style="grid-column:1/-1">Add your first school, yeshiva, or seminary above.</div>`;return;}
-    grid.innerHTML=collegeData.map(c=>`
-        <div class="college-card" style="position:relative;">
+    const sorted = [...collegeData].sort((a,b) => {
+        const ra = a.rankNum ? parseInt(a.rankNum) : 9999;
+        const rb = b.rankNum ? parseInt(b.rankNum) : 9999;
+        return ra - rb;
+    });
+    grid.innerHTML=sorted.map(c=>`
+        <div class="college-card" style="position:relative;" draggable="true"
+            ondragstart="dragStart(event,${c.id})"
+            ondragover="dragOver(event)"
+            ondragleave="dragLeave(event)"
+            ondrop="dragDrop(event,${c.id})"
+            ondragend="dragEnd(event)">
             <button class="btn-del" onclick="deleteCollege(${c.id})" style="position:absolute;top:8px;left:8px;font-size:14px;line-height:1;z-index:2;color:#ccc;">×</button>
+            <div class="drag-handle" title="Drag to reorder">⠿</div>
             <div class="college-card-top" style="padding-left:28px;">
                 <div class="college-card-name">${c.name}</div>
                 <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
@@ -849,8 +878,39 @@ function renderCollege() {
 }
 function updateCollegeNotes(id,val){const c=collegeData.find(x=>x.id===id);if(c){c.notes=val;saveCollege();}}
 function updateCollegeStatus(id,val){const c=collegeData.find(x=>x.id===id);if(c){c.status=val;saveCollege();renderCollege();}}
-function updateCollegeRank(id,val){const c=collegeData.find(x=>x.id===id);if(c){c.rank=val;saveCollege();renderCollege();}}
+function updateCollegeRank(id,val){const c=collegeData.find(x=>x.id===id);if(c){c.userRank=val;saveCollege();renderCollege();}}
+function updateCollegeRankNum(id,val){
+    const c=collegeData.find(x=>x.id===id);
+    if(!c) return;
+    c.rankNum = val ? parseInt(val) : null;
+    saveCollege();
+    renderCollege();
+}
 function deleteCollege(id){collegeData=collegeData.filter(x=>x.id!==id);saveCollege();renderCollege();}
+
+let dragId = null;
+function dragStart(e, id) {
+    dragId = id;
+    setTimeout(() => e.target.closest('.college-card').classList.add('dragging'), 0);
+    e.dataTransfer.effectAllowed = 'move';
+}
+function dragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    e.currentTarget.classList.add('drag-over');
+}
+function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+function dragEnd(e) { e.target.closest('.college-card').classList.remove('dragging'); }
+function dragDrop(e, targetId) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag-over');
+    if (dragId === targetId) return;
+    const fromIdx = collegeData.findIndex(x => x.id === dragId);
+    const toIdx = collegeData.findIndex(x => x.id === targetId);
+    const [moved] = collegeData.splice(fromIdx, 1);
+    collegeData.splice(toIdx, 0, moved);
+    saveCollege(); renderCollege();
+}
 
 // Dark mode
 function toggleDark() {
