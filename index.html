@@ -19,6 +19,50 @@
         .nav-btn { background: none; border: none; color: rgba(255,255,255,0.6); font-family: inherit; font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 8px; cursor: pointer; transition: 0.18s; }
         .nav-btn:hover { background: rgba(255,255,255,0.09); color: white; }
         .nav-btn.active { background: var(--red); color: white; }
+        [data-theme="dark"] {
+            --bg: #111111;
+            --white: #1e1e1e;
+            --black: #f0f0f0;
+            --border: #2e2e2e;
+        }
+        [data-theme="dark"] body { color: #f0f0f0; }
+        [data-theme="dark"] .nav { background: #0a0a0a; }
+        [data-theme="dark"] .year-header,
+        [data-theme="dark"] .card-header,
+        [data-theme="dark"] .sem-footer,
+        [data-theme="dark"] .college-card-footer { background: #252525; }
+        [data-theme="dark"] .sem-block { border-bottom-color: #2e2e2e; }
+        [data-theme="dark"] .sem-label { color: var(--red); }
+        [data-theme="dark"] input[type="text"],
+        [data-theme="dark"] input[type="date"],
+        [data-theme="dark"] select,
+        [data-theme="dark"] textarea { background: #2a2a2a; border-color: #3a3a3a; color: #f0f0f0; }
+        [data-theme="dark"] input[type="text"]:focus,
+        [data-theme="dark"] input[type="date"]:focus,
+        [data-theme="dark"] select:focus,
+        [data-theme="dark"] textarea:focus { background: #2e2e2e; border-color: var(--red); }
+        [data-theme="dark"] .wt-toggle { background: #2a2a2a; border-color: #3a3a3a; color: #aaa; }
+        [data-theme="dark"] .tool-item { background: #1e1e1e; border-color: #2e2e2e; }
+        [data-theme="dark"] .tool-item:hover { border-color: var(--red); }
+        [data-theme="dark"] .tool-icon { background: #2a1a1a; }
+        [data-theme="dark"] .tool-desc { color: #666; }
+        [data-theme="dark"] .tool-arrow { color: #444; }
+        [data-theme="dark"] .home-sub { color: #666; }
+        [data-theme="dark"] .gpa-info-card,
+        [data-theme="dark"] .college-card { background: #1e1e1e; border-color: #2e2e2e; }
+        [data-theme="dark"] .college-notes-area { color: #ccc; }
+        [data-theme="dark"] .assign-row:hover { background: #252525; }
+        [data-theme="dark"] .completed-toggle-row:hover { background: #252525; }
+        [data-theme="dark"] .btn-ghost { background: #1e1e1e; border-color: #3a3a3a; color: #666; }
+        [data-theme="dark"] .btn-ghost:hover { border-color: var(--red); color: var(--red); }
+        [data-theme="dark"] .year-gpa-pill { background: #2a2a2a; border-color: #3a3a3a; color: #888; }
+        [data-theme="dark"] .badge-type { background: #2a2a2a; color: #aaa; }
+        [data-theme="dark"] .page-footer { border-top-color: #2e2e2e; color: #444; }
+        [data-theme="dark"] .gpa-info-card ul { color: #aaa; }
+        [data-theme="dark"] .grade-scale-table td { color: #aaa; }
+        [data-theme="dark"] .course-row { border-bottom-color: #2a2a2a; }
+        [data-theme="dark"] .college-card-top { border-bottom-color: #2a2a2a; }
+
 
         .page { display: none; }
         .page.active { display: block; }
@@ -43,11 +87,11 @@
         .page-title span { color: var(--red); }
         .tool-page-desc { font-size: 13px; color: #888; margin-top: -14px; margin-bottom: 24px; line-height: 1.7; max-width: 680px; text-align: center; margin-left: auto; margin-right: auto; }
 
-        .dashboard { background: var(--black); border-radius: 20px; padding: 28px 32px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 28px; box-shadow: 0 8px 28px rgba(0,0,0,0.13); }
+        .dashboard { background: var(--white); border-radius: 20px; padding: 28px 32px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 28px; box-shadow: 0 8px 28px rgba(0,0,0,0.13); }
         .d-stat { text-align: center; flex: 1; }
-        .d-stat + .d-stat { border-left: 1px solid #333; }
+        .d-stat + .d-stat { border-left: 1px solid var(--border); }
         .d-val { font-size: 3rem; font-weight: 800; color: var(--red); line-height: 1; }
-        .d-label { font-size: 0.65rem; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-top: 8px; }
+        .d-label { font-size: 0.65rem; letter-spacing: 2.5px; text-transform: uppercase; color: #aaa; margin-top: 8px; }
 
         .card { background: var(--white); border: 1px solid var(--border); border-radius: 18px; margin-bottom: 24px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
         .card-header { background: #fafafa; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
@@ -144,6 +188,66 @@
         .college-status select { width: auto; font-size: 11px; padding: 5px 8px; border-radius: 7px; border-color: #eee; color: #666; }
         .college-empty { padding: 50px 24px; text-align: center; color: #ccc; font-size: 13px; }
 
+
+        /* Dark mode */
+        body.dark { --bg: #18191c; --white: #23252a; --black: #eaeaea; --border: #313339; }
+        body.dark { background: var(--bg); color: var(--black); }
+        body.dark .nav { background: #0f1012; }
+        body.dark .year-header,
+        body.dark .card-header,
+        body.dark .sem-footer,
+        body.dark .college-card-footer { background: #1e2024; }
+        body.dark .gpa-info-card { background: #23252a; border-color: #313339; }
+        body.dark .gpa-info-card ul, body.dark .gpa-info-card li { color: #c8c8c8; }
+        body.dark .grade-scale-table td { color: #c8c8c8; }
+        body.dark .grade-scale-table th { color: #777; }
+        body.dark input[type="text"], body.dark input[type="date"], body.dark select, body.dark textarea { background: #2a2d33; border-color: #3a3d44; color: #eaeaea; }
+        body.dark input[type="text"]:focus, body.dark input[type="date"]:focus, body.dark select:focus, body.dark textarea:focus { background: #2e3138; border-color: var(--red); }
+        body.dark input::placeholder { color: #555; }
+        body.dark .wt-toggle { background: #2a2d33; border-color: #3a3d44; color: #bbb; }
+        body.dark .wt-toggle.active { background: var(--red); color: white; border-color: var(--red); }
+        body.dark .btn-ghost { background: #23252a; border-color: #3a3d44; color: #888; }
+        body.dark .btn-ghost:hover { border-color: var(--red); color: var(--red); }
+        body.dark .btn-del { color: #555; }
+        body.dark .btn-del:hover { color: var(--red); }
+        body.dark .college-card { background: #23252a; border-color: #313339; }
+        body.dark .college-notes-area { color: #ccc; background: transparent; }
+        body.dark .assign-row:hover { background: #1e2024; }
+        body.dark .assign-row { border-bottom-color: #2a2d33; }
+        body.dark .tool-item { background: #23252a; border-color: #313339; }
+        body.dark .tool-item:hover { border-color: var(--red); background: #26282e; }
+        body.dark .tool-name { color: #eaeaea; }
+        body.dark .tool-desc { color: #888; }
+        body.dark .tool-arrow { color: #555; }
+        body.dark .home-sub { color: #888; }
+        body.dark .home-title { color: #eaeaea; }
+        body.dark .year-gpa-pill { background: #2a2d33; border-color: #3a3d44; color: #aaa; }
+        body.dark .sem-block { border-top-color: #313339; }
+        body.dark .course-row { border-bottom-color: #2a2d33; }
+        body.dark .sem-label { color: var(--red); }
+        body.dark .cr-label { color: var(--red); }
+        body.dark .completed-toggle-row:hover { background: #1e2024; }
+        body.dark .completed-toggle-row { border-top-color: #313339; }
+        body.dark .completed-label { color: #666; }
+        body.dark .page-footer { color: #555; border-top-color: #313339; }
+        body.dark .year-title { color: #eaeaea; }
+        body.dark .card-title { color: #eaeaea; }
+        body.dark .a-name { color: #eaeaea; }
+        body.dark label { color: #666; }
+        body.dark .filter-bar-label { color: #555; }
+        body.dark .assign-list-header span { color: #444; }
+        body.dark .badge-type { background: #2a2d33; color: #aaa; }
+        body.dark .nav-time { color: rgba(255,255,255,0.3); }
+        body.dark .tool-page-desc { color: #777; }
+        body.dark .empty-state { color: #555; }
+        body.dark .college-empty { color: #555; }
+        body.dark .sem-stats { color: #777; }
+        body.dark .a-notes-txt { color: #666; }
+        body.dark .a-due { color: #aaa; }
+
+        .dark-toggle { background: none; border: 1.5px solid #333; border-radius: 20px; padding: 5px 12px; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.5); transition: 0.2s; display: flex; align-items: center; gap: 7px; }
+        .dark-toggle:hover { border-color: #555; color: rgba(255,255,255,0.8); }
+        .dark-toggle .toggle-icon { font-size: 13px; }
         .page-footer { margin-top: 16px; padding: 30px 0; text-align: center; border-top: 1px solid var(--border); font-size: 11px; color: #bbb; line-height: 1.8; }
     </style>
 </head>
@@ -253,13 +357,12 @@
 <nav class="nav">
     <div class="nav-left">
         <div class="nav-logo" onclick="showPage('home')">Shalhevet <span>Dashboard</span></div>
-        <div class="nav-time" id="nav-time"></div>
-    </div>
+        <div class="nav-time" id="nav-time"></div>    </div>
     <div class="nav-links">
         <button class="nav-btn" onclick="showPage('gpa')">GPA Calculator</button>
         <button class="nav-btn" onclick="showPage('assign')">Assignments</button>
         <button class="nav-btn" onclick="showPage('college')">Post-Grad Planner</button>
-    </div>
+        <button class="dark-toggle" onclick="toggleDark()" id="dark-btn">🌙</button>
 </nav>
 
 <!-- HOME -->
@@ -685,7 +788,29 @@ function updateCollegeNotes(id,val){const c=collegeData.find(x=>x.id===id);if(c)
 function updateCollegeStatus(id,val){const c=collegeData.find(x=>x.id===id);if(c){c.status=val;saveCollege();renderCollege();}}
 function deleteCollege(id){collegeData=collegeData.filter(x=>x.id!==id);saveCollege();renderCollege();}
 
+// Dark mode
+function toggleDark() {
+    const on = document.body.classList.toggle('dark');
+    localStorage.setItem('shalhevet_dark', on ? '1' : '0');
+    document.getElementById('dark-btn').textContent = on ? '☀️' : '🌙';
+}
+(function() {
+    if (localStorage.getItem('shalhevet_dark') === '1') {
+        document.body.classList.add('dark');
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('dark-btn');
+            if (btn) btn.textContent = '☀️';
+        });
+    }
+})();
+
 calcGPA(); renderAssignments(); renderCollege();
+
+
 </script>
+
+<div style="text-align:center; padding: 24px 0 32px; font-size: 11px; color: #bbb; letter-spacing: 0.3px;">
+    Website created and managed by Adam Sandler '27
+</div>
 </body>
 </html>
