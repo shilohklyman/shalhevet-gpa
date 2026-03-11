@@ -173,6 +173,13 @@
         /* College */
         .college-add-form { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 14px; padding: 20px 24px; align-items: end; }
         .college-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; padding: 20px 24px; }
+
+
+        .rank-pill { width:32px;height:32px;border-radius:50%;border:2px solid #e0e0e0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ccc;cursor:pointer;flex-shrink:0;transition:0.15s;user-select:none; }
+        .rank-pill:hover { border-color:var(--red);color:var(--red); }
+        .rank-pill.ranked { border-color:var(--red);color:var(--red);background:#fff5f5; }
+        body.dark .rank-pill { border-color:#3a3d44;color:#555; }
+        body.dark .rank-pill.ranked { background:#2a1a1a;border-color:var(--red);color:var(--red); }
         .college-card { border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; transition: 0.2s; background: white; cursor: default; }
         .college-card.dragging { opacity: 0.4; border: 1.5px dashed var(--red); }
         .college-card.drag-over { border: 1.5px solid var(--red); box-shadow: 0 0 0 3px rgba(204,0,0,0.12); }
@@ -860,12 +867,12 @@ function renderCollege() {
             ondragend="dragEnd(event)">
             <button class="btn-del" onclick="deleteCollege(${c.id})" style="position:absolute;top:8px;left:8px;font-size:14px;line-height:1;z-index:2;color:#ccc;">×</button>
             <div class="drag-handle" title="Drag to reorder">⠿</div>
-            <div class="college-card-top" style="padding-left:28px;">
-                <div class="college-card-name">${c.name}</div>
-                <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
-                    ${c.rank ? `<span class="college-type-badge rank-${c.rank.toLowerCase()}">${c.rank}</span>` : ''}
-                    <span class="college-type-badge ct-${c.type}">${c.type}</span>
+            <div class="college-card-top">
+                <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+                    <div class="rank-pill ${c.rankNum?'ranked':''}" onclick="promptRank(${c.id})" title="Click to set rank">${c.rankNum ? '#'+c.rankNum : '—'}</div>
+                    <div class="college-card-name">${c.name}</div>
                 </div>
+                <span class="college-type-badge ct-${c.type}" style="flex-shrink:0;">${c.type}</span>
             </div>
             <textarea class="college-notes-area" placeholder="Notes — deadlines, requirements, impressions…"
                 onblur="updateCollegeNotes(${c.id},this.value)">${c.notes}</textarea>
@@ -879,6 +886,13 @@ function renderCollege() {
 function updateCollegeNotes(id,val){const c=collegeData.find(x=>x.id===id);if(c){c.notes=val;saveCollege();}}
 function updateCollegeStatus(id,val){const c=collegeData.find(x=>x.id===id);if(c){c.status=val;saveCollege();renderCollege();}}
 function updateCollegeRank(id,val){const c=collegeData.find(x=>x.id===id);if(c){c.userRank=val;saveCollege();renderCollege();}}
+function promptRank(id) {
+    const entry = prompt('Enter rank number (e.g. 1 for top choice), or leave blank to remove:');
+    if (entry === null) return;
+    const num = parseInt(entry);
+    const col = collegeData.find(x=>x.id===id);
+    if (col) { col.rankNum = (!entry.trim()||isNaN(num)) ? null : num; saveCollege(); renderCollege(); }
+}
 function updateCollegeRankNum(id,val){
     const c=collegeData.find(x=>x.id===id);
     if(!c) return;
