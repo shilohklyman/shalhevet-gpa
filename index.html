@@ -24,10 +24,10 @@
         .page.active { display: block; }
 
         .home-wrap { max-width: 700px; margin: 0 auto; padding: 70px 24px 60px; }
-        .home-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: var(--red); margin-bottom: 14px; }
-        .home-title { font-size: 2.8rem; font-weight: 800; line-height: 1.1; margin-bottom: 16px; }
+        .home-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: var(--red); margin-bottom: 14px; text-align: center; }
+        .home-title { font-size: 2.8rem; font-weight: 800; line-height: 1.1; margin-bottom: 16px; text-align: center; }
         .home-title span { color: var(--red); }
-        .home-sub { font-size: 15px; color: #666; margin-bottom: 52px; line-height: 1.7; }
+        .home-sub { font-size: 15px; color: #666; margin-bottom: 52px; line-height: 1.7; text-align: center; }
         .tool-list { display: flex; flex-direction: column; gap: 14px; }
         .tool-item { background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; padding: 22px 26px; display: flex; align-items: flex-start; justify-content: space-between; cursor: pointer; transition: 0.2s; }
         .tool-item:hover { border-color: var(--red); box-shadow: 0 6px 20px rgba(204,0,0,0.09); transform: translateY(-1px); }
@@ -39,8 +39,9 @@
         .tool-item:hover .tool-arrow { color: var(--red); transform: translateX(3px); }
 
         .inner { max-width: 1050px; margin: 0 auto; padding: 32px 24px 60px; }
-        .page-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 24px; }
+        .page-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 24px; text-align: center; }
         .page-title span { color: var(--red); }
+        .tool-page-desc { font-size: 13px; color: #888; margin-top: -14px; margin-bottom: 24px; line-height: 1.7; max-width: 680px; text-align: center; margin-left: auto; margin-right: auto; }
 
         .dashboard { background: var(--black); border-radius: 20px; padding: 28px 32px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 28px; box-shadow: 0 8px 28px rgba(0,0,0,0.13); }
         .d-stat { text-align: center; flex: 1; }
@@ -306,6 +307,7 @@
 <div id="page-gpa" class="page">
     <div class="inner">
         <div class="page-title">GPA <span>Calculator</span></div>
+        <p class="tool-page-desc">Track your weighted and unweighted GPA across all four years. SAS and Honors courses are auto-weighted; Advanced track stays unweighted per Shalhevet policy. Semester breakdowns and your cumulative GPA update in real time.</p>
         <div class="dashboard">
             <div class="d-stat">
                 <div class="d-val" id="gpa-uw">0.00</div>
@@ -319,10 +321,7 @@
                 <div class="d-val" id="gpa-credits">0</div>
                 <div class="d-label">Total Credits</div>
             </div>
-            <div class="d-stat">
-                <div class="d-val" id="gpa-courses">0</div>
-                <div class="d-label">Total Courses</div>
-            </div>
+
         </div>
 
         <div id="gpa-root"></div>
@@ -340,7 +339,6 @@
                     <li><strong>Advanced Track:</strong> Unweighted per Shalhevet policy — no bonus point applied.</li>
                     <li><strong>Auto-Weighting:</strong> Course names with "SAS" or "Honors" auto-toggle to WT. You can override manually at any time.</li>
                     <li><strong>Credits:</strong> Most courses = 0.5 credits per semester.</li>
-                    <li><strong>Formula:</strong> Sum of (grade points × credits) ÷ total credits.</li>
                 </ul>
             </div>
             <div class="gpa-info-card">
@@ -363,7 +361,7 @@
                 </table>
             </div>
         </div>
-        <div class="page-footer"><strong>Disclaimer:</strong> For planning purposes only. Official GPA is determined by your transcript.</div>
+        <div class="page-footer"><strong>Unofficial use only.</strong> This tool is for personal planning and does not reflect your official GPA. For questions about your actual GPA, contact <strong>Ed Support</strong> or <strong>College Counseling</strong>.</div>
     </div>
 </div>
 
@@ -371,6 +369,7 @@
 <div id="page-assign" class="page">
     <div class="inner">
         <div class="page-title">Assignment <span>Tracker</span></div>
+        <p class="tool-page-desc">Log homework, tests, quizzes, projects, and essays with due dates, priority levels, and notes. Assignments sort by urgency automatically — overdue items get flagged. Mark things done to move them to the completed section.</p>
         <div class="dashboard">
             <div class="d-stat"><div class="d-val" id="assign-pending">0</div><div class="d-label">Pending</div></div>
             <div class="d-stat"><div class="d-val" id="assign-overdue">0</div><div class="d-label">Overdue</div></div>
@@ -418,7 +417,8 @@
 <!-- POST-GRAD TRACKER -->
 <div id="page-college" class="page">
     <div class="inner">
-        <div class="page-title">Post-Grad <span>Tracker</span></div>
+        <div class="page-title">Post-Grad <span>Planner</span></div>
+        <p class="tool-page-desc">Keep track of every college, yeshiva, and seminary you're considering. Add institutions, write notes on deadlines and impressions, and track your status from researching all the way to committed.</p>
         <div class="dashboard">
             <div class="d-stat"><div class="d-val" id="c-total">0</div><div class="d-label">Institutions</div></div>
             <div class="d-stat"><div class="d-val" id="c-applying">0</div><div class="d-label">Applying / Applied</div></div>
@@ -480,14 +480,14 @@ function showPage(id) {
 function pr(n) { return Math.round((n+0.00001)*100)/100; }
 
 function calcGPA() {
-    let gW=0,gU=0,gCr=0,gCount=0;
+    let gW=0,gU=0,gCr=0;
     gpaData.forEach(y => {
         let yW=0,yU=0,yCr=0;
         ['s1','s2'].forEach(sk => {
             let sw=0,su=0,scr=0;
             y[sk].forEach(c => {
                 let p = gpaScale[c.grade]??0, cr = parseFloat(c.credits)||0;
-                su+=p*cr; sw+=(p+(c.wt?1:0))*cr; scr+=cr; gCount++;
+                su+=p*cr; sw+=(p+(c.wt?1:0))*cr; scr+=cr;
             });
             y[sk+'_wt']=scr>0?sw/scr:0; y[sk+'_un']=scr>0?su/scr:0; y[sk+'_cr']=scr;
             yW+=sw; yU+=su; yCr+=scr; gW+=sw; gU+=su; gCr+=scr;
@@ -497,7 +497,6 @@ function calcGPA() {
     document.getElementById('gpa-uw').textContent = pr(gCr>0?gU/gCr:0).toFixed(2);
     document.getElementById('gpa-wt').textContent = pr(gCr>0?gW/gCr:0).toFixed(2);
     document.getElementById('gpa-credits').textContent = pr(gCr);
-    document.getElementById('gpa-courses').textContent = gCount;
     localStorage.setItem(KEYS.gpa, JSON.stringify(gpaData));
     renderGPA();
 }
