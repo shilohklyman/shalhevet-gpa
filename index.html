@@ -641,10 +641,6 @@ function renderGPA() {
         <div class="year-card">
             <div class="year-header">
                 <span class="year-title">${y.name}</span>
-                <div class="year-gpa-pill">
-                    REG: <span class="rv">${pr(y.yr_un||0).toFixed(2)}</span>
-                    &nbsp;&nbsp; WT: <span class="rv">${pr(y.yr_wt||0).toFixed(2)}</span>
-                </div>
             </div>
             ${['s1','s2'].map(sk => `
                 <div class="sem-block">
@@ -689,6 +685,10 @@ function renderGPA() {
                         <button class="btn-ghost" onclick="gpaAdd(${yi},'${sk}')">+ Add Course</button>
                     </div>
                 </div>`).join('')}
+            <div style="padding:14px 28px;border-top:2px solid var(--border);display:flex;justify-content:flex-end;gap:24px;">
+                <span style="font-size:12px;font-weight:700;color:#aaa;">Year REG: <span style="color:var(--red)">${pr(y.yr_un||0).toFixed(2)}</span></span>
+                <span style="font-size:12px;font-weight:700;color:#aaa;">Year WT: <span style="color:var(--red)">${pr(y.yr_wt||0).toFixed(2)}</span></span>
+            </div>
         </div>`).join('');
 }
 
