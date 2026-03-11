@@ -171,7 +171,7 @@
         .chevron.open { transform: rotate(180deg); }
 
         /* College */
-        .college-add-form { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 14px; padding: 20px 24px; align-items: end; }
+        .college-add-form { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 14px; padding: 20px 24px; align-items: end; }
         .college-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; padding: 20px 24px; }
         .college-card { border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; transition: 0.2s; background: white; }
         .college-card:hover { border-color: #ccc; box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
@@ -187,6 +187,10 @@
         .college-card-footer { padding: 10px 17px; border-top: 1px solid #f5f5f5; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
         .college-status select { width: auto; font-size: 11px; padding: 5px 8px; border-radius: 7px; border-color: #eee; color: #666; }
         .college-empty { padding: 50px 24px; text-align: center; color: #ccc; font-size: 13px; }
+        .rank-reach { background: #fff0f0; color: #cc0000; }
+        .rank-target { background: #fff8e6; color: #b07000; }
+        .rank-safety { background: #edfff4; color: #1a8a45; }
+        .rank-none { background: #f3f3f3; color: #999; }
 
 
         /* Dark mode */
@@ -360,7 +364,7 @@
         <div class="nav-time" id="nav-time"></div>    </div>
     <div class="nav-links">
         <button class="nav-btn" onclick="showPage('gpa')">GPA Calculator</button>
-        <button class="nav-btn" onclick="showPage('assign')">Assignments</button>
+        <button class="nav-btn" onclick="showPage('assign')">Assignment Tracker</button>
         <button class="nav-btn" onclick="showPage('college')">Post-Graduation Planner</button>
         <button class="dark-toggle" onclick="toggleDark()" id="dark-btn">🌙</button>
 </nav>
@@ -521,7 +525,7 @@
 <div id="page-college" class="page">
     <div class="inner">
         <div class="page-title">Post-Graduation <span>Planner</span></div>
-        <p class="tool-page-desc">Keep track of every college, yeshiva, and seminary you're considering. Add institutions, write notes on deadlines and impressions, and track your status from researching all the way to committed.</p>
+        <p class="tool-page-desc">Keep track of every college, yeshiva, and seminary you're considering. Add institutions, write notes on deadlines and impressions, and track your status from researching all the way to committed. You can also rank your schools to help narrow down your top choices.</p>
         <div class="dashboard">
             <div class="d-stat"><div class="d-val" id="c-total">0</div><div class="d-label">Institutions</div></div>
             <div class="d-stat"><div class="d-val" id="c-applying">0</div><div class="d-label">Applying / Applied</div></div>
@@ -533,6 +537,7 @@
                 <div class="form-group"><label>Institution Name</label><input type="text" id="c-name" placeholder="e.g. Yeshiva University"></div>
                 <div class="form-group"><label>Type</label><select id="c-type"><option value="college">College</option><option value="yeshiva">Yeshiva</option><option value="seminary">Seminary</option><option value="other">Other</option></select></div>
                 <div class="form-group"><label>Status</label><select id="c-status"><option>Researching</option><option>Applying</option><option>Applied</option><option>Accepted</option><option>Waitlisted</option><option>Rejected</option><option>Committed</option></select></div>
+                <div class="form-group"><label>Ranking</label><select id="c-rank"><option value="">—</option><option value="Reach">Reach</option><option value="Target">Target</option><option value="Safety">Safety</option></select></div>
                 <div class="form-group" style="justify-content:flex-end;"><button class="btn-primary" onclick="addCollege()" style="height:42px;">Add</button></div>
             </div>
         </div>
@@ -630,7 +635,7 @@ function calcGPAOnly() {
         if (pill) pill.innerHTML = `REG: <span class="rv">${pr(y.yr_un||0).toFixed(2)}</span>&nbsp;&nbsp; WT: <span class="rv">${pr(y.yr_wt||0).toFixed(2)}</span>`;
         ['s1','s2'].forEach((sk,si) => {
             const stats = card.querySelectorAll('.sem-stats')[si];
-            if (stats) stats.innerHTML = `<span>REG: <span class="val">${pr(y[sk+'_un']||0).toFixed(2)}</span></span><span>WT: <span class="val">${pr(y[sk+'_wt']||0).toFixed(2)}</span></span>`;
+            if (stats) stats.innerHTML = `<span>UW: <span class="val">${pr(y[sk+'_un']||0).toFixed(2)}</span></span><span>WT: <span class="val">${pr(y[sk+'_wt']||0).toFixed(2)}</span></span>`;
         });
     });
 }
@@ -679,14 +684,14 @@ function renderGPA() {
                         </div>`).join('')}
                     <div class="sem-footer">
                         <div class="sem-stats">
-                            <span>REG: <span class="val">${pr(y[sk+'_un']||0).toFixed(2)}</span></span>
+                            <span>UW: <span class="val">${pr(y[sk+'_un']||0).toFixed(2)}</span></span>
                             <span>WT: <span class="val">${pr(y[sk+'_wt']||0).toFixed(2)}</span></span>
                         </div>
                         <button class="btn-ghost" onclick="gpaAdd(${yi},'${sk}')">+ Add Course</button>
                     </div>
                 </div>`).join('')}
             <div style="padding:14px 28px;border-top:2px solid var(--border);display:flex;justify-content:flex-end;gap:24px;">
-                <span style="font-size:12px;font-weight:700;color:#aaa;">Year REG: <span style="color:var(--red)">${pr(y.yr_un||0).toFixed(2)}</span></span>
+                <span style="font-size:12px;font-weight:700;color:#aaa;">Year UW: <span style="color:var(--red)">${pr(y.yr_un||0).toFixed(2)}</span></span>
                 <span style="font-size:12px;font-weight:700;color:#aaa;">Year WT: <span style="color:var(--red)">${pr(y.yr_wt||0).toFixed(2)}</span></span>
             </div>
         </div>`).join('');
@@ -813,8 +818,8 @@ function toggleCompleted() {
 // College
 function addCollege() {
     const name=document.getElementById('c-name').value.trim(); if(!name) return;
-    collegeData.push({id:Date.now(),name,type:document.getElementById('c-type').value,status:document.getElementById('c-status').value,notes:''});
-    saveCollege();renderCollege();document.getElementById('c-name').value='';
+    collegeData.push({id:Date.now(),name,type:document.getElementById('c-type').value,status:document.getElementById('c-status').value,rank:document.getElementById('c-rank').value,notes:''});
+    saveCollege();renderCollege();document.getElementById('c-name').value='';document.getElementById('c-rank').value='';
 }
 function saveCollege() { localStorage.setItem(KEYS.college,JSON.stringify(collegeData)); }
 function renderCollege() {
@@ -824,10 +829,14 @@ function renderCollege() {
     const grid=document.getElementById('college-grid');
     if(!collegeData.length){grid.innerHTML=`<div class="college-empty" style="grid-column:1/-1">Add your first school, yeshiva, or seminary above.</div>`;return;}
     grid.innerHTML=collegeData.map(c=>`
-        <div class="college-card">
-            <div class="college-card-top">
+        <div class="college-card" style="position:relative;">
+            <button class="btn-del" onclick="deleteCollege(${c.id})" style="position:absolute;top:8px;left:8px;font-size:14px;line-height:1;z-index:2;color:#ccc;">×</button>
+            <div class="college-card-top" style="padding-left:28px;">
                 <div class="college-card-name">${c.name}</div>
-                <span class="college-type-badge ct-${c.type}">${c.type}</span>
+                <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
+                    ${c.rank ? `<span class="college-type-badge rank-${c.rank.toLowerCase()}">${c.rank}</span>` : ''}
+                    <span class="college-type-badge ct-${c.type}">${c.type}</span>
+                </div>
             </div>
             <textarea class="college-notes-area" placeholder="Notes — deadlines, requirements, impressions…"
                 onblur="updateCollegeNotes(${c.id},this.value)">${c.notes}</textarea>
@@ -835,12 +844,12 @@ function renderCollege() {
                 <div class="college-status"><select onchange="updateCollegeStatus(${c.id},this.value)">
                     ${['Researching','Applying','Applied','Accepted','Waitlisted','Rejected','Committed'].map(s=>`<option ${c.status===s?'selected':''}>${s}</option>`).join('')}
                 </select></div>
-                <button class="btn-del" onclick="deleteCollege(${c.id})">×</button>
             </div>
         </div>`).join('');
 }
 function updateCollegeNotes(id,val){const c=collegeData.find(x=>x.id===id);if(c){c.notes=val;saveCollege();}}
 function updateCollegeStatus(id,val){const c=collegeData.find(x=>x.id===id);if(c){c.status=val;saveCollege();renderCollege();}}
+function updateCollegeRank(id,val){const c=collegeData.find(x=>x.id===id);if(c){c.rank=val;saveCollege();renderCollege();}}
 function deleteCollege(id){collegeData=collegeData.filter(x=>x.id!==id);saveCollege();renderCollege();}
 
 // Dark mode
