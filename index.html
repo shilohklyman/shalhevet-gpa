@@ -604,6 +604,37 @@ function calcGPA() {
     renderGPA();
 }
 
+function calcGPAOnly() {
+    let gW=0,gU=0,gCr=0;
+    gpaData.forEach(y => {
+        let yW=0,yU=0,yCr=0;
+        ['s1','s2'].forEach(sk => {
+            let sw=0,su=0,scr=0;
+            y[sk].forEach(c => {
+                let p = gpaScale[c.grade]??0, cr = parseFloat(c.credits)||0;
+                su+=p*cr; sw+=(p+(c.wt?1:0))*cr; scr+=cr;
+            });
+            y[sk+'_wt']=scr>0?sw/scr:0; y[sk+'_un']=scr>0?su/scr:0; y[sk+'_cr']=scr;
+            yW+=sw; yU+=su; yCr+=scr; gW+=sw; gU+=su; gCr+=scr;
+        });
+        y.yr_wt=yCr>0?yW/yCr:0; y.yr_un=yCr>0?yU/yCr:0;
+    });
+    document.getElementById('gpa-uw').textContent = pr(gCr>0?gU/gCr:0).toFixed(2);
+    document.getElementById('gpa-wt').textContent = pr(gCr>0?gW/gCr:0).toFixed(2);
+    document.getElementById('gpa-credits').textContent = pr(gCr);
+    // Update year pills without re-rendering
+    gpaData.forEach((y,yi) => {
+        const card = document.querySelectorAll('.year-card')[yi];
+        if (!card) return;
+        const pill = card.querySelector('.year-gpa-pill');
+        if (pill) pill.innerHTML = `REG: <span class="rv">${pr(y.yr_un||0).toFixed(2)}</span>&nbsp;&nbsp; WT: <span class="rv">${pr(y.yr_wt||0).toFixed(2)}</span>`;
+        ['s1','s2'].forEach((sk,si) => {
+            const stats = card.querySelectorAll('.sem-stats')[si];
+            if (stats) stats.innerHTML = `<span>REG: <span class="val">${pr(y[sk+'_un']||0).toFixed(2)}</span></span><span>WT: <span class="val">${pr(y[sk+'_wt']||0).toFixed(2)}</span></span>`;
+        });
+    });
+}
+
 function renderGPA() {
     const root = document.getElementById('gpa-root');
     root.innerHTML = gpaData.map((y,yi) => `
@@ -671,7 +702,7 @@ function gpaNameInput(el) {
     const toggle = el.closest('.course-row').querySelector('.wt-toggle');
     if (toggle) { toggle.className='wt-toggle'+(isWt?' active':''); toggle.textContent=isWt?'WT':'REG'; }
     clearTimeout(el._t);
-    el._t = setTimeout(()=>{ localStorage.setItem(KEYS.gpa,JSON.stringify(gpaData)); calcGPA(); }, 600);
+    el._t = setTimeout(()=>{ localStorage.setItem(KEYS.gpa,JSON.stringify(gpaData)); calcGPAOnly(); }, 600);
 }
 
 function gpaUpdate(yi,sk,ci,field,val) { gpaData[yi][sk][ci][field]=val; calcGPA(); }
@@ -746,7 +777,12 @@ function assignRow(a) {
                 style="font-weight:700;font-size:14px;border:none;background:transparent;outline:none;width:100%;padding:0;color:inherit;">
             ${a.notes?`<div class="a-notes-txt">${a.notes}</div>`:''}
         </div>
-        <div style="font-size:12px;color:#999">${a.course||'—'}</div>
+        <div>
+            <input type="text" list="catalog" value="${(a.course||'').replace(/"/g,'&quot;')}"
+                onblur="editAssign(${a.id},'course',this.value)"
+                onkeydown="if(event.key==='Enter')this.blur()"
+                style="font-size:12px;color:#999;border:none;background:transparent;outline:none;width:100%;padding:0;font-family:inherit;cursor:text;">
+        </div>
         <div><span class="badge badge-type">${a.type}</span></div>
         <div>
             <select class="inline-edit-select" onchange="editAssign(${a.id},'priority',this.value)"
