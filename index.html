@@ -90,7 +90,7 @@
 
         .dashboard { background: var(--white); border-radius: 20px; padding: 28px 32px; display: flex; justify-content: space-around; align-items: center; margin-bottom: 28px; box-shadow: 0 8px 28px rgba(0,0,0,0.13); }
         .d-stat { text-align: center; flex: 1; }
-        .d-stat + .d-stat { border-left: 1px solid var(--border); }
+        .d-stat + .d-stat { border-left: 2px solid var(--border); margin: -8px 0; }
         .d-val { font-size: 3rem; font-weight: 800; color: var(--red); line-height: 1; }
         .d-label { font-size: 0.65rem; letter-spacing: 2.5px; text-transform: uppercase; color: #aaa; margin-top: 8px; }
 
@@ -604,7 +604,7 @@
 
 <script>
 const KEYS = { gpa: 'shalhevet_gpa_v4', assign: 'shalhevet_assign_v1', college: 'shalhevet_college_v1' };
-const gpaScale = {'--':null,"A+":4.0,"A":4.0,"A-":3.67,"B+":3.33,"B":3.0,"B-":2.67,"C+":2.33,"C":2.0,"C-":1.67,"D+":1.33,"D":1.0,"D-":0.0,"F":0.0 };
+const gpaScale = {'—':null,"A+":4.0,"A":4.0,"A-":3.67,"B+":3.33,"B":3.0,"B-":2.67,"C+":2.33,"C":2.0,"C-":1.67,"D+":1.33,"D":1.0,"D-":0.0,"F":0.0 };
 
 let gpaData = JSON.parse(localStorage.getItem(KEYS.gpa)) || [
     {name:"9th Grade",courses:[]},{name:"10th Grade",courses:[]},
@@ -657,7 +657,7 @@ function calcGPA() {
         ['s1grade','s2grade'].forEach(sk => {
             let sw=0,su=0,scr=0;
             (y.courses||[]).forEach(c => {
-                if (gpaScale[c[sk]]===null) return; let p = gpaScale[c[sk]]??0, cr = parseFloat(c.credits)||0;
+                const raw=c[sk]==='--'?'—':c[sk]; if(!raw||gpaScale[raw]===null||gpaScale[raw]==null){return;} let p=gpaScale[raw]; let cr = parseFloat(c.credits)||0;
                 su+=p*cr; sw+=(p+(c.wt?1:0))*cr; scr+=cr;
             });
             const key = sk==='s1grade'?'s1':'s2';
@@ -692,7 +692,7 @@ function courseRow(yi, ci, c, sk) {
                     data-yi="${yi}" data-sk="${sk}" data-ci="${ci}"
                     value="${c.name.replace(/"/g,'&quot;')}"
                     placeholder="Type or select a course…"
-                    ${s2locked ? `readonly style="pointer-events:none;opacity:0.55;"` : `oninput="gpaNameInput(this)"`}>
+                    ${s2locked ? `readonly style="pointer-events:none;opacity:0.55;"` : `oninput="gpaNameInput(this)" onblur="gpaNameBlur(this)"`}>
             </div>
             <div>
                 <div class="cr-label">Grade</div>
@@ -745,12 +745,25 @@ function renderGPA() {
 
 function gpaNameInput(el) {
     const yi=parseInt(el.dataset.yi), ci=parseInt(el.dataset.ci);
+    // Save name + detect weight — NO re-render while typing
     gpaData[yi].courses[ci].name = el.value;
     const n = el.value.toUpperCase();
     const isWt = (n.includes('SAS')||n.includes('HONORS'))&&!n.includes('ADVANCED');
     gpaData[yi].courses[ci].wt = isWt;
-    clearTimeout(el._t);
-    el._t = setTimeout(()=>{ calcGPA(); }, 400);
+    // Update the wt-toggle in this row visually without full re-render
+    const toggle = el.closest('.course-block').querySelector('.wt-toggle');
+    if (toggle) {
+        toggle.className = 'wt-toggle' + (isWt ? ' active' : '');
+        toggle.textContent = isWt ? 'SAS / HON' : 'REGULAR';
+    }
+    // Only recalc+re-render after user stops typing for 900ms
+    clearTimeout(window._gpaT);
+    window._gpaT = setTimeout(() => { calcGPA(); }, 900);
+}
+function gpaNameBlur(el) {
+    // Force immediate save+recalc on blur
+    clearTimeout(window._gpaT);
+    calcGPA();
 }
 
 function gpaUpdate(yi,ci,field,val) { gpaData[yi].courses[ci][field]=val; calcGPA(); }
@@ -760,11 +773,11 @@ function gpaSetSync(yi,ci,val) {
     if (val) {
         // Copy S1 fields to S2 on enable
         const c = gpaData[yi].courses[ci];
-        c.s2grade = c.s1grade;
+        c.s2grade = c.s1grade === '--' ? '—' : c.s1grade;
     }
     calcGPA();
 }
-function gpaAdd(yi) { gpaData[yi].courses.push({name:'',s1grade:'--',s2grade:'--',credits:0.5,wt:false,sync:false}); calcGPA(); }
+function gpaAdd(yi) { gpaData[yi].courses.push({name:'',s1grade:'—',s2grade:'—',credits:0.5,wt:false,sync:false}); calcGPA(); }
 function gpaDel(yi,ci) { gpaData[yi].courses.splice(ci,1); calcGPA(); }
 function resetGPA() {
     if (!confirm('Clear all GPA data?')) return;
