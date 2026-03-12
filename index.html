@@ -147,9 +147,9 @@
         .filter-bar { display: flex; gap: 10px; padding: 12px 24px; border-bottom: 1px solid #f0f0f0; align-items: center; flex-wrap: wrap; }
         .filter-bar select { width: auto; font-size: 12px; padding: 6px 10px; }
         .filter-bar-label { font-size: 11px; font-weight: 700; color: #bbb; text-transform: uppercase; letter-spacing: 1px; }
-        .assign-list-header { display: grid; grid-template-columns: 26px 1.8fr 1.2fr 90px 80px 100px 60px; gap: 10px; padding: 10px 24px; border-bottom: 1px solid #f0f0f0; }
+        .assign-list-header { display: grid; grid-template-columns: 26px 1.8fr 1.2fr 90px 80px 110px 60px; gap: 10px; padding: 10px 24px; border-bottom: 1px solid #f0f0f0; }
         .assign-list-header span { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #ccc; font-weight: 700; }
-        .assign-row { display: grid; grid-template-columns: 26px 1.8fr 1.2fr 90px 80px 100px 60px; gap: 10px; padding: 13px 24px; border-bottom: 1px solid #f8f8f8; align-items: center; transition: background 0.15s; }
+        .assign-row { display: grid; grid-template-columns: 26px 1.8fr 1.2fr 90px 80px 110px 60px; gap: 10px; padding: 13px 24px; border-bottom: 1px solid #f8f8f8; align-items: center; transition: background 0.15s; }
         .assign-row:last-child { border-bottom: none; }
         .assign-row:hover { background: #fafafa; }
         .assign-row.done { opacity: 0.4; }
@@ -824,8 +824,8 @@ function assignRow(a) {
         <div style="font-size:12px;color:#999">${a.course||'—'}</div>
         <div><span class="badge badge-type">${a.type}</span></div>
         <div><span class="badge ${pc}">${a.priority}</span></div>
-        <div class="a-due">${od?'<span class="overdue-flag">!</span>':''}${fmtDate(a.due)}</div>
-        <div style="display:flex;gap:4px;align-items:center;">
+        <div class="a-due" style="min-width:60px;">${od?'<span class="overdue-flag">!</span>':''}${fmtDate(a.due)}</div>
+        <div style="display:flex;gap:4px;align-items:center;min-width:50px;">
             <button class="pencil-btn" onclick="openEditModal(${a.id})" title="Edit">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
