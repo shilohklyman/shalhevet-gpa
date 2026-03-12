@@ -114,20 +114,26 @@
 
         /* GPA */
         .year-card { background: var(--white); border: 1px solid var(--border); border-radius: 18px; margin-bottom: 24px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
-        .year-header { background: var(--white); padding: 20px 28px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); }
+        .year-header { background: var(--white); padding: 20px 28px; border-bottom: 1px solid var(--border); }
         .year-title { font-weight: 800; font-size: 1.1rem; }
-        .year-gpa-pill { background: #f5f5f5; border: 1px solid #e8e8e8; border-radius: 10px; padding: 6px 16px; font-size: 12px; font-weight: 700; color: #777; display: flex; gap: 16px; }
-        .year-gpa-pill .rv { color: var(--red); }
-        .sem-block { border-top: 1px solid var(--border); }
-        .sem-label { padding: 16px 28px 4px; font-size: 10px; font-weight: 800; color: var(--red); text-transform: uppercase; letter-spacing: 2px; }
-        .course-row { display: grid; grid-template-columns: 1fr 150px 130px 130px 36px; gap: 16px; padding: 10px 28px 14px; border-bottom: 1px solid #f5f5f5; }
-        .course-row:last-of-type { border-bottom: none; }
-        .cr-label { font-size: 10px; font-weight: 800; color: var(--red); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; }
-        .wt-toggle { cursor: pointer; padding: 10px 14px; border-radius: 9px; font-size: 11px; font-weight: 800; text-align: center; background: #f0f0f0; border: 1.5px solid #e0e0e0; user-select: none; transition: 0.15s; white-space: nowrap; width: 100%; color: #777; }
+        .sem-section { padding: 0 28px; border-bottom: 2px solid var(--border); }
+        .sem-section:last-of-type { border-bottom: none; }
+        .sem-heading { font-size: 10px; font-weight: 800; color: var(--red); text-transform: uppercase; letter-spacing: 2.5px; padding: 14px 0 12px; }
+        .course-block { border-top: 1px solid #f0f0f0; padding: 14px 0; }
+        .cr-label { font-size: 10px; font-weight: 800; color: var(--red); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 8px; }
+        .course-fields { display: grid; grid-template-columns: 1fr 150px 130px 140px 32px; gap: 14px; align-items: end; }
+        .wt-toggle { cursor: pointer; padding: 10px 14px; border-radius: 8px; font-size: 11px; font-weight: 800; text-align: center; background: #f2f2f2; border: 1.5px solid #e0e0e0; user-select: none; transition: 0.15s; white-space: nowrap; color: #888; }
         .wt-toggle.active { background: var(--red); color: white; border-color: var(--red); }
-        .sem-footer { background: #fafafa; padding: 12px 28px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f0f0f0; }
+        .sem-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 0 16px; }
         .sem-stats { display: flex; gap: 20px; font-size: 12px; font-weight: 700; color: #999; }
         .sem-stats .val { color: var(--red); }
+        .year-summary { padding: 13px 28px; border-top: 2px solid var(--border); display: flex; justify-content: flex-end; gap: 28px; background: #fafafa; }
+        .year-summary span { font-size: 12px; font-weight: 700; color: #999; }
+        .year-summary .rv { color: var(--red); }
+        .sync-toggle { display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
+        .sync-toggle input { display:none; }
+        .sync-pill { font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; padding:3px 9px; border-radius:20px; border:1.5px solid #e0e0e0; color:#bbb; background:transparent; transition:0.15s; user-select:none; }
+        .sync-toggle input:checked ~ .sync-pill { background:var(--red); color:white; border-color:var(--red); }
 
         .gpa-info-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 8px; margin-bottom: 24px; }
         .gpa-info-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; }
@@ -224,6 +230,8 @@
         body.dark { background: var(--bg); color: var(--black); }
         body.dark .nav { background: #0f1012; }
         body.dark .year-header,
+        body.dark .gpa-col-header,
+        body.dark .year-summary,
         body.dark .card-header,
         body.dark .sem-footer,
         body.dark .college-card-footer { background: #1e2024; }
@@ -252,8 +260,11 @@
         body.dark .home-sub { color: #888; }
         body.dark .home-title { color: #eaeaea; }
         body.dark .year-gpa-pill { background: #2a2d33; border-color: #3a3d44; color: #aaa; }
-        body.dark .sem-block { border-top-color: #313339; }
-        body.dark .course-row { border-bottom-color: #2a2d33; }
+        body.dark .gpa-col-header { background: #1e2024; border-bottom-color: #313339; }
+        body.dark .course-row:hover { background: #1e2024; }
+        body.dark .course-block { border-bottom-color: #2a2d33; }
+        body.dark .year-summary { border-top-color: #313339; background: #1a1a1a; }
+        body.dark .course-block { border-bottom-color: #2a2d33; }
         body.dark .sem-label { color: var(--red); }
         body.dark .cr-label { color: var(--red); }
         body.dark .completed-toggle-row:hover { background: #1e2024; }
@@ -592,13 +603,23 @@
 </div>
 
 <script>
-const KEYS = { gpa: 'shalhevet_gpa_v3', assign: 'shalhevet_assign_v1', college: 'shalhevet_college_v1' };
-const gpaScale = { "A+":4.0,"A":4.0,"A-":3.67,"B+":3.33,"B":3.0,"B-":2.67,"C+":2.33,"C":2.0,"C-":1.67,"D+":1.33,"D":1.0,"D-":0.0,"F":0.0 };
+const KEYS = { gpa: 'shalhevet_gpa_v4', assign: 'shalhevet_assign_v1', college: 'shalhevet_college_v1' };
+const gpaScale = {'--':null,"A+":4.0,"A":4.0,"A-":3.67,"B+":3.33,"B":3.0,"B-":2.67,"C+":2.33,"C":2.0,"C-":1.67,"D+":1.33,"D":1.0,"D-":0.0,"F":0.0 };
 
 let gpaData = JSON.parse(localStorage.getItem(KEYS.gpa)) || [
-    {name:"9th Grade",s1:[],s2:[]},{name:"10th Grade",s1:[],s2:[]},
-    {name:"11th Grade",s1:[],s2:[]},{name:"12th Grade",s1:[],s2:[]}
+    {name:"9th Grade",courses:[]},{name:"10th Grade",courses:[]},
+    {name:"11th Grade",courses:[]},{name:"12th Grade",courses:[]}
 ];
+// Migrate old s1/s2 format
+gpaData.forEach(y => {
+    if (!y.courses) {
+        y.courses = (y.s1||[]).map((c,i) => ({
+            name:c.name, credits:c.credits, wt:c.wt,
+            s1grade: c.grade, s2grade: (y.s2&&y.s2[i]) ? y.s2[i].grade : 'A'
+        }));
+        delete y.s1; delete y.s2;
+    }
+});
 let assignData = JSON.parse(localStorage.getItem(KEYS.assign)) || [];
 let collegeData = JSON.parse(localStorage.getItem(KEYS.college)) || [];
 let completedOpen = false;
@@ -633,13 +654,14 @@ function calcGPA() {
     let gW=0,gU=0,gCr=0;
     gpaData.forEach(y => {
         let yW=0,yU=0,yCr=0;
-        ['s1','s2'].forEach(sk => {
+        ['s1grade','s2grade'].forEach(sk => {
             let sw=0,su=0,scr=0;
-            y[sk].forEach(c => {
-                let p = gpaScale[c.grade]??0, cr = parseFloat(c.credits)||0;
+            (y.courses||[]).forEach(c => {
+                if (gpaScale[c[sk]]===null) return; let p = gpaScale[c[sk]]??0, cr = parseFloat(c.credits)||0;
                 su+=p*cr; sw+=(p+(c.wt?1:0))*cr; scr+=cr;
             });
-            y[sk+'_wt']=scr>0?sw/scr:0; y[sk+'_un']=scr>0?su/scr:0; y[sk+'_cr']=scr;
+            const key = sk==='s1grade'?'s1':'s2';
+            y[key+'_wt']=scr>0?sw/scr:0; y[key+'_un']=scr>0?su/scr:0; y[key+'_cr']=scr;
             yW+=sw; yU+=su; yCr+=scr; gW+=sw; gU+=su; gCr+=scr;
         });
         y.yr_wt=yCr>0?yW/yCr:0; y.yr_un=yCr>0?yU/yCr:0;
@@ -651,114 +673,102 @@ function calcGPA() {
     renderGPA();
 }
 
-function calcGPAOnly() {
-    let gW=0,gU=0,gCr=0;
-    gpaData.forEach(y => {
-        let yW=0,yU=0,yCr=0;
-        ['s1','s2'].forEach(sk => {
-            let sw=0,su=0,scr=0;
-            y[sk].forEach(c => {
-                let p = gpaScale[c.grade]??0, cr = parseFloat(c.credits)||0;
-                su+=p*cr; sw+=(p+(c.wt?1:0))*cr; scr+=cr;
-            });
-            y[sk+'_wt']=scr>0?sw/scr:0; y[sk+'_un']=scr>0?su/scr:0; y[sk+'_cr']=scr;
-            yW+=sw; yU+=su; yCr+=scr; gW+=sw; gU+=su; gCr+=scr;
-        });
-        y.yr_wt=yCr>0?yW/yCr:0; y.yr_un=yCr>0?yU/yCr:0;
-    });
-    document.getElementById('gpa-uw').textContent = pr(gCr>0?gU/gCr:0).toFixed(2);
-    document.getElementById('gpa-wt').textContent = pr(gCr>0?gW/gCr:0).toFixed(2);
-    document.getElementById('gpa-credits').textContent = pr(gCr);
-    // Update year pills without re-rendering
-    gpaData.forEach((y,yi) => {
-        const card = document.querySelectorAll('.year-card')[yi];
-        if (!card) return;
-        const pill = card.querySelector('.year-gpa-pill');
-        if (pill) pill.innerHTML = `REG: <span class="rv">${pr(y.yr_un||0).toFixed(2)}</span>&nbsp;&nbsp; WT: <span class="rv">${pr(y.yr_wt||0).toFixed(2)}</span>`;
-        ['s1','s2'].forEach((sk,si) => {
-            const stats = card.querySelectorAll('.sem-stats')[si];
-            if (stats) stats.innerHTML = `<span>UW: <span class="val">${pr(y[sk+'_un']||0).toFixed(2)}</span></span><span>WT: <span class="val">${pr(y[sk+'_wt']||0).toFixed(2)}</span></span>`;
-        });
-    });
+function courseRow(yi, ci, c, sk) {
+    const isS1 = sk === 's1';
+    const synced = !!c.sync;
+    const gradeKey = sk + 'grade';
+    const s2locked = !isS1 && synced;
+    return `<div class="course-block">
+        <div class="course-fields">
+            <div>
+                <div class="cr-label" style="display:flex;align-items:center;justify-content:space-between;">
+                    <span>Course Name</span>
+                    ${isS1 ? `<label class="sync-toggle" title="Sync this course to Semester 2">
+                        <input type="checkbox" ${synced?'checked':''} onchange="gpaSetSync(${yi},${ci},this.checked)">
+                        <span class="sync-pill">Sync S2</span>
+                    </label>` : ''}
+                </div>
+                <input type="text" list="catalog"
+                    data-yi="${yi}" data-sk="${sk}" data-ci="${ci}"
+                    value="${c.name.replace(/"/g,'&quot;')}"
+                    placeholder="Type or select a course…"
+                    ${s2locked ? `readonly style="pointer-events:none;opacity:0.55;"` : `oninput="gpaNameInput(this)"`}>
+            </div>
+            <div>
+                <div class="cr-label">Grade</div>
+                <select onchange="gpaUpdate(${yi},${ci},'${gradeKey}',this.value)">
+                    ${Object.keys(gpaScale).map(g=>`<option ${c[gradeKey]===g?'selected':''}>${g}</option>`).join('')}
+                </select>
+            </div>
+            <div>
+                <div class="cr-label">Credits</div>
+                <select onchange="gpaUpdate(${yi},${ci},'credits',this.value)" ${s2locked?'disabled style="opacity:0.55"':''}>
+                    <option value="0.5" ${c.credits==0.5?'selected':''}>0.5</option>
+                    <option value="0.25" ${c.credits==0.25?'selected':''}>0.25</option>
+                    <option value="1.0" ${c.credits==1.0?'selected':''}>1.0</option>
+                </select>
+            </div>
+            <div>
+                <div class="cr-label">Weight</div>
+                <div class="wt-toggle ${c.wt?'active':''}" onclick="${s2locked?'':(`gpaToggle(${yi},${ci})`)}" style="${s2locked?'pointer-events:none;opacity:0.55;':''}">${c.wt?'SAS / HON':'REGULAR'}</div>
+            </div>
+            <div style="display:flex;align-items:flex-end;padding-bottom:2px;">
+                ${isS1?`<button class="btn-del" onclick="gpaDel(${yi},${ci})">×</button>`:''}
+            </div>
+        </div>
+    </div>`;
 }
 
 function renderGPA() {
     const root = document.getElementById('gpa-root');
     root.innerHTML = gpaData.map((y,yi) => `
         <div class="year-card">
-            <div class="year-header">
-                <span class="year-title">${y.name}</span>
-            </div>
+            <div class="year-header"><span class="year-title">${y.name}</span></div>
             ${['s1','s2'].map(sk => `
-                <div class="sem-block">
-                    <div class="sem-label">${sk==='s1'?'Semester 1':'Semester 2'}</div>
-                    ${y[sk].map((c,ci) => `
-                        <div class="course-row">
-                            <div>
-                                <div class="cr-label">Course Name</div>
-                                <input type="text" list="catalog"
-                                    data-yi="${yi}" data-sk="${sk}" data-ci="${ci}"
-                                    value="${c.name.replace(/"/g,'&quot;')}"
-                                    placeholder="Type or select a course…"
-                                    oninput="gpaNameInput(this)">
-                            </div>
-                            <div>
-                                <div class="cr-label">Grade</div>
-                                <select onchange="gpaUpdate(${yi},'${sk}',${ci},'grade',this.value)">
-                                    ${Object.keys(gpaScale).map(g=>`<option ${c.grade===g?'selected':''}>${g}</option>`).join('')}
-                                </select>
-                            </div>
-                            <div>
-                                <div class="cr-label">Credits</div>
-                                <select onchange="gpaUpdate(${yi},'${sk}',${ci},'credits',this.value)">
-                                    <option value="0.5" ${c.credits==0.5?'selected':''}>0.5</option>
-                                    <option value="0.25" ${c.credits==0.25?'selected':''}>0.25</option>
-                                    <option value="1.0" ${c.credits==1.0?'selected':''}>1.0</option>
-                                </select>
-                            </div>
-                            <div>
-                                <div class="cr-label">Weight</div>
-                                <div class="wt-toggle ${c.wt?'active':''}" onclick="gpaToggle(${yi},'${sk}',${ci})">${c.wt?'SAS / HON':'REGULAR'}</div>
-                            </div>
-                            <div style="display:flex;align-items:flex-end;padding-bottom:2px;">
-                                <button class="btn-del" onclick="gpaDel(${yi},'${sk}',${ci})">×</button>
-                            </div>
-                        </div>`).join('')}
-                    <div class="sem-footer">
+                <div class="sem-section">
+                    <div class="sem-heading">Semester ${sk==='s1'?'1':'2'}</div>
+                    ${(y.courses||[]).map((c,ci) => courseRow(yi, ci, c, sk)).join('')}
+                    <div class="sem-bar">
                         <div class="sem-stats">
                             <span>UW: <span class="val">${pr(y[sk+'_un']||0).toFixed(2)}</span></span>
                             <span>WT: <span class="val">${pr(y[sk+'_wt']||0).toFixed(2)}</span></span>
                         </div>
-                        <button class="btn-ghost" onclick="gpaAdd(${yi},'${sk}')">+ Add Course</button>
+                        ${sk==='s1'?`<button class="btn-ghost" onclick="gpaAdd(${yi})">+ Add Course</button>`:''}
                     </div>
                 </div>`).join('')}
-            <div style="padding:14px 28px;border-top:2px solid var(--border);display:flex;justify-content:flex-end;gap:24px;">
-                <span style="font-size:12px;font-weight:700;color:#aaa;">Year UW: <span style="color:var(--red)">${pr(y.yr_un||0).toFixed(2)}</span></span>
-                <span style="font-size:12px;font-weight:700;color:#aaa;">Year WT: <span style="color:var(--red)">${pr(y.yr_wt||0).toFixed(2)}</span></span>
+            <div class="year-summary">
+                <span>Year UW: <span class="rv">${pr(y.yr_un||0).toFixed(2)}</span></span>
+                <span>Year WT: <span class="rv">${pr(y.yr_wt||0).toFixed(2)}</span></span>
             </div>
         </div>`).join('');
 }
 
-// KEY FIX: update name in-place without re-rendering, debounce recalc
 function gpaNameInput(el) {
-    const yi=parseInt(el.dataset.yi), sk=el.dataset.sk, ci=parseInt(el.dataset.ci);
-    gpaData[yi][sk][ci].name = el.value;
+    const yi=parseInt(el.dataset.yi), ci=parseInt(el.dataset.ci);
+    gpaData[yi].courses[ci].name = el.value;
     const n = el.value.toUpperCase();
     const isWt = (n.includes('SAS')||n.includes('HONORS'))&&!n.includes('ADVANCED');
-    gpaData[yi][sk][ci].wt = isWt;
-    const toggle = el.closest('.course-row').querySelector('.wt-toggle');
-    if (toggle) { toggle.className='wt-toggle'+(isWt?' active':''); toggle.textContent=isWt?'WT':'REG'; }
+    gpaData[yi].courses[ci].wt = isWt;
     clearTimeout(el._t);
-    el._t = setTimeout(()=>{ localStorage.setItem(KEYS.gpa,JSON.stringify(gpaData)); calcGPAOnly(); }, 600);
+    el._t = setTimeout(()=>{ calcGPA(); }, 400);
 }
 
-function gpaUpdate(yi,sk,ci,field,val) { gpaData[yi][sk][ci][field]=val; calcGPA(); }
-function gpaToggle(yi,sk,ci) { gpaData[yi][sk][ci].wt=!gpaData[yi][sk][ci].wt; calcGPA(); }
-function gpaAdd(yi,sk) { gpaData[yi][sk].push({name:'',grade:'A',credits:0.5,wt:false}); calcGPA(); }
-function gpaDel(yi,sk,ci) { gpaData[yi][sk].splice(ci,1); calcGPA(); }
+function gpaUpdate(yi,ci,field,val) { gpaData[yi].courses[ci][field]=val; calcGPA(); }
+function gpaToggle(yi,ci) { gpaData[yi].courses[ci].wt=!gpaData[yi].courses[ci].wt; calcGPA(); }
+function gpaSetSync(yi,ci,val) {
+    gpaData[yi].courses[ci].sync = val;
+    if (val) {
+        // Copy S1 fields to S2 on enable
+        const c = gpaData[yi].courses[ci];
+        c.s2grade = c.s1grade;
+    }
+    calcGPA();
+}
+function gpaAdd(yi) { gpaData[yi].courses.push({name:'',s1grade:'--',s2grade:'--',credits:0.5,wt:false,sync:false}); calcGPA(); }
+function gpaDel(yi,ci) { gpaData[yi].courses.splice(ci,1); calcGPA(); }
 function resetGPA() {
     if (!confirm('Clear all GPA data?')) return;
-    gpaData = [{name:"9th Grade",s1:[],s2:[]},{name:"10th Grade",s1:[],s2:[]},{name:"11th Grade",s1:[],s2:[]},{name:"12th Grade",s1:[],s2:[]}];
+    gpaData = [{name:'9th Grade',courses:[]},{name:'10th Grade',courses:[]},{name:'11th Grade',courses:[]},{name:'12th Grade',courses:[]}];
     calcGPA();
 }
 
