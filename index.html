@@ -69,9 +69,15 @@
         /* Auth */
         .auth-btn { background: #1e1e1e; border: 1.5px solid #333; border-radius: 10px; padding: 7px 14px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: 0.18s; color: rgba(255,255,255,0.75); flex-shrink: 0; white-space: nowrap; }
         .auth-btn:hover { border-color: var(--red); color: white; }
-        .auth-user { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 600; }
-        .auth-signout { background: none; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); font-family: inherit; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: 0.18s; letter-spacing: 0.3px; }
-        .auth-signout:hover { border-color: rgba(255,255,255,0.5); color: white; }
+        .auth-user { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 600; white-space: nowrap; }
+        #auth-nav-area { display: flex; align-items: center; }
+        .auth-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--red); color: white; font-family: inherit; font-size: 11px; font-weight: 800; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; letter-spacing: 0.5px; position: relative; transition: 0.2s; flex-shrink: 0; }
+        .auth-avatar:hover { background: #a80000; }
+        .auth-avatar .avatar-tooltip { position: absolute; top: calc(100% + 10px); right: 0; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; padding: 8px 14px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7); white-space: nowrap; opacity: 0; pointer-events: none; transition: 0.15s; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+        .auth-avatar:hover .avatar-tooltip { opacity: 1; pointer-events: all; }
+        .auth-avatar .avatar-tooltip .tooltip-name { color: white; font-size: 13px; font-weight: 800; margin-bottom: 8px; }
+        .auth-avatar .avatar-tooltip .tooltip-signout { display: block; width: 100%; background: none; border: 1px solid #333; border-radius: 6px; padding: 5px 10px; color: rgba(255,255,255,0.5); font-family: inherit; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.15s; margin-top: 4px; }
+        .auth-avatar .avatar-tooltip .tooltip-signout:hover { border-color: var(--red); color: var(--red); }
         .auth-gate { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; }
         .auth-gate.visible { display: flex; }
         .auth-gate-box { background: #1a1a1a; border-radius: 20px; padding: 48px 44px; text-align: center; max-width: 380px; width: 90%; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
@@ -1266,15 +1272,19 @@ onAuthStateChanged(auth, async (user) => {
     if (user) {
         currentUser = user;
         gate.classList.remove('visible');
+        const name = user.displayName || 'User';
+        const parts = name.trim().split(' ');
+        const initials = parts.length >= 2
+            ? parts[0][0] + parts[parts.length - 1][0]
+            : parts[0].slice(0, 2);
         navArea.innerHTML = `
-            <div class="auth-user">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="8" r="4" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
-                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                <span>Hi, ${user.displayName ? user.displayName.split(' ')[0] : 'there'}!</span>
-            </div>
-            <button class="auth-signout" onclick="window.signOutUser && window.signOutUser()">Sign out</button>
+            <button class="auth-avatar">
+                ${initials.toUpperCase()}
+                <div class="avatar-tooltip">
+                    <div class="tooltip-name">${name.split(' ')[0]}</div>
+                    <button class="tooltip-signout" onclick="window.signOutUser && window.signOutUser()">Sign out</button>
+                </div>
+            </button>
         `;
         await loadFromFirestore(user.uid);
     } else {
