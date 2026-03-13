@@ -70,7 +70,6 @@
         .auth-btn { background: #1e1e1e; border: 1.5px solid #333; border-radius: 10px; padding: 7px 14px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: 0.18s; color: rgba(255,255,255,0.75); flex-shrink: 0; white-space: nowrap; }
         .auth-btn:hover { border-color: var(--red); color: white; }
         .auth-user { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 600; }
-        .auth-user img { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); }
         .auth-signout { background: none; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); font-family: inherit; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: 0.18s; letter-spacing: 0.3px; }
         .auth-signout:hover { border-color: rgba(255,255,255,0.5); color: white; }
         .auth-gate { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; align-items: center; justify-content: center; }
@@ -1269,8 +1268,11 @@ onAuthStateChanged(auth, async (user) => {
         gate.classList.remove('visible');
         navArea.innerHTML = `
             <div class="auth-user">
-                <img src="${user.photoURL || ''}" alt="">
-                <span>${user.displayName ? user.displayName.split(' ')[0] : 'You'}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="8" r="4" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="rgba(255,255,255,0.6)" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>Hi, ${user.displayName ? user.displayName.split(' ')[0] : 'there'}!</span>
             </div>
             <button class="auth-signout" onclick="window.signOutUser && window.signOutUser()">Sign out</button>
         `;
