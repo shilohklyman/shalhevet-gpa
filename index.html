@@ -74,7 +74,7 @@
         .auth-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--red); color: white; font-family: inherit; font-size: 10px; font-weight: 800; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; letter-spacing: 0.5px; position: relative; transition: 0.2s; flex-shrink: 0; }
         .auth-avatar:hover { background: #a80000; }
         .auth-dropdown { position: absolute; top: calc(100% + 12px); right: 0; background: #1a1a1a; border: 1px solid #2e2e2e; border-radius: 12px; padding: 12px; min-width: 140px; opacity: 0; pointer-events: none; transition: opacity 0.15s; box-shadow: 0 8px 24px rgba(0,0,0,0.5); z-index: 1000; }
-        .auth-avatar:hover .auth-dropdown { opacity: 1; pointer-events: all; }
+        .auth-dropdown.open { opacity: 1; pointer-events: all; }
         .auth-dropdown-name { color: white; font-size: 13px; font-weight: 800; margin-bottom: 10px; white-space: nowrap; }
         .auth-dropdown-signout { display: block; width: 100%; background: none; border: 1px solid #333; border-radius: 6px; padding: 6px 10px; color: rgba(255,255,255,0.5); font-family: inherit; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.15s; text-align: center; }
         .auth-dropdown-signout:hover { border-color: var(--red); color: var(--red); }
@@ -1278,21 +1278,31 @@ onAuthStateChanged(auth, async (user) => {
             ? parts[0][0] + parts[parts.length - 1][0]
             : parts[0].slice(0, 2);
         navArea.innerHTML = `
-            <button class="auth-avatar">
-                ${initials.toUpperCase()}
-                <div class="auth-dropdown">
-                    <div class="auth-dropdown-name">${name.split(' ')[0]}</div>
+            <div style="position:relative;display:flex;align-items:center;">
+                <button class="auth-avatar" id="avatar-btn" onclick="document.getElementById('avatar-dropdown').classList.toggle('open')">
+                    ${initials.toUpperCase()}
+                </button>
+                <div class="auth-dropdown" id="avatar-dropdown">
+                    <div class="auth-dropdown-name">Hi, ${name.split(' ')[0]}!</div>
                     <button class="auth-dropdown-signout" onclick="window.signOutUser && window.signOutUser()">Sign out</button>
                 </div>
-            </button>
+            </div>
         `;
+        document.addEventListener('click', function handler(e) {
+            const btn = document.getElementById('avatar-btn');
+            const dd = document.getElementById('avatar-dropdown');
+            if (dd && btn && !btn.contains(e.target)) dd.classList.remove('open');
+        });
         await loadFromFirestore(user.uid);
     } else {
         currentUser = null;
         gate.classList.add('visible');
         navArea.innerHTML = `
-            <button class="auth-btn" onclick="signInWithGoogle()">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+            <button class="auth-btn" onclick="window.signInWithGoogle()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
                 Sign in
             </button>
         `;
