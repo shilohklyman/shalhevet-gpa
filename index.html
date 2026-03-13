@@ -132,10 +132,16 @@
         .year-summary { padding: 13px 28px; border-top: 2px solid var(--border); display: flex; justify-content: flex-end; gap: 28px; background: #fafafa; }
         .year-summary span { font-size: 12px; font-weight: 700; color: #999; }
         .year-summary .rv { color: var(--red); }
-        .sync-toggle { display:inline-flex; align-items:center; gap:6px; cursor:pointer; }
+        .sync-toggle { display:inline-flex; align-items:center; gap:7px; cursor:pointer; }
         .sync-toggle input { display:none; }
-        .sync-pill { font-size:10px; font-weight:800; letter-spacing:1px; text-transform:uppercase; padding:3px 9px; border-radius:20px; border:1.5px solid #e0e0e0; color:#bbb; background:transparent; transition:0.15s; user-select:none; }
-        .sync-toggle input:checked ~ .sync-pill { background:var(--red); color:white; border-color:var(--red); }
+        .sync-slider { position:relative; width:32px; height:18px; background:#ddd; border-radius:9px; transition:background 0.2s; flex-shrink:0; }
+        .sync-slider::after { content:''; position:absolute; top:3px; left:3px; width:12px; height:12px; background:#fff; border-radius:50%; transition:transform 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+        .sync-toggle input:checked ~ .sync-slider { background:var(--red); }
+        .sync-toggle input:checked ~ .sync-slider::after { transform:translateX(14px); }
+        .sync-label { font-size:10px; font-weight:700; letter-spacing:0.5px; color:#bbb; text-transform:uppercase; transition:color 0.2s; }
+        .sync-toggle input:checked ~ .sync-slider + .sync-label { color:var(--red); }
+        body.dark .sync-slider { background:#3a3d44; }
+        body.dark .sync-toggle input:checked ~ .sync-slider { background:var(--red); }
 
         .gpa-info-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 8px; margin-bottom: 24px; }
         .gpa-info-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; }
@@ -440,7 +446,7 @@
         <div class="tool-list">
             <div class="tool-item" onclick="showPage('gpa')">
                 <div class="tool-left">
-                    <div class="tool-icon">📊</div>
+                    <div class="tool-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#cc0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
                     <div>
                         <div class="tool-name">GPA Calculator</div>
                         <div class="tool-desc">Track your weighted and unweighted GPA across all four years. Built for Shalhevet's grading scale — SAS and Honors courses are auto-weighted, Advanced track stays unweighted per school policy. See semester-by-semester breakdowns and your running cumulative GPA updated in real time.</div>
@@ -450,7 +456,7 @@
             </div>
             <div class="tool-item" onclick="showPage('assign')">
                 <div class="tool-left">
-                    <div class="tool-icon">📋</div>
+                    <div class="tool-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#cc0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
                     <div>
                         <div class="tool-name">Activity Tracker</div>
                         <div class="tool-desc">Track anything on your plate — homework, tests, club meetings, events, rehearsals, or deadlines. Sort by urgency, filter by category, and mark things done when finished.</div>
@@ -460,7 +466,7 @@
             </div>
             <div class="tool-item" onclick="showPage('college')">
                 <div class="tool-left">
-                    <div class="tool-icon">🎓</div>
+                    <div class="tool-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#cc0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg></div>
                     <div>
                         <div class="tool-name">Post-Graduation Planner</div>
                         <div class="tool-desc">Keep track of every college, yeshiva, and seminary you're considering. Add institutions, write notes on deadlines, requirements, and impressions, and track your application status from researching all the way to committed.</div>
@@ -509,6 +515,7 @@
                     <li><strong>Advanced Track:</strong> Unweighted per Shalhevet policy — no bonus point applied.</li>
                     <li><strong>Auto-Weighting:</strong> Course names with "SAS" or "Honors" auto-toggle to WT. You can override manually at any time.</li>
                     <li><strong>Credits:</strong> Most courses = 0.5 credits per semester.</li>
+                    <li><strong>S2 Toggle:</strong> The slide toggle on each S1 course mirrors that course into Semester 2 — copying the name, credits, and weight. Only the S2 grade stays editable. Use this for full-year courses that you take both semesters.</li>
                 </ul>
             </div>
             <div class="gpa-info-card">
@@ -565,7 +572,7 @@
                     <select id="filter-subject" onchange="renderAssignments()" style="width:140px;"><option value="">All Categories</option></select>
                     <select id="filter-priority" onchange="renderAssignments()" style="width:120px;"><option value="">All Priorities</option><option>High</option><option>Medium</option><option>Low</option></select>
                     <select id="filter-type" onchange="renderAssignments()" style="width:130px;"><option value="">All Types</option><option>Homework</option><option>Test</option><option>Quiz</option><option>Project</option><option>Essay</option><option>Lab</option><option>Reading</option><option>Event</option><option>Meeting</option><option>Practice</option><option>Other</option></select>
-                    <label class="group-toggle-wrap" title="Group activities by category">
+                    <label class="group-toggle-wrap" title="Group activities by type">
                         <input type="checkbox" id="group-by-class" onchange="renderAssignments()">
                         <span class="group-pill">Group by Activity</span>
                     </label>
@@ -697,9 +704,9 @@ function courseRow(yi, ci, c, sk) {
             <div>
                 <div class="cr-label" style="display:flex;align-items:center;justify-content:space-between;">
                     <span>Course Name</span>
-                    ${isS1 ? `<label class="sync-toggle" title="Sync this course to Semester 2">
+                    ${isS1 ? `<label class="sync-toggle" title="Mirror this course in Semester 2">
                         <input type="checkbox" ${synced?'checked':''} onchange="gpaSetSync(${yi},${ci},this.checked)">
-                        <span class="sync-pill">Sync S2</span>
+                        <span class="sync-slider"></span><span class="sync-label">S2</span>
                     </label>` : ''}
                 </div>
                 <input type="text" list="catalog"
@@ -852,7 +859,7 @@ function renderAssignments() {
         activeHTML='<div class="empty-state">Nothing here — add a task, event, or activity above.</div>';
     } else if(groupBy) {
         const groups={};
-        active.forEach(a=>{ const k=a.course||'No Course'; if(!groups[k]) groups[k]=[]; groups[k].push(a); });
+        active.forEach(a=>{ const k=a.type||'Other'; if(!groups[k]) groups[k]=[]; groups[k].push(a); });
         Object.keys(groups).sort().forEach(cls=>{
             activeHTML+=`<div class="class-group-header">${cls}</div>`;
             activeHTML+=groups[cls].map(assignRow).join('');
