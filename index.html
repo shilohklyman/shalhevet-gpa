@@ -538,7 +538,7 @@
 <!-- ASSIGNMENT TRACKER -->
 <div id="page-assign" class="page">
     <div class="inner">
-        <div class="page-title">Assignment <span>Tracker</span></div>
+        <div class="page-title">Activity <span>Tracker</span></div>
         <p class="tool-page-desc">Track anything on your plate — homework, tests, club meetings, events, rehearsals, deadlines, or errands. Items sort by urgency automatically — overdue ones get flagged. Mark things done to move them to the completed section.</p>
         <div class="dashboard">
             <div class="d-stat"><div class="d-val" id="assign-pending">0</div><div class="d-label">Pending</div></div>
@@ -565,9 +565,9 @@
                     <select id="filter-subject" onchange="renderAssignments()" style="width:140px;"><option value="">All Categories</option></select>
                     <select id="filter-priority" onchange="renderAssignments()" style="width:120px;"><option value="">All Priorities</option><option>High</option><option>Medium</option><option>Low</option></select>
                     <select id="filter-type" onchange="renderAssignments()" style="width:130px;"><option value="">All Types</option><option>Homework</option><option>Test</option><option>Quiz</option><option>Project</option><option>Essay</option><option>Lab</option><option>Reading</option><option>Event</option><option>Meeting</option><option>Practice</option><option>Other</option></select>
-                    <label class="group-toggle-wrap" title="Group assignments by course">
+                    <label class="group-toggle-wrap" title="Group activities by category">
                         <input type="checkbox" id="group-by-class" onchange="renderAssignments()">
-                        <span class="group-pill">Group by Activity</span>
+                        <span class="group-pill">Group by Class</span>
                     </label>
                 </div>
             </div>
@@ -1036,13 +1036,13 @@ calcGPA(); renderAssignments(); renderCollege();
     MANAGED AND DEVELOPED BY ADAM SANDLER '27 AND SHILOH KLYMAN '27
 </div>
 
-<!-- Edit Assignment Modal -->
+<!-- Edit Activity Modal -->
 <div class="modal-overlay" id="edit-modal" onclick="if(event.target===this)closeEditModal()">
     <div class="modal">
-        <div class="modal-title">Edit Assignment</div>
+        <div class="modal-title">Edit Activity</div>
         <div class="modal-full">
             <label>Task / Event Name</label>
-            <input type="text" id="edit-name" placeholder="Assignment name">
+            <input type="text" id="edit-name" placeholder="Activity name">
         </div>
         <div class="modal-grid">
             <div class="form-group">
