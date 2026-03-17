@@ -361,7 +361,7 @@
             .nav-left { gap: 8px; min-width: 0; flex-shrink: 1; overflow: hidden; }
             .nav-logo { font-size: 0.85rem; white-space: nowrap; }
             .nav-time { display: none; }
-            .nav-links { display: none; }
+            .nav-btn { display: none; }
             .sync-status { display: none; }
             .dark-toggle { padding: 5px 8px; font-size: 11px; }
             .auth-btn { padding: 6px 10px; font-size: 11px; white-space: nowrap; }
@@ -378,70 +378,55 @@
             .inner { padding: 20px 14px 40px; }
 
             /* GPA dashboard stats — stack vertically */
-            .dashboard {
-                flex-direction: column;
-                gap: 0;
-                padding: 20px 16px;
-            }
+            .dashboard { flex-direction: column; gap: 0; padding: 20px 16px; }
             .d-stat { padding: 12px 0; width: 100%; }
-            .d-stat + .d-stat {
-                border-left: none;
-                border-top: 1px solid var(--border);
-                margin: 0;
-            }
+            .d-stat + .d-stat { border-left: none; border-top: 1px solid var(--border); margin: 0; }
             .d-val { font-size: 2.2rem; }
 
+            /* GPA export buttons */
+            .btn-export-pdf { width: 100%; text-align: center; box-sizing: border-box; margin-bottom: 8px; }
+
+            /* GPA info cards — stack vertically */
+            .gpa-info-wrap { grid-template-columns: 1fr; }
+
             /* GPA course rows — stack fields */
-            .course-fields {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
+            .course-fields { display: flex; flex-direction: column; gap: 10px; }
             .course-fields > div { width: 100%; }
             .course-fields input[type="text"],
             .course-fields select { width: 100%; }
             .wt-toggle { width: 100%; text-align: center; }
-            .btn-del { align-self: flex-end; }
 
             /* Semester bar */
             .sem-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
 
             /* Assignment add form */
-            .add-form-grid {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                padding: 14px;
-            }
+            .add-form-grid { display: flex; flex-direction: column; gap: 10px; padding: 14px; }
             .add-form-grid > div { width: 100%; }
-            .add-form-grid input,
-            .add-form-grid select { width: 100%; }
+            .add-form-grid input, .add-form-grid select { width: 100%; }
             .add-form-notes { padding: 0 14px 14px; }
             .add-form-actions { padding: 0 14px 14px; }
 
-            /* Assignment list — hide header, simplify rows */
+            /* Assignment list — clean 2-col card layout */
             .assign-list-header { display: none; }
             .assign-row {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 6px;
-                padding: 12px 8px;
-                align-items: flex-start;
+                display: grid;
+                grid-template-columns: 26px 1fr;
+                gap: 2px 8px;
+                padding: 12px 14px;
+                align-items: start;
             }
-            .assign-row > * { flex-shrink: 0; }
-            .a-check { margin-top: 2px; }
-            .a-name { font-size: 14px; flex: 1; min-width: 0; }
-            .a-course { width: 100%; font-size: 11px; color: #999; order: 10; }
-            .a-due { font-size: 11px; }
-            .a-notes-txt { width: 100%; order: 11; font-size: 11px; }
+            .assign-row .a-check { grid-column: 1; grid-row: 1; margin-top: 3px; }
+            .assign-row .a-name { grid-column: 2; grid-row: 1; font-size: 14px; word-break: break-word; }
+            .assign-row .a-course { grid-column: 2; font-size: 11px; color: #999; }
+            .assign-row .a-notes-txt { grid-column: 2; font-size: 11px; }
+            .assign-row .badge-type,
+            .assign-row .badge-priority { font-size: 10px; padding: 2px 7px; }
+            .assign-row .a-due { grid-column: 2; font-size: 11px; }
+            .assign-row .pencil-btn,
+            .assign-row .btn-del { grid-column: 2; }
 
             /* College form */
-            .college-add-form {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                padding: 14px;
-            }
+            .college-add-form { display: flex; flex-direction: column; gap: 10px; padding: 14px; }
             .college-add-form .form-group { width: 100%; }
 
             /* Modal */
@@ -810,6 +795,85 @@ function showPage(id) {
 
 // GPA
 function pr(n) { return Math.round((n+0.00001)*100)/100; }
+
+function exportTranscriptPDF() {
+    // Build printable HTML transcript and open in new window for Save as PDF
+    const user = window._currentUserName || 'Student';
+    const date = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+    const data = window.gpaData || gpaData;
+
+    let coursesHTML = '';
+    data.forEach(year => {
+        if (!year.courses || year.courses.length === 0) return;
+        coursesHTML += `<div class="year-block">
+            <div class="year-title">${year.name}</div>
+            <table>
+                <thead><tr><th>Course</th><th>S1</th><th>S2</th><th>Credits</th><th>Weight</th></tr></thead>
+                <tbody>
+                ${year.courses.map(c => `<tr>
+                    <td>${c.name || '—'}</td>
+                    <td>${c.s1grade || '—'}</td>
+                    <td>${c.sync ? '<em>synced</em>' : (c.s2grade || '—')}</td>
+                    <td>${c.credits}</td>
+                    <td>${c.wt ? 'SAS/HON' : 'REG'}</td>
+                </tr>`).join('')}
+                </tbody>
+            </table>
+            <div class="year-summary">
+                Year UW: <strong>${(year.yr_un||0).toFixed(2)}</strong> &nbsp;|&nbsp;
+                Year WT: <strong>${(year.yr_wt||0).toFixed(2)}</strong>
+            </div>
+        </div>`;
+    });
+
+    const uwGPA = document.getElementById('gpa-uw')?.textContent || '—';
+    const wtGPA = document.getElementById('gpa-wt')?.textContent || '—';
+    const credits = document.getElementById('gpa-credits')?.textContent || '—';
+
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+    <title>Shalhevet Unofficial Transcript</title>
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #1a1a1a; padding: 40px; max-width: 780px; margin: 0 auto; font-size: 13px; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #cc0000; padding-bottom: 16px; margin-bottom: 24px; }
+        .school { font-size: 22px; font-weight: 800; }
+        .school span { color: #cc0000; }
+        .meta { text-align: right; color: #666; font-size: 12px; }
+        .disclaimer { background: #fff5f5; border: 1px solid #ffcccc; border-radius: 8px; padding: 10px 14px; font-size: 11px; color: #aa0000; margin-bottom: 24px; }
+        .summary { display: flex; gap: 32px; background: #f8f8f8; border-radius: 10px; padding: 16px 24px; margin-bottom: 28px; }
+        .summary-item { text-align: center; }
+        .summary-val { font-size: 28px; font-weight: 800; color: #cc0000; line-height: 1; }
+        .summary-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #999; margin-top: 4px; }
+        .year-block { margin-bottom: 24px; }
+        .year-title { font-size: 15px; font-weight: 800; color: #cc0000; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid #eee; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+        th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #aaa; padding: 6px 8px; border-bottom: 1px solid #eee; }
+        td { padding: 6px 8px; border-bottom: 1px solid #f5f5f5; }
+        tr:last-child td { border-bottom: none; }
+        .year-summary { font-size: 12px; color: #555; text-align: right; margin-top: 4px; }
+        .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #eee; font-size: 11px; color: #bbb; text-align: center; }
+        @media print { body { padding: 20px; } }
+    </style>
+    </head><body>
+    <div class="header">
+        <div><div class="school">Shalhevet <span>Dashboard</span></div><div style="font-size:13px;color:#666;margin-top:4px;">Unofficial Academic Transcript</div></div>
+        <div class="meta"><div>${user}</div><div>Generated: ${date}</div></div>
+    </div>
+    <div class="disclaimer">⚠️ This is an <strong>unofficial</strong> transcript generated by the Shalhevet Dashboard. It is not an official school document.</div>
+    <div class="summary">
+        <div class="summary-item"><div class="summary-val">${uwGPA}</div><div class="summary-label">Cumulative UW</div></div>
+        <div class="summary-item"><div class="summary-val">${wtGPA}</div><div class="summary-label">Cumulative WT</div></div>
+        <div class="summary-item"><div class="summary-val">${credits}</div><div class="summary-label">Total Credits</div></div>
+    </div>
+    ${coursesHTML || '<p style="color:#aaa">No course data entered yet.</p>'}
+    <div class="footer">Shalhevet High School · Managed and developed by Adam Sandler \'27 and Shiloh Klyman \'27</div>
+    </body></html>`;
+
+    const win = window.open('', '_blank');
+    win.document.write(html);
+    win.document.close();
+    win.focus();
+    setTimeout(() => win.print(), 400);
+}
 
 function calcGPA() {
     gpaData = window.gpaData; // sync from cloud if updated
@@ -1367,6 +1431,7 @@ onAuthStateChanged(auth, async (user) => {
     const navArea = document.getElementById('auth-nav-area');
     if (user) {
         currentUser = user;
+        window._currentUserName = user.displayName || 'Student';
         gate.classList.remove('visible');
         const name = user.displayName || 'User';
         const parts = name.trim().split(' ');
