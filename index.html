@@ -406,24 +406,26 @@
             .add-form-notes { padding: 0 14px 14px; }
             .add-form-actions { padding: 0 14px 14px; }
 
-            /* Assignment list — clean 2-col card layout */
+            /* Assignment list — clean stacked card layout */
             .assign-list-header { display: none; }
             .assign-row {
-                display: grid;
-                grid-template-columns: 26px 1fr;
-                gap: 2px 8px;
-                padding: 12px 14px;
-                align-items: start;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                padding: 14px;
+                position: relative;
             }
-            .assign-row .a-check { grid-column: 1; grid-row: 1; margin-top: 3px; }
-            .assign-row .a-name { grid-column: 2; grid-row: 1; font-size: 14px; word-break: break-word; }
-            .assign-row .a-course { grid-column: 2; font-size: 11px; color: #999; }
-            .assign-row .a-notes-txt { grid-column: 2; font-size: 11px; }
-            .assign-row .badge-type,
-            .assign-row .badge-priority { font-size: 10px; padding: 2px 7px; }
-            .assign-row .a-due { grid-column: 2; font-size: 11px; }
-            .assign-row .pencil-btn,
-            .assign-row .btn-del { grid-column: 2; }
+            .assign-row > input[type="checkbox"] {
+                position: absolute;
+                top: 16px;
+                left: 14px;
+            }
+            .assign-row > div:nth-child(2) { padding-left: 28px; } /* name/notes */
+            .assign-row > div:nth-child(3) { padding-left: 28px; font-size: 11px; color: #999; } /* course */
+            .assign-row > div:nth-child(4),
+            .assign-row > div:nth-child(5) { padding-left: 28px; } /* badges */
+            .assign-row .a-due { padding-left: 28px; font-size: 12px; }
+            .assign-row > div:last-child { padding-left: 28px; } /* edit/delete */
 
             /* College form */
             .college-add-form { display: flex; flex-direction: column; gap: 10px; padding: 14px; }
