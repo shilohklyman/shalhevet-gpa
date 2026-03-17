@@ -807,19 +807,33 @@ function exportTranscriptPDF() {
     let coursesHTML = '';
     data.forEach(year => {
         if (!year.courses || year.courses.length === 0) return;
+
+        const s1rows = year.courses.map(c => `<tr>
+            <td>${c.name || '—'}</td>
+            <td>${c.s1grade || '—'}</td>
+            <td>${c.credits}</td>
+            <td>${c.wt ? 'SAS/HON' : 'REG'}</td>
+        </tr>`).join('');
+
+        // S2: synced courses reuse same name, unsynced courses may have same name but different grade
+        const s2rows = year.courses.map(c => `<tr>
+            <td>${c.name || '—'}</td>
+            <td>${c.s2grade || '—'}</td>
+            <td>${c.credits}</td>
+            <td>${c.wt ? 'SAS/HON' : 'REG'}</td>
+        </tr>`).join('');
+
         coursesHTML += `<div class="year-block">
             <div class="year-title">${year.name}</div>
+            <div class="sem-label">Semester 1</div>
             <table>
-                <thead><tr><th>Course</th><th>S1</th><th>S2</th><th>Credits</th><th>Weight</th></tr></thead>
-                <tbody>
-                ${year.courses.map(c => `<tr>
-                    <td>${c.name || '—'}</td>
-                    <td>${c.s1grade || '—'}</td>
-                    <td>${c.sync ? '<em>synced</em>' : (c.s2grade || '—')}</td>
-                    <td>${c.credits}</td>
-                    <td>${c.wt ? 'SAS/HON' : 'REG'}</td>
-                </tr>`).join('')}
-                </tbody>
+                <thead><tr><th>Course</th><th>Grade</th><th>Credits</th><th>Weight</th></tr></thead>
+                <tbody>${s1rows}</tbody>
+            </table>
+            <div class="sem-label" style="margin-top:12px;">Semester 2</div>
+            <table>
+                <thead><tr><th>Course</th><th>Grade</th><th>Credits</th><th>Weight</th></tr></thead>
+                <tbody>${s2rows}</tbody>
             </table>
             <div class="year-summary">
                 Year UW: <strong>${(year.yr_un||0).toFixed(2)}</strong> &nbsp;|&nbsp;
@@ -847,6 +861,7 @@ function exportTranscriptPDF() {
         .summary-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #999; margin-top: 4px; }
         .year-block { margin-bottom: 24px; }
         .year-title { font-size: 15px; font-weight: 800; color: #cc0000; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid #eee; }
+        .sem-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 6px; }
         table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
         th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #aaa; padding: 6px 8px; border-bottom: 1px solid #eee; }
         td { padding: 6px 8px; border-bottom: 1px solid #f5f5f5; }
