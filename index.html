@@ -1425,15 +1425,28 @@
             
             const list = document.getElementById('task-list');
             list.innerHTML = '';
-            const filtered = window.tasks.filter(t => 
-                (!t.date || t.date === selectedDate) && 
-                (t.title.toLowerCase().includes(searchVal) || t.category.toLowerCase().includes(searchVal))
-            );
+const matchesSearch = t => t.title.toLowerCase().includes(searchVal) || t.category.toLowerCase().includes(searchVal);
 
-            if (!filtered.length) {
-                list.innerHTML = `<div class="text-center py-12 md:py-16 bg-zinc-50/50 dark:bg-zinc-900/30 rounded-[24px] md:rounded-[32px] border-2 border-dashed border-zinc-100 dark:border-zinc-800/50"><div class="w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-zinc-800 rounded-xl md:rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm text-emerald-500"><i data-lucide="check-circle-2"></i></div><h3 class="text-zinc-900 dark:text-white font-bold text-xs">No activities found</h3><p class="text-zinc-400 font-bold text-[11px] mt-1 mb-4">Try a different search or date.</p></div>`;
-            } else {
-                filtered.forEach(t => {
+const selectedTasks = window.tasks.filter(t => t.date === selectedDate && matchesSearch(t));
+const overdueTasks = window.tasks.filter(t => t.date && t.date < todayStr && t.date !== selectedDate && !t.completed && matchesSearch(t));
+const upcomingTasks = window.tasks.filter(t => t.date && t.date > selectedDate && matchesSearch(t));
+const undatedTasks = window.tasks.filter(t => !t.date && matchesSearch(t));
+
+function renderTaskGroup(tasks, label) {
+    if (!tasks.length) return;
+    const header = document.createElement('div');
+    header.className = 'text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1 mt-4 mb-2';
+    header.innerText = label;
+    list.appendChild(header);
+    tasks.forEach(t => renderTaskCard(t));
+}
+
+const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...undatedTasks];
+
+if (!allVisible.length) {
+    list.innerHTML = `<div class="text-center py-12 md:py-16 bg-zinc-50/50 dark:bg-zinc-900/30 rounded-[24px] md:rounded-[32px] border-2 border-dashed border-zinc-100 dark:border-zinc-800/50"><div class="w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-zinc-800 rounded-xl md:rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm text-emerald-500"><i data-lucide="check-circle-2"></i></div><h3 class="text-zinc-900 dark:text-white font-bold text-xs">No activities found</h3><p class="text-zinc-400 font-bold text-[11px] mt-1 mb-4">Try a different search or date.</p></div>`;
+} else {
+    function renderTaskCard(t) {
                     const card = document.createElement('div');
                     const isUndated = !t.date;
                     const isOverdue = !isUndated && !t.completed && t.date < todayStr;
@@ -1459,11 +1472,13 @@
                             <button onclick="startEditTask('${t.id}')" class="text-zinc-300 hover:text-shalhevet p-1.5 md:p-2 transition-colors"><i data-lucide="pencil" class="w-3 h-3 md:w-3.5 md:h-3.5"></i></button>
                             <button onclick="deleteTask('${t.id}')" class="text-zinc-300 hover:text-shalhevet p-1.5 md:p-2 transition-colors"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
                         </div>`;
-                    list.appendChild(card);
-                });
-            }
-            lucide.createIcons();
+                  list.appendChild(card);
         }
+        if (selectedTasks.length) renderTaskGroup(selectedTasks, 'Selected Date');
+        if (overdueTasks.length) renderTaskGroup(overdueTasks, 'Overdue');
+        if (upcomingTasks.length) renderTaskGroup(upcomingTasks, 'Upcoming');
+        if (undatedTasks.length) renderTaskGroup(undatedTasks, 'No Due Date');
+    }
 
         function toggleTask(id) {
             const idx = window.tasks.findIndex(t => t.id === id);
