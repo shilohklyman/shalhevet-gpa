@@ -564,7 +564,7 @@
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Unweighted (REG):</strong> Standard 4.0 scale. All courses calculated equally.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Weighted (WT):</strong> SAS and Honors courses receive a +1.0 bonus point.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Advanced Track:</strong> Unweighted per Shalhevet policy — no bonus point applied.</span></li>
-                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Auto-Weighting:</strong> Course names with "SAS" or "Honors" auto-toggle to WT. You can override manually at any time.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Auto-Weighting:</strong> Course names with "SAS", "Honors", or "BMT" auto-toggle to WT. You can override manually at any time.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Credits:</strong> Most courses = 0.5 credits per semester.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">In-Progress Courses:</strong> Leaving a grade as "—" keeps the course on your transcript draft without counting it in GPA totals yet.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Sync S2 Toggle:</strong> The slide toggle on each S1 course mirrors that course into semester 2 — copying the name, credits, and weight. Only the S2 grade stays editable. Use this for full-year courses you take both semesters.</span></li>
@@ -1082,22 +1082,71 @@
             return '';
         }
 
-        function transcriptCredit(course) {
+        function isWeightedCourseName(name = '') {
+            const upper = name.toUpperCase();
+            return (upper.includes('SAS') || upper.includes('HONORS') || upper.includes('BMT') || upper.includes('BEIT MIDRASH TRACK')) && !upper.includes('ADVANCED');
+        }
+
+        function getSemesterCourseName(course, sIdx) {
+            return sIdx === 0 || course.sync ? (course.name || '') : (course.s2name ?? course.name ?? '');
+        }
+
+        function getSemesterCourseCredits(course, sIdx) {
+            const raw = sIdx === 0 || course.sync ? course.credits : (course.s2credits ?? course.credits);
+            return parseFloat(raw || 0);
+        }
+
+        function getSemesterCourseWeight(course, sIdx) {
+            return sIdx === 0 || course.sync ? !!course.wt : (course.s2wt ?? course.wt ?? false);
+        }
+
+        function transcriptRowsForCourse(course) {
+            const s1Name = getSemesterCourseName(course, 0);
+            const s2Name = getSemesterCourseName(course, 1);
+            const s1Credits = getSemesterCourseCredits(course, 0);
+            const s2Credits = getSemesterCourseCredits(course, 1);
+            const splitRows = !course.sync && (s1Name !== s2Name || s1Credits !== s2Credits);
+
+            if (splitRows) {
+                return [
+                    {
+                        name: s1Name || s2Name || 'Untitled Course',
+                        level: transcriptLevel(s1Name),
+                        s1grade: course.s1grade === '—' ? '' : course.s1grade,
+                        s2grade: '',
+                        credit: course.s1grade && course.s1grade !== '—' ? s1Credits.toFixed(1) : ''
+                    },
+                    {
+                        name: s2Name || s1Name || 'Untitled Course',
+                        level: transcriptLevel(s2Name),
+                        s1grade: '',
+                        s2grade: course.s2grade === '—' ? '' : course.s2grade,
+                        credit: course.s2grade && course.s2grade !== '—' ? s2Credits.toFixed(1) : ''
+                    }
+                ].filter((row) => row.s1grade || row.s2grade || row.name);
+            }
+
             let total = 0;
-            if (course.s1grade && course.s1grade !== '—') total += parseFloat(course.credits || 0);
-            if (course.s2grade && course.s2grade !== '—') total += parseFloat(course.credits || 0);
-            return total ? total.toFixed(1) : '';
+            if (course.s1grade && course.s1grade !== '—') total += s1Credits;
+            if (course.s2grade && course.s2grade !== '—') total += s2Credits;
+            return [{
+                name: s1Name || s2Name || 'Untitled Course',
+                level: transcriptLevel(s1Name || s2Name),
+                s1grade: course.s1grade === '—' ? '' : course.s1grade,
+                s2grade: course.s2grade === '—' ? '' : course.s2grade,
+                credit: total ? total.toFixed(1) : ''
+            }];
         }
 
         function transcriptWeightedGPA(year) {
             let totalPoints = 0;
             let totalCredits = 0;
             year.courses.forEach((course) => {
-                ['s1grade', 's2grade'].forEach((gradeKey) => {
+                ['s1grade', 's2grade'].forEach((gradeKey, idx) => {
                     const pts = GRADE_SCALE[course[gradeKey]];
                     if (pts !== null && pts !== undefined) {
-                        const credits = parseFloat(course.credits || 0);
-                        totalPoints += (pts + (course.wt ? 1 : 0)) * credits;
+                        const credits = getSemesterCourseCredits(course, idx);
+                        totalPoints += (pts + (getSemesterCourseWeight(course, idx) ? 1 : 0)) * credits;
                         totalCredits += credits;
                     }
                 });
@@ -1131,13 +1180,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            ${year.courses.map(course => `
+                            ${year.courses.flatMap(course => transcriptRowsForCourse(course)).map(row => `
                                 <tr>
-                                    <td class="course-col">${course.name || 'Untitled Course'}</td>
-                                    <td class="level-col">${transcriptLevel(course.name)}</td>
-                                    <td class="grade-col">${course.s1grade === '—' ? '' : course.s1grade}</td>
-                                    <td class="grade-col">${course.s2grade === '—' ? '' : course.s2grade}</td>
-                                    <td class="credit-col">${transcriptCredit(course)}</td>
+                                    <td class="course-col">${row.name}</td>
+                                    <td class="level-col">${row.level}</td>
+                                    <td class="grade-col">${row.s1grade}</td>
+                                    <td class="grade-col">${row.s2grade}</td>
+                                    <td class="credit-col">${row.credit}</td>
                                 </tr>
                             `).join('')}
                         </tbody>
@@ -1229,15 +1278,20 @@
                         year.courses.forEach((c, cIdx) => {
                             const gradeKey = sIdx === 0 ? 's1grade' : 's2grade';
                             const isSynced = sIdx === 1 && c.sync;
+                            const nameField = sIdx === 0 ? 'name' : 's2name';
+                            const creditsField = sIdx === 0 ? 'credits' : 's2credits';
+                            const weightOn = getSemesterCourseWeight(c, sIdx);
+                            const courseName = getSemesterCourseName(c, sIdx);
+                            const courseCredits = getSemesterCourseCredits(c, sIdx);
                             html += `<div class="gpa-course-row space-y-3 ${isSynced ? 'opacity-50' : ''}">
                                 <div class="grid grid-cols-2 md:grid-cols-[1fr_108px_98px_116px_28px] gap-3 md:gap-4 items-end">
                                 <div class="col-span-2 md:col-span-1 space-y-1.5">
                                     ${sIdx === 0 ? `<div class="flex items-center justify-between"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label><label class="flex items-center gap-1.5 cursor-pointer"><label class="switch scale-[0.72] origin-right"><input type="checkbox" ${c.sync ? 'checked' : ''} onchange="updateCourse(${yIdx},${cIdx},'sync',this.checked)"><span class="slider"></span></label><span class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">S2</span></label></div>` : `<label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label>`}
-                                    <input type="text" list="course-catalog" value="${c.name}" ${isSynced ? 'readonly' : `onchange="updateCourse(${yIdx},${cIdx},'name',this.value)"`} placeholder="Type or select a course..." class="course-name w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none focus:ring-1 focus:ring-shalhevet">
+                                    <input type="text" list="course-catalog" value="${courseName}" ${isSynced ? 'readonly' : `onchange="updateCourse(${yIdx},${cIdx},'${nameField}',this.value)"`} placeholder="Type or select a course..." class="course-name w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none focus:ring-1 focus:ring-shalhevet">
                                 </div>
                                 <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">GRADE</label><select onchange="updateCourse(${yIdx},${cIdx},'${gradeKey}',this.value)" class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none">${Object.keys(GRADE_SCALE).map(g => `<option ${c[gradeKey] === g ? 'selected' : ''}>${g}</option>`).join('')}</select></div>
-                                <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">CREDITS</label><select ${isSynced ? 'disabled' : `onchange="updateCourse(${yIdx},${cIdx},'credits',this.value)"`} class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none"><option value="0.25" ${c.credits == 0.25 ? 'selected' : ''}>0.25</option><option value="0.5" ${c.credits == 0.5 ? 'selected' : ''}>0.5</option><option value="1.0" ${c.credits == 1.0 ? 'selected' : ''}>1.0</option></select></div>
-                                <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">WEIGHT</label><button ${isSynced ? 'disabled' : `onclick="toggleWeight(${yIdx},${cIdx})"`} class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 font-bold text-[11px] md:text-xs transition-all ${c.wt ? 'bg-shalhevet text-white border-shalhevet' : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'}">${c.wt ? 'SAS/HON' : 'REGULAR'}</button></div>
+                                <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">CREDITS</label><select ${isSynced ? 'disabled' : `onchange="updateCourse(${yIdx},${cIdx},'${creditsField}',this.value)"`} class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none"><option value="0.25" ${courseCredits == 0.25 ? 'selected' : ''}>0.25</option><option value="0.5" ${courseCredits == 0.5 ? 'selected' : ''}>0.5</option><option value="1.0" ${courseCredits == 1.0 ? 'selected' : ''}>1.0</option></select></div>
+                                <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">WEIGHT</label><button ${isSynced ? 'disabled' : `onclick="toggleWeight(${yIdx},${cIdx},${sIdx})"`} class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 font-bold text-[11px] md:text-xs transition-all ${weightOn ? 'bg-shalhevet text-white border-shalhevet' : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'}">${weightOn ? 'SAS/HON' : 'REGULAR'}</button></div>
                                 <div class="flex justify-end md:block">
                                     ${sIdx === 0 ? `<button onclick="deleteCourse(${yIdx},${cIdx})" class="text-zinc-300 hover:text-shalhevet p-1 mb-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>` : '<div></div>'}
                                 </div>
@@ -1245,12 +1299,13 @@
                             </div>`;
                             const pts = GRADE_SCALE[c[gradeKey]];
                             if (pts !== null) {
-                                const credits = parseFloat(c.credits);
+                                const credits = getSemesterCourseCredits(c, sIdx);
+                                const wt = getSemesterCourseWeight(c, sIdx);
                                 tUW += pts * credits;
-                                tWT += (pts + (c.wt ? 1 : 0)) * credits;
+                                tWT += (pts + (wt ? 1 : 0)) * credits;
                                 tCr += credits;
                                 yearUW += pts * credits;
-                                yearWT += (pts + (c.wt ? 1 : 0)) * credits;
+                                yearWT += (pts + (wt ? 1 : 0)) * credits;
                                 yearCr += credits;
                             }
                         });
@@ -1288,16 +1343,53 @@
             `).join('');
         }
 
-        function addCourse(yIdx) { window.gpaData[yIdx].courses.push({ name: '', s1grade: '—', s2grade: '—', credits: 0.5, wt: false, sync: true }); renderGPA(); }
-        function updateCourse(yIdx, cIdx, field, val) { 
-            window.gpaData[yIdx].courses[cIdx][field] = val;
-            if (field === 'name') {
-                const n = val.toUpperCase();
-                window.gpaData[yIdx].courses[cIdx].wt = (n.includes('SAS') || n.includes('HONORS')) && !n.includes('ADVANCED');
-            }
-            renderGPA(); 
+        function addCourse(yIdx) {
+            window.gpaData[yIdx].courses.push({
+                name: '',
+                s2name: '',
+                s1grade: '—',
+                s2grade: '—',
+                credits: 0.5,
+                s2credits: 0.5,
+                wt: false,
+                s2wt: false,
+                sync: true
+            });
+            renderGPA();
         }
-        function toggleWeight(yIdx, cIdx) { window.gpaData[yIdx].courses[cIdx].wt = !window.gpaData[yIdx].courses[cIdx].wt; renderGPA(); }
+        function updateCourse(yIdx, cIdx, field, val) {
+            const course = window.gpaData[yIdx].courses[cIdx];
+            course[field] = val;
+
+            if (field === 'sync') {
+                if (!val) {
+                    course.s2name = course.s2name || course.name || '';
+                    course.s2credits = course.s2credits ?? course.credits ?? 0.5;
+                    course.s2wt = course.s2wt ?? course.wt ?? false;
+                }
+            }
+
+            if (field === 'name') {
+                course.wt = isWeightedCourseName(val);
+                if (course.sync) course.s2wt = course.wt;
+            }
+
+            if (field === 's2name') {
+                course.s2wt = isWeightedCourseName(val);
+            }
+
+            renderGPA();
+        }
+        function toggleWeight(yIdx, cIdx, sIdx = 0) {
+            const course = window.gpaData[yIdx].courses[cIdx];
+            if (sIdx === 0) {
+                course.wt = !course.wt;
+                if (course.sync) course.s2wt = course.wt;
+            } else {
+                course.s2wt = !(course.s2wt ?? course.wt ?? false);
+            }
+            renderGPA();
+        }
         function deleteCourse(yIdx, cIdx) { window.gpaData[yIdx].courses.splice(cIdx, 1); renderGPA(); }
         function resetGPA() { if(confirm("Clear all GPA data?")) { window.gpaData.forEach(y => y.courses = []); renderGPA(); } }
 
