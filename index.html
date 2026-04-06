@@ -103,11 +103,10 @@
         .modal-overlay.open { display: flex; }
         .auth-gate { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .auth-gate.visible { opacity: 1; pointer-events: auto; }
-        .sync-status { font-size: 11px; font-weight: 700; transition: opacity 0.3s; }
-        .sync-status.syncing { color: #f59e0b; }
-        .sync-status.synced { color: #10b981; }
         .profile-dropdown { display: none; }
         .profile-dropdown.open { display: block; }
+        #hamburger-btn { transition: background-color 0.2s, color 0.2s; }
+        #hamburger-btn.active { background-color: #cc0000; color: white; border-color: #cc0000; }
         select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem center; padding-right: 2rem !important; }
         .print-transcript { display: none; }
         .transcript-sheet { display: flex; flex-direction: column; gap: 20px; }
@@ -130,6 +129,7 @@
         .gpa-course-row { padding-bottom: 12px; border-bottom: 1px solid #e4e4e7; }
         .gpa-course-row:last-child { padding-bottom: 0; border-bottom: none; }
         .gpa-scale-table th, .gpa-scale-table td { transition: border-color 0.2s ease, color 0.2s ease; }
+        @media (max-width: 767px) { .gpa-scale-table col:nth-child(1) { width: 18%; } .gpa-scale-table col:nth-child(2) { width: 36%; } .gpa-scale-table col:nth-child(3) { width: 23%; } .gpa-scale-table col:nth-child(4) { width: 23%; } }
         .gpa-scale-row:last-child td { border-bottom: none; }
         .dark .gpa-reference-card { background: #222327; border-color: rgba(255, 255, 255, 0.08); box-shadow: none; }
         .dark .gpa-year-card { box-shadow: none; }
@@ -466,9 +466,9 @@
                     <img src="logo.png" alt="Logo" class="w-[86%] h-[86%] object-contain" />
                 </div>
                 <div class="flex items-center leading-none">
-                    <span class="nav-logo-text inline-flex items-baseline gap-2 md:gap-2.5 whitespace-nowrap">
-                        <span class="text-[0.8rem] md:text-[0.9rem] font-bold text-white">SHALHEVET</span>
-                        <span class="text-[0.8rem] md:text-[0.9rem] font-bold text-shalhevet">DASHBOARD</span>
+                    <span class="nav-logo-text inline-flex items-baseline gap-1.5 md:gap-2.5 whitespace-nowrap">
+                        <span class="text-[0.65rem] sm:text-[0.8rem] md:text-[0.9rem] font-bold text-white">SHALHEVET</span>
+                        <span class="text-[0.65rem] sm:text-[0.8rem] md:text-[0.9rem] font-bold text-shalhevet">DASHBOARD</span>
                     </span>
                 </div>
             </div>
@@ -491,19 +491,34 @@
                 </button>
             </div>
             <div class="flex items-center gap-1.5">
-                <div id="sync-status" class="sync-status mr-2 hidden md:block"></div>
+                <div id="nav-btn-group" class="flex items-center gap-1.5">
                 <div id="auth-nav-area">
-                    <button onclick="signInWithGoogle()" class="bg-[#222] border border-[#333] text-white/75 hover:border-shalhevet hover:text-white rounded-xl h-8 md:h-9 px-2.5 md:px-4 font-bold text-[10px] md:text-xs flex items-center gap-1.5 transition-all">
-                        <i data-lucide="user" class="w-3 h-3 md:w-3.5 md:h-3.5"></i>
-                        <span class="hidden xs:inline">Sign In</span>
+                    <button onclick="signInWithGoogle()" class="w-8 h-8 md:w-auto md:h-9 md:px-4 md:rounded-xl rounded-full bg-[#222] border border-[#333] text-white/75 hover:border-shalhevet hover:text-white font-bold text-[10px] md:text-xs flex items-center justify-center md:gap-1.5 transition-all">
+                        <i data-lucide="user" class="w-3.5 h-3.5"></i>
+                        <span class="hidden md:inline">Sign In</span>
                     </button>
                 </div>
-                <button onclick="toggleDarkMode()" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-full border border-[#333] text-white/50 hover:border-[#555] hover:text-white transition-all">
+                <button onclick="toggleHamburgerMenu()" id="hamburger-btn" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-full border border-shalhevet text-shalhevet hover:bg-shalhevet/10 transition-all">
+                    <svg class="w-3.5 h-3.5 md:w-4 md:h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/>
+                    </svg>
+                </button>
+                <button onclick="toggleDarkMode()" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-full border border-[#333] text-white hover:border-[#555] transition-all">
                     <i data-lucide="moon" id="dark-icon-svg" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
                 </button>
+                </div>
             </div>
         </div>
     </nav>
+
+    <!-- Hamburger Dropdown -->
+    <div id="hamburger-menu" class="hidden fixed top-[56px] md:top-[60px] left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-[4px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl z-[1000] overflow-hidden w-[200px]">
+        <div class="py-2">
+            <button onclick="document.getElementById('tos-modal').classList.add('open'); lucide.createIcons(); toggleHamburgerMenu();" class="w-full px-5 py-3 text-center text-[13px] font-bold text-shalhevet hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">Terms of Service</button>
+            <button onclick="document.getElementById('privacy-modal').classList.add('open'); lucide.createIcons(); toggleHamburgerMenu();" class="w-full px-5 py-3 text-center text-[13px] font-bold text-shalhevet hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">Privacy Policy</button>
+            <button onclick="document.getElementById('contact-modal').classList.add('open'); lucide.createIcons(); toggleHamburgerMenu();" class="w-full px-5 py-3 text-center text-[13px] font-bold text-shalhevet hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">Contact</button>
+        </div>
+    </div>
 
     <!-- Guest Banner -->
     <div id="guest-banner" class="hidden bg-red-50 dark:bg-red-950/20 border-b border-red-100 dark:border-red-900/30 py-2.5 px-4 no-print">
@@ -511,7 +526,7 @@
             <p class="text-xs font-bold text-shalhevet flex-1 min-w-0 truncate">
                 <i data-lucide="info" class="w-3.5 h-3.5 inline mr-1.5 -mt-0.5"></i>
                 <span class="hidden sm:inline">You're in guest mode. Data is saved locally.</span>
-                <span class="sm:hidden">Guest mode — data saved locally.</span>
+                <span class="sm:hidden">Guest mode — local only.</span>
             </p>
             <div class="flex items-center gap-2 flex-shrink-0">
                 <button onclick="signInWithGoogle()" class="text-[10px] font-bold bg-shalhevet text-white px-3 py-1.5 rounded-lg shadow-sm whitespace-nowrap">Sign In to Save</button>
@@ -596,7 +611,7 @@
         <div id="page-gpa" class="page-content hidden space-y-8">
             <div class="text-left space-y-3 no-print-gpa">
                 <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">GPA <span class="text-shalhevet">Calculator</span></h1>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Track your weighted and unweighted GPA across all four years. SAS and Honors courses are auto-weighted; Advanced track stays unweighted per Shalhevet policy. Already have a transcript? Import it directly — your entire course history populates in seconds, no manual entry needed.</p>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Track your weighted and unweighted GPA across all four years. SAS and Honors courses are auto-weighted, and Advanced courses stay unweighted per Shalhevet policy. Already have a transcript? Import it directly — your entire course history is filled in seconds, no manual entry needed.</p>
             </div>
             <div class="bg-white dark:bg-zinc-900 rounded-[24px] p-6 md:p-8 flex flex-col md:flex-row justify-around items-center gap-6 md:gap-8 shadow-xl border border-zinc-200 dark:border-zinc-800 no-print-gpa">
                 <div class="text-center space-y-1 flex-1">
@@ -632,15 +647,15 @@
                 <div class="gpa-reference-card bg-white dark:bg-zinc-900 rounded-[20px] p-3.5 md:p-4 border border-zinc-200 dark:border-zinc-800 shadow-sm">
                     <div class="space-y-3">
                         <div><h4 class="text-xs font-bold text-shalhevet uppercase tracking-widest">HOW IT WORKS</h4><div class="h-0.5 w-12 bg-shalhevet mt-1.5"></div></div>
-                        <ul class="gpa-reference-list space-y-4 text-[13px] md:text-sm text-zinc-600 dark:text-zinc-300 font-medium leading-relaxed">
+                        <ul class="gpa-reference-list space-y-6 text-[13px] md:text-sm text-zinc-600 dark:text-zinc-300 font-medium leading-relaxed">
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Unweighted (REG):</strong> Standard 4.0 scale. All courses calculated equally.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Weighted (WT):</strong> SAS and Honors courses receive a +1.0 bonus point.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Advanced Track:</strong> Unweighted per Shalhevet policy — no bonus point applied.</span></li>
-                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Auto-Weighting:</strong> Course names with "SAS", "Honors", or "BMT" auto-toggle to WT.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Auto-Weighting:</strong> Course names with "SAS" or "Honors" auto-toggle to be weighted.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Credits:</strong> Most courses = 0.5 credits per semester.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">In-Progress Courses:</strong> Leaving a grade as "—" keeps the course on your transcript draft without counting it in GPA totals yet.</span></li>
-                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Sync S2 Toggle:</strong> Mirrors S1 course into semester 2. Only the S2 grade stays editable.</span></li>
-                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Transcript Export:</strong> Groups courses by year and only counts semesters with a real letter grade.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Sync S2 Toggle:</strong> Mirrors semester 1 course into semester 2. Only the Semester 2 grade stays editable.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Transcript Export:</strong> Generates an unofficial transcript from the grades you've entered, organized by year. Not an official school document.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">PDF Import:</strong> Sends your transcript to AI for processing. <strong class="text-shalhevet">Only courses and grades are extracted.</strong> No personal data is stored.</span></li>
                         </ul>
                     </div>
@@ -650,6 +665,7 @@
                         <div><h4 class="text-xs font-bold text-shalhevet uppercase tracking-widest">GRADE SCALE</h4><div class="h-0.5 w-12 bg-shalhevet mt-1.5"></div></div>
                         <div class="overflow-x-auto">
                             <table class="gpa-scale-table w-full text-[13px] md:text-sm border-separate border-spacing-0">
+                                <colgroup><col style="width:22%"><col style="width:32%"><col style="width:23%"><col style="width:23%"></colgroup>
                                 <thead>
                                     <tr class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider">
                                         <th class="text-left pb-2.5 border-b border-zinc-200 dark:border-zinc-700">Grade</th>
@@ -875,17 +891,8 @@
 
     </main>
 
-    <footer class="pt-4 pb-6 md:pt-6 md:pb-8 no-print">
-        <div class="max-w-[1200px] mx-auto px-6 text-center space-y-2">
-            <p class="text-[11px] font-bold text-zinc-400 dark:text-zinc-600">MANAGED AND DEVELOPED BY ADAM SANDLER '27</p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-4 w-full">
-                <button onclick="document.getElementById('tos-modal').classList.add('open'); lucide.createIcons();" class="text-[11px] font-bold text-zinc-400 dark:text-zinc-600 hover:text-shalhevet dark:hover:text-shalhevet transition-colors uppercase tracking-widest">Terms of Service</button>
-                <span class="text-zinc-300 dark:text-zinc-700 text-[11px] hidden sm:inline">·</span>
-                <button onclick="document.getElementById('privacy-modal').classList.add('open'); lucide.createIcons();" class="text-[11px] font-bold text-zinc-400 dark:text-zinc-600 hover:text-shalhevet dark:hover:text-shalhevet transition-colors uppercase tracking-widest">Privacy Policy</button>
-                <span class="text-zinc-300 dark:text-zinc-700 text-[11px] hidden sm:inline">·</span>
-                <button onclick="document.getElementById('contact-modal').classList.add('open'); lucide.createIcons();" class="text-[11px] font-bold text-zinc-400 dark:text-zinc-600 hover:text-shalhevet dark:hover:text-shalhevet transition-colors uppercase tracking-widest">Contact</button>
-            </div>
-        </div>
+    <footer class="pt-4 pb-6 md:pt-6 md:pb-8 no-print text-center">
+        <p class="text-[11px] font-bold text-zinc-400 dark:text-zinc-600">MANAGED AND DEVELOPED BY ADAM SANDLER '27</p>
     </footer>
 
     <datalist id="course-catalog"></datalist>
@@ -973,6 +980,43 @@
             saveTimeout = setTimeout(() => saveToFirestore(currentUser.uid), 1200);
         };
 
+        function alignHamburgerMenu() {
+            const menu = document.getElementById('hamburger-menu');
+            const navGroup = document.getElementById('nav-btn-group');
+            if (!menu || !navGroup) return;
+            if (window.innerWidth >= 768) {
+                const rect = navGroup.getBoundingClientRect();
+                menu.style.width = rect.width + 'px';
+                menu.style.right = (window.innerWidth - rect.right) + 'px';
+                menu.style.left = 'auto';
+                menu.style.transform = 'none';
+            } else {
+                menu.style.width = '200px';
+                menu.style.right = '';
+                menu.style.left = '50%';
+                menu.style.transform = 'translateX(-50%)';
+            }
+        }
+        window.toggleHamburgerMenu = function() {
+            const menu = document.getElementById('hamburger-menu');
+            const btn = document.getElementById('hamburger-btn');
+            menu.classList.toggle('hidden');
+            btn.classList.toggle('active');
+            if (!menu.classList.contains('hidden')) alignHamburgerMenu();
+        };
+        window.addEventListener('resize', function() {
+            const menu = document.getElementById('hamburger-menu');
+            if (menu && !menu.classList.contains('hidden')) alignHamburgerMenu();
+        });
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('hamburger-menu');
+            const btn = document.getElementById('hamburger-btn');
+            if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target)) {
+                menu.classList.add('hidden');
+                btn.classList.remove('active');
+            }
+        });
+
         function setSyncStatus(state) {
             const el = document.getElementById('sync-status');
             if (!el) return;
@@ -991,7 +1035,7 @@
                 const initials = user.displayName ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
                 navArea.innerHTML = `
                     <div class="relative">
-                        <button id="profile-btn" onclick="toggleProfileDropdown()" class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-shalhevet text-white font-bold text-[10px] md:text-xs flex items-center justify-center shadow-lg shadow-red-900/20 hover:bg-red-700 transition-all">${initials}</button>
+                        <button id="profile-btn" onclick="toggleProfileDropdown()" class="w-8 h-8 md:w-auto md:h-9 md:px-4 md:rounded-xl rounded-full bg-[#222] border border-[#333] text-white/75 hover:border-shalhevet hover:text-white font-bold text-[10px] md:text-xs flex items-center justify-center md:gap-1.5 transition-all"><span class="w-5 h-5 rounded-full bg-shalhevet text-white flex items-center justify-center text-[8px] font-bold flex-shrink-0">${initials}</span><span class="hidden md:inline">${user.displayName ? user.displayName.split(' ')[0] : initials}</span></button>
                         <div id="profile-dropdown" class="profile-dropdown absolute right-0 top-full mt-2 w-48 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl p-2 z-[1000]">
                             <div class="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800 mb-1">
                                 <p class="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">Signed in as</p>
@@ -1203,7 +1247,7 @@
                             const weightOn = getSemesterCourseWeight(c, sIdx);
                             const courseName = getSemesterCourseName(c, sIdx);
                             const courseCredits = getSemesterCourseCredits(c, sIdx);
-                            html += `<div class="gpa-course-row space-y-3 ${isSynced ? 'opacity-50' : ''}">
+                            html += `<div class="gpa-course-row space-y-3">
                                 <div class="grid grid-cols-1 md:grid-cols-[1fr_108px_98px_116px_28px] gap-3 md:gap-4 items-end">
                                 <div class="space-y-1.5">
                                     ${sIdx === 0 ? `<div class="flex items-center justify-between"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label><div class="flex items-center gap-2"><label class="flex items-center gap-1.5 cursor-pointer"><label class="switch scale-[0.72] origin-right"><input type="checkbox" ${c.sync ? 'checked' : ''} onchange="updateCourse(${yIdx},${cIdx},'sync',this.checked)"><span class="slider"></span></label><span class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">S2</span></label><button onclick="deleteCourse(${yIdx},${cIdx})" class="md:hidden text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button></div></div>` : `<label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label>`}
@@ -1266,8 +1310,8 @@
             const course = window.gpaData[yIdx].courses[cIdx];
             course[field] = val;
             if (field === 'sync' && !val) { course.s2name = course.s2name || course.name || ''; course.s2credits = course.s2credits ?? course.credits ?? 0.5; course.s2wt = course.s2wt ?? course.wt ?? false; }
-            if (field === 'name') { course.wt = isWeightedCourseName(val); if (course.sync) course.s2wt = course.wt; }
-            if (field === 's2name') { course.s2wt = isWeightedCourseName(val); }
+            if (field === 'name') { course.wt = isWeightedCourseName(val); if (course.sync) course.s2wt = course.wt; const upper = val.toUpperCase(); if (upper.includes('BMT') || upper.includes('BEIT MIDRASH TRACK')) { course.credits = 1.0; if (course.sync) course.s2credits = 1.0; } }
+            if (field === 's2name') { course.s2wt = isWeightedCourseName(val); const upper = val.toUpperCase(); if (upper.includes('BMT') || upper.includes('BEIT MIDRASH TRACK')) { course.s2credits = 1.0; } }
             renderGPA();
         }
         function toggleWeight(yIdx, cIdx, sIdx = 0) {
