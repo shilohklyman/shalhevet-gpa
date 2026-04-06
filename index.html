@@ -141,6 +141,15 @@
         .dark .gpa-scale-table tbody { color: rgba(255, 255, 255, 0.78); }
         .dark .gpa-scale-grade { color: rgba(255, 255, 255, 0.92); }
         .dark .gpa-disclaimer { border-top-color: rgba(255, 255, 255, 0.08); }
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+            padding-right: 2rem;
+        }
         @media print {
             @page { margin: 0.55in; }
             nav, .no-print, .no-print-gpa, .auth-gate, #guest-banner { display: none !important; }
@@ -153,6 +162,189 @@
     </style>
 </head>
 <body class="bg-[#f5f5f5] dark:bg-[#0a0a0a] text-zinc-900 dark:text-zinc-100 min-h-screen transition-colors duration-300 font-sans selection:bg-red-100 dark:selection:bg-red-900/30">
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal-overlay" onclick="if(event.target===this) document.getElementById('contact-modal').classList.remove('open')">
+        <div class="bg-white dark:bg-zinc-900 rounded-[32px] p-6 md:p-8 max-w-[620px] w-[95%] shadow-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between mb-5 flex-shrink-0">
+                <h2 class="text-lg font-bold">Contact</h2>
+                <button onclick="document.getElementById('contact-modal').classList.remove('open')" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="overflow-y-auto hide-scrollbar flex-1 space-y-5">
+                <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400">Have a question, found a bug, or want to suggest a feature? Fill out the form below.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Name</label>
+                        <input id="contact-name" type="text" placeholder="Your name" class="w-full h-11 px-4 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-transparent focus:border-shalhevet focus:outline-none text-base md:text-sm font-medium text-zinc-900 dark:text-white placeholder:text-zinc-400 transition-colors" />
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Your Email</label>
+                        <input id="contact-email" type="email" placeholder="your@email.com" class="w-full h-11 px-4 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-transparent focus:border-shalhevet focus:outline-none text-base md:text-sm font-medium text-zinc-900 dark:text-white placeholder:text-zinc-400 transition-colors" />
+                    </div>
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Subject</label>
+                    <select id="contact-subject" class="w-full h-11 px-4 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-transparent focus:border-shalhevet focus:outline-none text-base md:text-sm font-medium text-zinc-900 dark:text-white transition-colors">
+                        <option value="">Select a topic...</option>
+                        <option value="Bug Report">Bug Report</option>
+                        <option value="Feature Request">Feature Request</option>
+                        <option value="Data & Privacy Question">Data & Privacy Question</option>
+                        <option value="General Feedback">General Feedback</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Message</label>
+                    <textarea id="contact-message" rows="4" placeholder="Describe your question or feedback..." class="w-full px-4 py-3 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-transparent focus:border-shalhevet focus:outline-none text-base md:text-sm font-medium text-zinc-900 dark:text-white placeholder:text-zinc-400 transition-colors resize-none"></textarea>
+                </div>
+            </div>
+            <div class="pt-5 flex-shrink-0 space-y-3">
+                <button onclick="submitContactForm()" class="flex items-center justify-center gap-2 w-full h-12 bg-shalhevet hover:bg-red-700 text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-red-900/20">
+                    <i data-lucide="send" class="w-4 h-4"></i> Send Message
+                </button>
+                <p class="text-center text-[11px] font-medium text-zinc-400">This will open your email client with your message pre-filled.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacy-modal" class="modal-overlay" onclick="if(event.target===this) document.getElementById('privacy-modal').classList.remove('open')">
+        <div class="bg-white dark:bg-zinc-900 rounded-[32px] p-6 md:p-8 max-w-[620px] w-[95%] shadow-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col max-h-[85vh]">
+            <div class="flex items-center justify-between mb-5 flex-shrink-0">
+                <h2 class="text-lg font-bold">Privacy Policy</h2>
+                <button onclick="document.getElementById('privacy-modal').classList.remove('open')" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="overflow-y-auto hide-scrollbar space-y-5 text-sm text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed flex-1">
+                <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Last updated: April 6, 2026</p>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">1. Introduction</h3>
+                    <p>This Privacy Policy explains how the Shalhevet Dashboard ("the Dashboard"), developed by Adam Sandler ('27), collects, uses, and stores information when you use the service. By using the Dashboard, you agree to the practices described here.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">2. Information We Collect</h3>
+                    <ul class="space-y-2">
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Account information:</strong> If you sign in with Google, we receive your name, email address, and profile photo from Google solely to identify your account.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Academic data:</strong> GPA entries, course names, grades, credits, tasks, college list entries, and co-curricular activities that you manually enter.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Transcript data (optional):</strong> If you use the PDF import feature, your transcript is processed to extract course names, grades, and credits only.</span></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">3. How We Use Your Information</h3>
+                    <p>Information you provide is used solely to power the features of the Dashboard — displaying your GPA, tracking tasks, and syncing your data across devices when signed in. We do not use your data for advertising, profiling, or any purpose beyond operating the service.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">4. Data Storage &amp; Security</h3>
+                    <ul class="space-y-2">
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Signed-in users:</strong> Data is stored in Google Firebase/Firestore, which is protected by Google's security infrastructure.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Guest users:</strong> Data is stored locally in your browser and never transmitted to any server.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>We do not sell, rent, or share your personal data with any third party for commercial purposes.</span></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">5. Third-Party Services</h3>
+                    <p>The Dashboard relies on the following third-party services, each with their own privacy policies:</p>
+                    <ul class="space-y-2 mt-2">
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Google Firebase:</strong> Used for authentication and cloud data storage.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Anthropic (Claude AI):</strong> Used only when you choose to import a PDF transcript. Your transcript is transmitted to Anthropic for processing and is subject to Anthropic's Privacy Policy.</span></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">6. Your Rights</h3>
+                    <p>You may delete your data at any time using the "Clear All Data" option in the GPA Calculator. Signed-in users may also delete their account data by contacting us directly. Guest users can clear their data by clearing their browser's local storage.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">7. Changes to This Policy</h3>
+                    <p>We may update this Privacy Policy from time to time. Any changes will be reflected here with an updated date. Continued use of the Dashboard after changes are posted constitutes acceptance of the updated policy.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">8. Contact</h3>
+                    <p>For questions or concerns about this Privacy Policy, please email us at <a href="mailto:contactshalidashboard@gmail.com" class="text-shalhevet hover:underline">contactshalidashboard@gmail.com</a>.</p>
+                </div>
+            </div>
+            <div class="pt-5 flex-shrink-0">
+                <button onclick="document.getElementById('privacy-modal').classList.remove('open')" class="w-full h-11 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-xl font-bold text-sm transition-all">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms of Service Modal -->
+    <div id="tos-modal" class="modal-overlay" onclick="if(event.target===this) document.getElementById('tos-modal').classList.remove('open')">
+        <div class="bg-white dark:bg-zinc-900 rounded-[32px] p-6 md:p-8 max-w-[620px] w-[95%] shadow-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col max-h-[85vh]">
+            <div class="flex items-center justify-between mb-5 flex-shrink-0">
+                <h2 class="text-lg font-bold">Terms of Service</h2>
+                <button onclick="document.getElementById('tos-modal').classList.remove('open')" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="overflow-y-auto hide-scrollbar space-y-5 text-sm text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed flex-1">
+                <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Last updated: April 6, 2026</p>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">1. About</h3>
+                    <p>The Shalhevet Dashboard is an unofficial student tool developed by Adam Sandler ('27) for personal academic planning. It is intended for use by Shalhevet High School students only. By using the Dashboard, you agree to these Terms of Service.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">2. Use of Site</h3>
+                    <p>You agree to use the Dashboard only for its intended purpose of personal academic planning. You may not use it for any unlawful purpose, attempt to disrupt or interfere with its operation, or use it in any way that could harm other users or the developer.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">3. Intellectual Property</h3>
+                    <p>All content, design, and code within the Shalhevet Dashboard is the intellectual property of its developer. You may not copy, reproduce, distribute, or create derivative works from any part of the Dashboard without explicit permission.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">4. Disclaimer</h3>
+                    <p>All GPA calculations, transcript exports, and academic data displayed are for personal planning purposes only and do not reflect your official academic record. The Dashboard is not affiliated with or endorsed by Shalhevet High School. For your official GPA or transcript, contact Ed Support or College Counseling at Shalhevet.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">5. Your Account &amp; Data</h3>
+                    <ul class="space-y-2">
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Signed-in users:</strong> Your data (GPA, tasks, college list, co-curricular activities) is stored in Google's Firebase/Firestore cloud. Signing in with Google is subject to Google's own Terms of Service and Privacy Policy.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Guest users:</strong> Your data is stored locally on your device using browser storage. It is not transmitted to any server and will be lost if you clear your browser data.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>We do not sell, share, or monetize your data with any third party.</span></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">6. AI Usage</h3>
+                    <p>When you use the "Import PDF Transcript" feature, your transcript is transmitted to Anthropic's Claude AI API for processing. By using this feature, you acknowledge and agree that:</p>
+                    <ul class="space-y-2 mt-2">
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>Your transcript may contain personally identifiable information (PII), including your name, address, and date of birth.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>This data is sent to a third-party AI service (Anthropic) and is subject to Anthropic's Privacy Policy.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>Only course names, grades, and credits are extracted and stored by the Dashboard. No other data is retained.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>You use this feature at your own discretion and risk.</span></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">7. Limitation of Liability</h3>
+                    <p>The Dashboard is provided "as is" without any warranty of accuracy, reliability, or uptime. The developer is not liable for any errors in calculations, data loss, service interruptions, or any damages arising from your use of the Dashboard.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">8. Right to Change Terms</h3>
+                    <p>The developer reserves the right to modify, suspend, or discontinue the Dashboard or these Terms at any time without notice. Continued use of the Dashboard after changes are posted constitutes acceptance of the updated terms.</p>
+                </div>
+
+                <div class="space-y-1.5">
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">9. Contact</h3>
+                    <p>For questions or concerns regarding these Terms, please email us at <a href="mailto:contactshalidashboard@gmail.com" class="text-shalhevet hover:underline">contactshalidashboard@gmail.com</a>.</p>
+                </div>
+            </div>
+            <div class="pt-5 flex-shrink-0">
+                <button onclick="document.getElementById('tos-modal').classList.remove('open')" class="w-full h-11 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-xl font-bold text-sm transition-all">Close</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Edit Task Modal -->
     <div id="edit-task-modal" class="modal-overlay" onclick="if(event.target===this) closeEditTaskModal()">
@@ -320,13 +512,14 @@
 
     <!-- Guest Banner -->
     <div id="guest-banner" class="hidden bg-red-50 dark:bg-red-950/20 border-b border-red-100 dark:border-red-900/30 py-2.5 px-4 no-print">
-        <div class="max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p class="text-xs font-bold text-shalhevet text-center sm:text-left">
+        <div class="max-w-[1400px] mx-auto flex flex-row items-center justify-between gap-2">
+            <p class="text-xs font-bold text-shalhevet flex-1 min-w-0">
                 <i data-lucide="info" class="w-3.5 h-3.5 inline mr-1.5 -mt-0.5"></i>
-                You're in guest mode. Data is saved locally. <span class="hidden md:inline">Sign in to sync across devices.</span>
+                <span class="hidden sm:inline">You're in guest mode. Data is saved locally.</span>
+                <span class="sm:hidden">Guest mode — data saved locally.</span>
             </p>
-            <div class="flex items-center gap-3">
-                <button onclick="signInWithGoogle()" class="text-[10px] font-bold bg-shalhevet text-white px-3 py-1.5 rounded-lg shadow-sm">Sign In to Save</button>
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <button onclick="signInWithGoogle()" class="text-[10px] font-bold bg-shalhevet text-white px-3 py-1.5 rounded-lg shadow-sm whitespace-nowrap">Sign In to Save</button>
                 <button onclick="dismissGuestBanner()" class="text-shalhevet/50 hover:text-shalhevet transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
             </div>
         </div>
@@ -436,7 +629,7 @@
                     <i data-lucide="download" class="w-4 h-4 rotate-180"></i> Import PDF Transcript
                 </button>
                 <input type="file" id="import-transcript-input" accept=".pdf,application/pdf" class="hidden" onchange="importTranscriptPDF(event)">
-                <button onclick="resetGPA()" class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-red-500 hover:text-red-400 rounded-xl h-12 px-8 font-bold w-full md:w-auto transition-all text-sm">
+                <button onclick="resetGPA()" class="bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 border border-zinc-800 text-red-500 hover:text-red-400 rounded-xl h-12 px-8 font-bold w-full md:w-auto transition-all text-sm">
                     <i data-lucide="trash" class="w-4 h-4 mr-2 inline"></i> Clear All Data
                 </button>
             </div>
@@ -684,11 +877,19 @@
             <div id="cocurr-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
         </div>
 
+
     </main>
 
-    <footer class="py-8 md:py-12 no-print">
-        <div class="max-w-[1200px] mx-auto px-6 text-center">
+    <footer class="pt-4 pb-6 md:pt-6 md:pb-8 no-print">
+        <div class="max-w-[1200px] mx-auto px-6 text-center space-y-2">
             <p class="text-[11px] font-bold text-zinc-400 dark:text-zinc-600">MANAGED AND DEVELOPED BY ADAM SANDLER '27</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-4 w-full">
+                <button onclick="document.getElementById('tos-modal').classList.add('open'); lucide.createIcons();" class="text-[11px] font-bold text-zinc-400 dark:text-zinc-600 hover:text-shalhevet dark:hover:text-shalhevet transition-colors uppercase tracking-widest">Terms of Service</button>
+                <span class="text-zinc-300 dark:text-zinc-700 text-[11px] hidden sm:inline">·</span>
+                <button onclick="document.getElementById('privacy-modal').classList.add('open'); lucide.createIcons();" class="text-[11px] font-bold text-zinc-400 dark:text-zinc-600 hover:text-shalhevet dark:hover:text-shalhevet transition-colors uppercase tracking-widest">Privacy Policy</button>
+                <span class="text-zinc-300 dark:text-zinc-700 text-[11px] hidden sm:inline">·</span>
+                <button onclick="document.getElementById('contact-modal').classList.add('open'); lucide.createIcons();" class="text-[11px] font-bold text-zinc-400 dark:text-zinc-600 hover:text-shalhevet dark:hover:text-shalhevet transition-colors uppercase tracking-widest">Contact</button>
+            </div>
         </div>
     </footer>
 
@@ -953,6 +1154,17 @@
             container.querySelectorAll('[data-grade]').forEach(button => setGradeButtonState(button, selected.has(button.dataset.grade)));
         }
 
+        function submitContactForm() {
+            const name = document.getElementById('contact-name').value.trim();
+            const email = document.getElementById('contact-email').value.trim();
+            const subject = document.getElementById('contact-subject').value;
+            const message = document.getElementById('contact-message').value.trim();
+            if (!message) { alert('Please enter a message before sending.'); return; }
+            const body = `${name ? 'From: ' + name + '\n' : ''}${email ? 'Reply to: ' + email + '\n' : ''}\n${message}`;
+            const mailtoLink = `mailto:contactshalidashboard@gmail.com?subject=${encodeURIComponent(subject || 'Dashboard Inquiry')}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+
         function showPage(id) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
             document.getElementById(`page-${id}`).classList.remove('hidden');
@@ -963,6 +1175,7 @@
             }
             window.scrollTo(0,0);
             renderAll();
+            lucide.createIcons();
         }
 
         function toggleDarkMode() {
@@ -986,7 +1199,7 @@
                     html += `<div class="px-6 md:px-8 py-10 text-center"><p class="text-xs font-bold text-zinc-300 dark:text-zinc-600 uppercase tracking-wider">No courses added for this year</p></div>`;
                 } else {
                     ['SEMESTER 1','SEMESTER 2'].forEach((sem, sIdx) => {
-                        html += `<div class="gpa-semester-block px-6 md:px-8 py-5 ${sIdx === 0 ? 'border-b border-zinc-200 dark:border-zinc-800' : ''}"><div class="space-y-3"><div><div class="text-[11px] font-bold text-shalhevet uppercase tracking-[0.18em]">${sem}</div><div class="mt-2.5 h-px bg-zinc-200 dark:bg-zinc-700"></div></div>`;
+                        html += `<div class="gpa-semester-block px-3 md:px-8 py-5 ${sIdx === 0 ? 'border-b border-zinc-200 dark:border-zinc-800' : ''}"><div class="space-y-3"><div><div class="text-[11px] font-bold text-shalhevet uppercase tracking-[0.18em]">${sem}</div><div class="mt-2.5 h-px bg-zinc-200 dark:bg-zinc-700"></div></div>`;
                         year.courses.forEach((c, cIdx) => {
                             const gradeKey = sIdx === 0 ? 's1grade' : 's2grade';
                             const isSynced = sIdx === 1 && c.sync;
@@ -996,15 +1209,17 @@
                             const courseName = getSemesterCourseName(c, sIdx);
                             const courseCredits = getSemesterCourseCredits(c, sIdx);
                             html += `<div class="gpa-course-row space-y-3 ${isSynced ? 'opacity-50' : ''}">
-                                <div class="grid grid-cols-2 md:grid-cols-[1fr_108px_98px_116px_28px] gap-3 md:gap-4 items-end">
-                                <div class="col-span-2 md:col-span-1 space-y-1.5">
-                                    ${sIdx === 0 ? `<div class="flex items-center justify-between"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label><label class="flex items-center gap-1.5 cursor-pointer"><label class="switch scale-[0.72] origin-right"><input type="checkbox" ${c.sync ? 'checked' : ''} onchange="updateCourse(${yIdx},${cIdx},'sync',this.checked)"><span class="slider"></span></label><span class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">S2</span></label></div>` : `<label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label>`}
+                                <div class="grid grid-cols-1 md:grid-cols-[1fr_108px_98px_116px_28px] gap-3 md:gap-4 items-end">
+                                <div class="space-y-1.5">
+                                    ${sIdx === 0 ? `<div class="flex items-center justify-between"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label><div class="flex items-center gap-2"><label class="flex items-center gap-1.5 cursor-pointer"><label class="switch scale-[0.72] origin-right"><input type="checkbox" ${c.sync ? 'checked' : ''} onchange="updateCourse(${yIdx},${cIdx},'sync',this.checked)"><span class="slider"></span></label><span class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">S2</span></label><button onclick="deleteCourse(${yIdx},${cIdx})" class="md:hidden text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button></div></div>` : `<label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label>`}
                                     <input type="text" list="course-catalog" value="${courseName}" ${isSynced ? 'readonly' : `onchange="updateCourse(${yIdx},${cIdx},'${nameField}',this.value)"`} placeholder="Type or select a course..." class="course-name w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none focus:ring-1 focus:ring-shalhevet">
                                 </div>
+                                <div class="grid grid-cols-3 gap-2 md:contents">
                                 <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">GRADE</label><select onchange="updateCourse(${yIdx},${cIdx},'${gradeKey}',this.value)" class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none">${Object.keys(GRADE_SCALE).map(g => `<option ${c[gradeKey] === g ? 'selected' : ''}>${g}</option>`).join('')}</select></div>
                                 <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">CREDITS</label><select ${isSynced ? 'disabled' : `onchange="updateCourse(${yIdx},${cIdx},'${creditsField}',this.value)"`} class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none"><option value="0.25" ${courseCredits == 0.25 ? 'selected' : ''}>0.25</option><option value="0.5" ${courseCredits == 0.5 ? 'selected' : ''}>0.5</option><option value="1.0" ${courseCredits == 1.0 ? 'selected' : ''}>1.0</option></select></div>
                                 <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">WEIGHT</label><button ${isSynced ? 'disabled' : `onclick="toggleWeight(${yIdx},${cIdx},${sIdx})"`} class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 font-bold text-[11px] md:text-xs transition-all ${weightOn ? 'bg-shalhevet text-white border-shalhevet' : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'}">${weightOn ? 'SAS/HON' : 'REGULAR'}</button></div>
-                                <div class="flex justify-end md:block">${sIdx === 0 ? `<button onclick="deleteCourse(${yIdx},${cIdx})" class="text-zinc-300 hover:text-shalhevet p-1 mb-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>` : '<div></div>'}</div>
+                                </div>
+                                <div class="hidden md:flex justify-end">${sIdx === 0 ? `<button onclick="deleteCourse(${yIdx},${cIdx})" class="text-zinc-300 hover:text-shalhevet p-1 mb-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>` : '<div></div>'}</div>
                                 </div>
                             </div>`;
                             const pts = GRADE_SCALE[c[gradeKey]];
@@ -1019,12 +1234,12 @@
                 }
                 const yearAvgUW = yearCr > 0 ? (yearUW / yearCr).toFixed(2) : '0.00';
                 const yearAvgWT = yearCr > 0 ? (yearWT / yearCr).toFixed(2) : '0.00';
-                html += `</div><div class="gpa-year-footer px-6 md:px-8 py-3.5 md:py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                html += `</div><div class="gpa-year-footer px-6 md:px-8 py-3.5 md:py-4 flex flex-row items-center justify-between gap-3">
                     <div class="flex items-center gap-4 md:gap-5 text-sm md:text-base font-bold">
                         <div><span class="text-zinc-500 dark:text-zinc-400">UW:</span> <span class="text-shalhevet">${yearAvgUW}</span></div>
                         <div><span class="text-zinc-500 dark:text-zinc-400">WT:</span> <span class="text-shalhevet">${yearAvgWT}</span></div>
                     </div>
-                    <button onclick="addCourse(${yIdx})" class="h-9 md:h-10 px-4 md:px-5 rounded-[14px] border border-zinc-300 dark:border-zinc-700 bg-transparent hover:border-shalhevet hover:text-shalhevet font-bold text-xs md:text-sm text-zinc-500 dark:text-zinc-400 transition-all self-start md:self-auto">+ Add Course</button>
+                    <button onclick="addCourse(${yIdx})" class="h-9 md:h-10 px-4 md:px-5 rounded-[14px] border border-zinc-300 dark:border-zinc-700 bg-transparent hover:border-shalhevet hover:text-shalhevet font-bold text-xs md:text-sm text-zinc-500 dark:text-zinc-400 transition-all flex-shrink-0">+ Add Course</button>
                 </div>`;
                 container.innerHTML += html;
             });
