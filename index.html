@@ -450,7 +450,11 @@
                 <button onclick="window.print()" class="bg-shalhevet hover:bg-red-700 text-white font-bold rounded-xl h-12 px-8 flex items-center justify-center gap-2 shadow-lg shadow-red-900/20 w-full md:w-auto transition-all text-sm">
                     <i data-lucide="download" class="w-4 h-4"></i> Export Unofficial Transcript
                 </button>
-                <button onclick="resetGPA()" class="border border-red-200 text-shalhevet hover:bg-red-50 dark:border-red-900/30 dark:hover:bg-red-950/20 rounded-xl h-12 px-8 font-bold w-full md:w-auto transition-all text-sm">
+                <button onclick="showPDFPrivacyWarning()" class="border border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl h-12 px-8 font-bold w-full md:w-auto transition-all text-sm flex items-center justify-center gap-2">
+                    <i data-lucide="arrow-right" class="w-4 h-4 rotate-[-90deg]"></i> Import PDF Transcript
+                </button>
+                <input type="file" id="import-transcript-input" accept=".pdf,application/pdf" class="hidden" onchange="importTranscriptPDF(event)">
+                <button onclick="resetGPA()" class="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-red-500 hover:text-red-400 rounded-xl h-12 px-8 font-bold w-full md:w-auto transition-all text-sm">
                     <i data-lucide="rotate-ccw" class="w-4 h-4 mr-2 inline"></i> Clear All Data
                 </button>
             </div>
@@ -471,6 +475,7 @@
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">In-Progress Courses:</strong> Leaving a grade as "—" keeps the course on your transcript draft without counting it in GPA totals yet.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Sync S2 Toggle:</strong> The slide toggle on each S1 course mirrors that course into semester 2 — copying the name, credits, and weight. Only the S2 grade stays editable.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Transcript Export:</strong> The unofficial transcript groups courses by year and only counts semesters that already have a real letter grade entered.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">PDF Import:</strong> Sends your transcript to an AI for processing. Official transcripts contain personal details (name, address, DOB, parent names). <strong class="text-shalhevet">The AI is instructed to extract only courses and grades,</strong> and this app stores no personal data.</span></li>
                         </ul>
                     </div>
                 </div>
@@ -674,8 +679,6 @@
                 </div>
             </div>
 
-            <div id="cocurr-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
-
             <div id="cc-form-container" class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="p-6 space-y-6">
                     <h2 class="text-lg font-bold uppercase tracking-wider">ADD ACTIVITY</h2>
@@ -724,6 +727,8 @@
                     <button onclick="addCoCurr()" class="w-full bg-shalhevet hover:bg-red-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-red-900/20 text-sm">Add Entry</button>
                 </div>
             </div>
+
+            <div id="cocurr-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
         </div>
 
     </main>
@@ -1393,6 +1398,241 @@
         }
         function resetCCForm() { document.getElementById('cc-name').value = ''; document.getElementById('cc-role').value = ''; document.getElementById('cc-desc').value = ''; document.getElementById('cc-hours').value = ''; document.getElementById('cc-active').checked = true; setSelectedGrades('cc-grade-selector', []); }
         function deleteCoCurr(id) { window.cocurrs = window.cocurrs.filter(x => x.id !== id); if (window.cloudSave) window.cloudSave(); renderCoCurr(); }
+
+        function showPDFPrivacyWarning() {
+            let overlay = document.getElementById('pdf-privacy-warning');
+            if (overlay) overlay.remove();
+            overlay = document.createElement('div');
+            overlay.id = 'pdf-privacy-warning';
+            overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:20000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);padding:16px;';
+            overlay.innerHTML = `
+                <div style="background:#fff;border-radius:28px;width:100%;max-width:460px;box-shadow:0 12px 60px rgba(0,0,0,0.25);overflow:hidden;" class="dark:bg-zinc-900">
+                    <div style="background:#fef2f2;padding:24px 28px 18px;border-bottom:1px solid #fecaca;">
+                        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                            <div style="width:36px;height:36px;background:#fee2e2;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#cc0000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+                            </div>
+                            <h2 style="font-size:16px;font-weight:800;color:#18181b;">Before you upload</h2>
+                        </div>
+                        <p style="font-size:13px;font-weight:600;color:#dc2626;line-height:1.55;">Your transcript contains personal information that will be sent to the AI for processing.</p>
+                    </div>
+                    <div style="padding:20px 28px;">
+                        <p style="font-size:12px;font-weight:700;color:#71717a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">This includes</p>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+                            ${["Student name","Date of birth","Parent / guardian names","Home address"].map(item => `
+                                <div style="display:flex;align-items:center;gap:7px;background:#fef2f2;border-radius:10px;padding:8px 10px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                                    <span style="font-size:12px;font-weight:700;color:#7f1d1d;">${item}</span>
+                                </div>`).join("")}
+                        </div>
+                        <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:12px 14px;margin-bottom:16px;">
+                            <p style="font-size:13px;font-weight:800;color:#15803d;line-height:1.5;margin:0;">Only course names, grades, and credits are extracted.</p>
+                            <p style="font-size:12px;font-weight:600;color:#166534;line-height:1.5;margin:4px 0 0;">No personal data is stored by this app.</p>
+                        </div>
+                        <p style="font-size:12px;font-weight:600;color:#71717a;line-height:1.6;margin-bottom:20px;">The full PDF is transmitted to the AI for processing. Only proceed if you are comfortable with this.</p>
+                        <div style="display:flex;gap:10px;">
+                            <button onclick="document.getElementById('pdf-privacy-warning').remove()" style="flex:1;height:44px;border-radius:12px;font-weight:700;font-size:13px;background:#f4f4f5;color:#27272a;border:none;cursor:pointer;">Cancel</button>
+                            <button onclick="document.getElementById('pdf-privacy-warning').remove(); document.getElementById('import-transcript-input').click();" style="flex:2;height:44px;border-radius:12px;font-weight:700;font-size:13px;background:#cc0000;color:#fff;border:none;cursor:pointer;">I understand — Continue</button>
+                        </div>
+                    </div>
+                </div>`;
+            document.body.appendChild(overlay);
+        }
+
+        function importTranscriptPDF(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            event.target.value = '';
+
+            // Show a loading modal
+            showPDFImportModal('reading');
+
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64PDF = e.target.result.split(',')[1];
+                try {
+                    showPDFImportModal('parsing');
+                    const response = await fetch('https://api.anthropic.com/v1/messages', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            model: 'claude-sonnet-4-20250514',
+                            max_tokens: 4000,
+                            system: `You are a transcript parser. Extract ONLY academic course data from the uploaded school transcript PDF and return ONLY a valid JSON array — no markdown, no explanation, no backticks.
+
+PRIVACY RULES — STRICTLY IGNORE AND DO NOT INCLUDE:
+- Student name, parent/guardian names
+- Home address, mailing address, city, state, zip
+- Phone numbers, email addresses
+- Student ID, Social Security Number, or any ID numbers
+- Date of birth, age
+- School counselor or teacher names
+- Any other personally identifiable information (PII)
+
+The JSON must be an array of exactly 4 year objects in this format:
+[
+  { "name": "9th Grade", "courses": [...] },
+  { "name": "10th Grade", "courses": [...] },
+  { "name": "11th Grade", "courses": [...] },
+  { "name": "12th Grade", "courses": [...] }
+]
+
+Each course object:
+{
+  "id": "<unique string, e.g. timestamp + index>",
+  "name": "<course name>",
+  "s1grade": "<letter grade or — if missing>",
+  "s2grade": "<letter grade or — if missing>",
+  "credits": <number, typically 0.5>,
+  "wt": <true if Honors/SAS/AP/IB only — NOT for Advanced track>
+}
+
+Rules:
+- Match each course to the correct grade year (9th, 10th, 11th, 12th) based on the transcript.
+- If a year has no courses, return an empty courses array.
+- Valid letter grades: A+, A, A-, B+, B, B-, C+, C, C-, D+, D, F, or — for missing/in-progress.
+- Credits are usually 0.5 per semester or 1.0 for a full-year course. Default to 0.5 if unclear.
+- wt should be true for Honors, SAS, AP, and IB courses only. Advanced/ADV track courses are NOT weighted — set wt to false for any course with "Advanced" in the name.
+- Return ONLY the JSON array. Nothing else.`,
+                            messages: [{
+                                role: 'user',
+                                content: [{
+                                    type: 'document',
+                                    source: { type: 'base64', media_type: 'application/pdf', data: base64PDF }
+                                }, {
+                                    type: 'text',
+                                    text: 'Parse this transcript PDF and return the course data as the JSON array described.'
+                                }]
+                            }]
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const err = await response.json().catch(() => ({}));
+                        throw new Error(err?.error?.message || `API error ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    const rawText = (data.content || []).map(b => b.text || '').join('').trim();
+                    const clean = rawText.replace(/^```json|^```|```$/gm, '').trim();
+                    const parsed = JSON.parse(clean);
+
+                    if (!Array.isArray(parsed)) throw new Error('Unexpected response format');
+
+                    const imported = normalizeGPAData(parsed);
+                    // Assign unique ids if missing
+                    imported.forEach(year => year.courses.forEach((c, i) => { if (!c.id) c.id = `${Date.now()}-${i}`; }));
+                    const hasData = imported.some(y => y.courses.length > 0);
+
+                    hidePDFImportModal();
+                    if (!hasData) { showImportToast('No courses found in the transcript.', true); return; }
+
+                    showPDFImportPreview(imported);
+
+                } catch(err) {
+                    hidePDFImportModal();
+                    console.error('PDF import error:', err);
+                    showImportToast('Could not parse transcript: ' + (err.message || 'Unknown error'), true);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ── PDF Import Modal (loading state) ────────────────────────────────────
+        function showPDFImportModal(state) {
+            let modal = document.getElementById('pdf-import-modal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'pdf-import-modal';
+                modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:20000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
+                modal.innerHTML = `
+                    <div style="background:var(--modal-bg,#fff);border-radius:24px;padding:36px 40px;max-width:380px;width:90%;text-align:center;box-shadow:0 8px 48px rgba(0,0,0,0.22);" class="dark:bg-zinc-900 bg-white">
+                        <div id="pdf-import-spinner" style="width:44px;height:44px;border:3px solid #f4f4f5;border-top-color:#cc0000;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px;"></div>
+                        <p id="pdf-import-status" style="font-weight:700;font-size:15px;" class="text-zinc-900 dark:text-white"></p>
+                        <p id="pdf-import-sub" style="font-size:12px;font-weight:600;margin-top:6px;" class="text-zinc-400"></p>
+                    </div>`;
+                const style = document.createElement('style');
+                style.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+                document.head.appendChild(style);
+                document.body.appendChild(modal);
+            }
+            modal.style.display = 'flex';
+            const status = document.getElementById('pdf-import-status');
+            const sub = document.getElementById('pdf-import-sub');
+            if (state === 'reading') { status.textContent = 'Reading PDF…'; sub.textContent = 'Preparing your transcript for analysis.'; }
+            if (state === 'parsing') { status.textContent = 'Analyzing transcript…'; sub.textContent = 'Claude is extracting your courses and grades. This may take a few seconds.'; }
+        }
+        function hidePDFImportModal() {
+            const modal = document.getElementById('pdf-import-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        // ── PDF Import Preview ───────────────────────────────────────────────────
+        function showPDFImportPreview(imported) {
+            let overlay = document.getElementById('pdf-preview-overlay');
+            if (overlay) overlay.remove();
+
+            overlay = document.createElement('div');
+            overlay.id = 'pdf-preview-overlay';
+            overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:20000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);padding:16px;';
+
+            const totalCourses = imported.reduce((n, y) => n + y.courses.length, 0);
+            const yearsHTML = imported.map(year => {
+                if (!year.courses.length) return '';
+                return `<div style="margin-bottom:12px;">
+                    <div style="font-size:11px;font-weight:800;color:#cc0000;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">${year.name}</div>
+                    ${year.courses.map(c => `
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f4f4f5;font-size:12px;font-weight:600;">
+                            <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:12px;">${c.name}</span>
+                            <span style="color:#71717a;flex-shrink:0;">${c.s1grade || '—'} / ${c.s2grade || '—'}</span>
+                        </div>`).join('')}
+                </div>`;
+            }).join('');
+
+            overlay.innerHTML = `
+                <div style="background:#fff;border-radius:28px;width:100%;max-width:520px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 12px 60px rgba(0,0,0,0.25);" class="dark:bg-zinc-900">
+                    <div style="padding:24px 28px 16px;border-bottom:1px solid #f4f4f5;flex-shrink:0;">
+                        <h2 style="font-size:17px;font-weight:800;" class="text-zinc-900 dark:text-white">Transcript Preview</h2>
+                        <p style="font-size:12px;font-weight:600;margin-top:4px;" class="text-zinc-400">${totalCourses} course${totalCourses !== 1 ? 's' : ''} found across ${imported.filter(y=>y.courses.length).length} year${imported.filter(y=>y.courses.length).length!==1?'s':''}. Review before importing.</p>
+                    </div>
+                    <div style="overflow-y:auto;padding:20px 28px;flex:1;" class="text-zinc-900 dark:text-white">${yearsHTML || '<p style="color:#71717a;font-size:13px;">No courses detected.</p>'}</div>
+                    <div style="padding:16px 28px 24px;display:flex;gap:10px;flex-shrink:0;border-top:1px solid #f4f4f5;">
+                        <button onclick="document.getElementById('pdf-preview-overlay').remove()" style="flex:1;height:44px;border-radius:12px;font-weight:700;font-size:13px;background:#f4f4f5;color:#27272a;border:none;cursor:pointer;">Cancel</button>
+                        <button onclick="confirmPDFImport()" style="flex:2;height:44px;border-radius:12px;font-weight:700;font-size:13px;background:#cc0000;color:#fff;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(204,0,0,0.25);">Import ${totalCourses} Courses</button>
+                    </div>
+                </div>`;
+
+            // Stash on overlay element so confirmPDFImport can access it
+            overlay._importedData = imported;
+            document.body.appendChild(overlay);
+        }
+
+        function confirmPDFImport() {
+            const overlay = document.getElementById('pdf-preview-overlay');
+            if (!overlay) return;
+            const imported = overlay._importedData;
+            overlay.remove();
+            window.gpaData = imported;
+            if (window.cloudSave) window.cloudSave();
+            renderAll();
+            showImportToast(`Transcript imported — ${imported.reduce((n,y)=>n+y.courses.length,0)} courses loaded.`);
+        }
+
+        function showImportToast(message, isError = false) {
+            let toast = document.getElementById('import-toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'import-toast';
+                toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;padding:12px 20px;border-radius:14px;font-size:13px;font-weight:700;box-shadow:0 4px 24px rgba(0,0,0,0.18);transition:opacity 0.3s;pointer-events:none;';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = message;
+            toast.style.background = isError ? '#dc2626' : '#18181b';
+            toast.style.color = '#fff';
+            toast.style.opacity = '1';
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+        }
 
         function safeRender(label, fn) { try { fn(); } catch (error) { console.error(`${label} render failed`, error); } }
         function renderAll() {
