@@ -1637,15 +1637,9 @@ async function importTranscriptPDF(event) {
     if (!file) return;
     event.target.value = '';
 
-    if (!PROXY_URL || PROXY_URL.includes('YOUR-WORKER')) {
-        showImportToast('PDF import is not yet configured.', true);
-        return;
-    }
-
     showPDFImportModal('reading');
 
     try {
-        // Load PDF.js to extract text
         if (!window.pdfjsLib) {
             await new Promise((resolve, reject) => {
                 const script = document.createElement('script');
@@ -1666,6 +1660,8 @@ async function importTranscriptPDF(event) {
             fullText += content.items.map(item => item.str).join(' ') + '\n';
         }
 
+        console.log('Extracted text:', fullText);
+
         if (!fullText.trim()) {
             hidePDFImportModal();
             showImportToast('Could not extract text from PDF.', true);
@@ -1681,9 +1677,15 @@ async function importTranscriptPDF(event) {
                 messages: [
                     {
                         role: 'system',
-                        content: `You are a transcript parser. Extract ONLY academic course data and return ONLY a valid JSON array — no markdown, no explanation, no backticks.
+                        content: `You are a transcript parser. You will receive raw text extracted from a high school transcript. The text may be messy or poorly formatted. Your job is to find ALL courses, grades, and credits regardless of formatting.
 
-The JSON must be an array of exactly 4 year objects:
+Look for patterns like:
+- Course names followed by letter grades (A, B, C, D, F with +/- modifiers)
+- Semester 1 and Semester 2 grades
+- Credit values (usually 0.5 or 1.0)
+- Year or grade level indicators (9th, 10th, 11th, 12th or Freshman, Sophomore, Junior, Senior)
+
+Return ONLY a valid JSON array of exactly 4 year objects — no markdown, no explanation, no backticks:
 [
   { "name": "9th Grade", "courses": [...] },
   { "name": "10th Grade", "courses": [...] },
@@ -1735,7 +1737,6 @@ Return ONLY the JSON array. Nothing else.`
         showImportToast('Could not parse transcript: ' + (err.message || 'Unknown error'), true);
     }
 }
-
         function showPDFImportModal(state) {
             let modal = document.getElementById('pdf-import-modal');
             if (!modal) {
