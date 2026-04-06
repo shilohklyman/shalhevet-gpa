@@ -241,7 +241,7 @@
                     <p>The Dashboard relies on the following third-party services, each with their own privacy policies:</p>
                     <ul class="space-y-2 mt-2">
                         <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Google Firebase:</strong> Used for authentication and cloud data storage.</span></li>
-                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Anthropic (Claude AI):</strong> Used only when you choose to import a PDF transcript. Your transcript is transmitted to Anthropic for processing and is subject to Anthropic's Privacy Policy.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Google Gemini AI:</strong> Used only when you choose to import a PDF transcript. Your transcript is transmitted to Google for processing and is subject to Google's Privacy Policy.</span></li>
                     </ul>
                 </div>
                 <div class="space-y-1.5">
@@ -298,10 +298,10 @@
                 </div>
                 <div class="space-y-1.5">
                     <h3 class="font-bold text-zinc-900 dark:text-white text-sm">6. AI Usage</h3>
-                    <p>When you use the "Import PDF Transcript" feature, your transcript is transmitted to Anthropic's Claude AI API for processing. By using this feature, you acknowledge and agree that:</p>
+                    <p>When you use the "Import PDF Transcript" feature, your transcript is transmitted to Google Gemini's AI API for processing. By using this feature, you acknowledge and agree that:</p>
                     <ul class="space-y-2 mt-2">
                         <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>Your transcript may contain personally identifiable information (PII), including your name, address, and date of birth.</span></li>
-                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>This data is sent to a third-party AI service (Anthropic) and is subject to Anthropic's Privacy Policy.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>This data is sent to a third-party AI service (Google Gemini) and is subject to Google's Privacy Policy.</span></li>
                         <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>Only course names, grades, and credits are extracted and stored by the Dashboard. No other data is retained.</span></li>
                         <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>You use this feature at your own discretion and risk.</span></li>
                     </ul>
@@ -640,7 +640,7 @@
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">In-Progress Courses:</strong> Leaving a grade as "—" keeps the course on your transcript draft without counting it in GPA totals yet.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Sync S2 Toggle:</strong> Mirrors semester 1 course into semester 2. Only the Semester 2 grade stays editable.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Transcript Export:</strong> Generates an unofficial transcript from the grades you've entered, organized by year. Not an official school document.</span></li>
-                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">PDF Import:</strong> Sends your transcript to AI for processing. <strong class="text-shalhevet">Only courses and grades are extracted.</strong> No personal data is stored.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">PDF Import:</strong> Sends your transcript to Google Gemini AI for processing. <strong class="text-shalhevet">Only courses and grades are extracted.</strong> No personal data is stored.</span></li>
                         </ul>
                     </div>
                 </div>
@@ -1633,60 +1633,86 @@
         }
 
         async function importTranscriptPDF(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            event.target.value = '';
+    const file = event.target.files[0];
+    if (!file) return;
+    event.target.value = '';
 
-            // Guard: PROXY_URL must be configured before this feature works.
-            if (!PROXY_URL || PROXY_URL.includes('YOUR-WORKER')) {
-                showImportToast('PDF import is not yet configured. See setup instructions in the source.', true);
-                return;
+    if (!PROXY_URL || PROXY_URL.includes('YOUR-WORKER')) {
+        showImportToast('PDF import is not yet configured.', true);
+        return;
+    }
+
+    showPDFImportModal('reading');
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        const base64PDF = e.target.result.split(',')[1];
+        try {
+            showPDFImportModal('parsing');
+
+            const response = await fetch(PROXY_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [
+                            {
+                                inline_data: {
+                                    mime_type: 'application/pdf',
+                                    data: base64PDF
+                                }
+                            },
+                            {
+                                text: `You are a transcript parser. Extract ONLY academic course data from this transcript PDF and return ONLY a valid JSON array — no markdown, no explanation, no backticks.
+
+The JSON must be an array of exactly 4 year objects:
+[
+  { "name": "9th Grade", "courses": [...] },
+  { "name": "10th Grade", "courses": [...] },
+  { "name": "11th Grade", "courses": [...] },
+  { "name": "12th Grade", "courses": [...] }
+]
+
+Each course object:
+{
+  "id": "<unique string>",
+  "name": "<course name>",
+  "s1grade": "<letter grade or — if missing>",
+  "s2grade": "<letter grade or — if missing>",
+  "credits": <number, typically 0.5>,
+  "wt": <true if Honors/SAS/AP/IB — NOT for Advanced track>
+}
+
+Return ONLY the JSON array. Nothing else.`
+                            }
+                        ]
+                    }]
+                })
+            });
+
+            if (!response.ok) {
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err?.error?.message || `Proxy error ${response.status}`);
             }
 
-            showPDFImportModal('reading');
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                const base64PDF = e.target.result.split(',')[1];
-                try {
-                    showPDFImportModal('parsing');
-
-                    // Request goes to YOUR Cloudflare Worker, not directly to Anthropic.
-                    // The worker holds the API key server-side and forwards the request.
-                    const response = await fetch(PROXY_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            model: 'claude-sonnet-4-20250514',
-                            max_tokens: 4000,
-                            system: `You are a transcript parser. Extract ONLY academic course data from the uploaded school transcript PDF and return ONLY a valid JSON array — no markdown, no explanation, no backticks.\n\nPRIVACY RULES — STRICTLY IGNORE AND DO NOT INCLUDE:\n- Student name, parent/guardian names\n- Home address, mailing address, city, state, zip\n- Phone numbers, email addresses\n- Student ID, Social Security Number, or any ID numbers\n- Date of birth, age\n- School counselor or teacher names\n- Any other personally identifiable information (PII)\n\nThe JSON must be an array of exactly 4 year objects:\n[\n  { "name": "9th Grade", "courses": [...] },\n  { "name": "10th Grade", "courses": [...] },\n  { "name": "11th Grade", "courses": [...] },\n  { "name": "12th Grade", "courses": [...] }\n]\n\nEach course object:\n{\n  "id": "<unique string>",\n  "name": "<course name>",\n  "s1grade": "<letter grade or — if missing>",\n  "s2grade": "<letter grade or — if missing>",\n  "credits": <number, typically 0.5>,\n  "wt": <true if Honors/SAS/AP/IB — NOT for Advanced track>\n}\n\nReturn ONLY the JSON array. Nothing else.`,
-                            messages: [{ role: 'user', content: [{ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: base64PDF } }, { type: 'text', text: 'Parse this transcript PDF and return the course data as the JSON array described.' }] }]
-                        })
-                    });
-
-                    if (!response.ok) {
-                        const err = await response.json().catch(() => ({}));
-                        throw new Error(err?.error?.message || `Proxy error ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    const rawText = (data.content || []).map(b => b.text || '').join('').trim();
-                    const clean = rawText.replace(/^```json|^```|```$/gm, '').trim();
-                    const parsed = JSON.parse(clean);
-                    if (!Array.isArray(parsed)) throw new Error('Unexpected response format');
-                    const imported = normalizeGPAData(parsed);
-                    imported.forEach(year => year.courses.forEach((c, i) => { if (!c.id) c.id = `${Date.now()}-${i}`; }));
-                    const hasData = imported.some(y => y.courses.length > 0);
-                    hidePDFImportModal();
-                    if (!hasData) { showImportToast('No courses found in the transcript.', true); return; }
-                    showPDFImportPreview(imported);
-                } catch(err) {
-                    hidePDFImportModal();
-                    console.error('PDF import error:', err);
-                    showImportToast('Could not parse transcript: ' + (err.message || 'Unknown error'), true);
-                }
-            };
-            reader.readAsDataURL(file);
+            const data = await response.json();
+            const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+            const clean = rawText.replace(/^```json|^```|```$/gm, '').trim();
+            const parsed = JSON.parse(clean);
+            if (!Array.isArray(parsed)) throw new Error('Unexpected response format');
+            const imported = normalizeGPAData(parsed);
+            imported.forEach(year => year.courses.forEach((c, i) => { if (!c.id) c.id = `${Date.now()}-${i}`; }));
+            const hasData = imported.some(y => y.courses.length > 0);
+            hidePDFImportModal();
+            if (!hasData) { showImportToast('No courses found in the transcript.', true); return; }
+            showPDFImportPreview(imported);
+        } catch(err) {
+            hidePDFImportModal();
+            console.error('PDF import error:', err);
+            showImportToast('Could not parse transcript: ' + (err.message || 'Unknown error'), true);
         }
+    };
+    reader.readAsDataURL(file);
+}
 
         function showPDFImportModal(state) {
             let modal = document.getElementById('pdf-import-modal');
@@ -1704,7 +1730,7 @@
             const status = document.getElementById('pdf-import-status');
             const sub = document.getElementById('pdf-import-sub');
             if (state === 'reading') { status.textContent = 'Reading PDF…'; sub.textContent = 'Preparing your transcript for analysis.'; }
-            if (state === 'parsing') { status.textContent = 'Analyzing transcript…'; sub.textContent = 'Claude is extracting your courses and grades. This may take a few seconds.'; }
+            if (state === 'parsing') { status.textContent = 'Analyzing transcript…'; sub.textContent = 'Google Gemini is extracting your courses and grades. This may take a few seconds.'; }
         }
         function hidePDFImportModal() { const modal = document.getElementById('pdf-import-modal'); if (modal) modal.style.display = 'none'; }
 
