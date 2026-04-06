@@ -1039,54 +1039,66 @@
     </script>
 
     <script>
-        // ─────────────────────────────────────────────────────────────────────
-        // CLOUDFLARE WORKER PROXY — keeps your Anthropic API key server-side.
-        //
-        // SETUP (one-time, ~5 minutes):
-        //   1. Go to https://dash.cloudflare.com → Workers & Pages → Create
-        //   2. Create a new Worker, paste the code below, deploy it.
-        //   3. In the Worker settings → Variables → add a secret:
-        //        Name:  ANTHROPIC_API_KEY
-        //        Value: sk-ant-...your key...
-        //   4. Replace PROXY_URL below with your worker's URL.
-        //
-        // WORKER CODE (paste into Cloudflare Worker editor):
-        // ─────────────────────────────────────────────────────────────────────
-        // export default {
-        //   async fetch(request, env) {
-        //     if (request.method === 'OPTIONS') {
-        //       return new Response(null, { headers: corsHeaders() });
-        //     }
-        //     if (request.method !== 'POST') {
-        //       return new Response('Method Not Allowed', { status: 405 });
-        //     }
-        //     const body = await request.json();
-        //     const response = await fetch('https://api.anthropic.com/v1/messages', {
-        //       method: 'POST',
-        //       headers: {
-        //         'Content-Type': 'application/json',
-        //         'x-api-key': env.ANTHROPIC_API_KEY,
-        //         'anthropic-version': '2023-06-01',
-        //       },
-        //       body: JSON.stringify(body),
-        //     });
-        //     const data = await response.json();
-        //     return new Response(JSON.stringify(data), {
-        //       status: response.status,
-        //       headers: { 'Content-Type': 'application/json', ...corsHeaders() },
-        //     });
-        //   }
-        // };
-        // function corsHeaders() {
-        //   return {
-        //     'Access-Control-Allow-Origin': 'https://shalhevetgpa.com',
-        //     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        //     'Access-Control-Allow-Headers': 'Content-Type',
-        //   };
-        // }
-        // ─────────────────────────────────────────────────────────────────────
+export default {
+  async fetch(request, env) {
+    if (request.method === 'OPTIONS') {
+      return new Response(null, { headers: corsHeaders(request) });
+    }
 
-        // ← Replace this with your deployed Cloudflare Worker URL once set up.
+    if (request.method !== 'POST') {
+      return new Response('Method Not Allowed', {
+        status: 405,
+        headers: corsHeaders(request)
+      });
+    }
+
+    try {
+      const body = await request.json();
+
+      const upstream = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${env.OPENAI_API_KEY}`
+        },
+        body: JSON.stringify(body)
+      });
+
+      const text = await upstream.text();
+
+      return new Response(text, {
+        status: upstream.status,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders(request)
+        }
+      });
+    } catch (err) {
+      return new Response(JSON.stringify({ error: String(err) }), {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders(request)
+        }
+      });
+    }
+  }
+};
+
+function corsHeaders(request) {
+  const origin = request.headers.get('Origin') || '';
+  const allowed = [
+    'https://shalhevetgpa.com',
+    'http://localhost:3000',
+    'http://127.0.0.1:5500'
+  ];
+
+  return {
+    'Access-Control-Allow-Origin': allowed.includes(origin) ? origin : 'https://shalhevetgpa.com',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  };
+}
         const PROXY_URL = 'https://shali-proxy.adamjsandler09.workers.dev';
 
         const SHALHEVET_COURSES = ["English Composition","English Composition (Honors)","American Literature","American Literature (Honors)","Banned Books","Banned Books (Honors)","British Literature (SAS)","Journalism","Journalism (Honors)","Creative Writing","Film, Literature & Composition","Film, Literature & Composition (Honors)","Free Will and Time Travel (SAS)","World History","U.S. History","U.S. History (Honors)","Civil War & Reconstruction (SAS)","Civics (SAS)","Comparative Government (Honors)","Economics (SAS)","Medieval Jewish History (SAS)","Positive Psychology","Psychology (SAS)","Topics in U.S. History (SAS)","U.S. Government & Economics","WW II (SAS)","Biology","Engineering","Chemistry","Chemistry (Honors)","Chemistry (SAS)","Intro to Computer Science (Honors)","Computer Science (SAS)","Computer Science 2 (SAS)","Anatomy and Physiology (Honors)","Biochemistry (SAS)","Biology (SAS)","Environmental Science","Physics","Physics (SAS)","Algebra 1","Geometry","Geometry (Advanced)","Geometry (Honors)","Algebra 2","Algebra 2 (Advanced)","Algebra 2 (Honors)","Precalculus","Precalculus (Advanced)","Precalculus (Honors)","Calculus","Calculus (SAS)","Multivariable Calculus (SAS)","Statistics (Honors)","Visual Art","Tech Theater & Drama","Art Composition & Design","Art History (Honors)","Photography","Studio Art (SAS)","Hebrew 100","Hebrew 101","Hebrew 102","Hebrew 103","Hebrew 110","Hebrew 111","Hebrew 112","Hebrew 113 (Honors)","Hebrew 120","Hebrew 121","Hebrew 122","Israeli Culture & Conversation","Hebrew Film & Literature (SAS)","Tanakh 1","Tanakh 1 (Advanced)","Tanakh 2","Tanakh 2 (Advanced)","Tanakh 3","Tanakh 3 (Advanced)","Tanakh 4","Tanakh 4 (Advanced)","Talmud 1","Talmud 1 (Advanced)","Talmud 2","Talmud 2 (Advanced)","Talmud 3","Talmud 3 (Advanced)","Talmud 4","Talmud 4 (Advanced)","Honors Gemara Shiur","Beit Midrash Track (BMT)","Halacha 1","Halacha 2","Israel Education","Israel Education (SAS)","Jewish Philosophy","Jewish Philosophy (Advanced)","Jewish Philosophy (Honors)"];
@@ -1670,14 +1682,9 @@ async function importTranscriptPDF(event) {
 
         showPDFImportModal('parsing');
 
-        const response = await fetch(PROXY_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                messages: [
-                    {
-                        role: 'system',
-                        content: `You are a transcript parser for Shalhevet High School transcripts. The transcript has courses organized by grade year (Grade 9, Grade 10, Grade 11, Grade 12). Each course has these columns: Course Name, Level (SAS/HON/ADV or blank), S1 grade, S2 grade, and Credit.
+        const systemPrompt = `You are a transcript parser for Shalhevet High School transcripts.
+The transcript has courses organized by grade year (Grade 9, Grade 10, Grade 11, Grade 12).
+Each course has these columns: Course Name, Level (SAS/HON/ADV or blank), S1 grade, S2 grade, and Credit.
 
 Level meanings:
 - SAS = Shalhevet Advanced Study (weighted)
@@ -1706,17 +1713,26 @@ Each course object:
   "wt": <true if Level is SAS or HON, false if ADV or blank>
 }
 
-Return ONLY the JSON array. Nothing else.`
-                    },
-                    {
-                        role: 'user',
-                        content: `Parse this Shalhevet High School transcript. The text may have scrambled column order due to PDF extraction. Look for course names you would recognize from a Jewish high school (English, Math, Science, History, Talmud, Tanakh, Hebrew, etc.) and match them with nearby letter grades and credit values.
+Return ONLY the JSON array. Nothing else.`;
+
+        const userPrompt = `Parse this Shalhevet High School transcript.
+The text may have scrambled column order due to PDF extraction.
+Look for course names you would recognize from a Jewish high school (English, Math, Science, History, Talmud, Tanakh, Hebrew, etc.) and match them with nearby letter grades and credit values.
 
 Transcript text:
-${fullText}`
-                    }
-                ],
-                max_tokens: 4000
+${fullText}`;
+
+        const response = await fetch(PROXY_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                model: 'gpt-4o-mini',
+                temperature: 0,
+                max_tokens: 4000,
+                messages: [
+                    { role: 'system', content: systemPrompt },
+                    { role: 'user', content: userPrompt }
+                ]
             })
         });
 
@@ -1725,13 +1741,23 @@ ${fullText}`
             throw new Error(err?.error?.message || `Proxy error ${response.status}`);
         }
 
-        const data = await response.json();
+                const data = await response.json();
+        console.log('OpenAI raw response:', data);
+
         const rawText = data?.choices?.[0]?.message?.content?.trim() || '';
-        const clean = rawText.replace(/^```json|^```|```$/gm, '').trim();
-        const parsed = JSON.parse(clean);
+        if (!rawText) throw new Error('OpenAI returned no content.');
+
+        const clean = rawText.replace(/^```json\s*|^```\s*|```$/gm, '').trim();
+        const jsonMatch = clean.match(/\[[\s\S]*\]/);
+
+        if (!jsonMatch) {
+            throw new Error('Could not find JSON array in OpenAI response.');
+        }
+
+        const parsed = JSON.parse(jsonMatch[0]);
         if (!Array.isArray(parsed)) throw new Error('Unexpected response format');
-        const imported = normalizeGPAData(parsed);
-        imported.forEach(year => year.courses.forEach((c, i) => { if (!c.id) c.id = `${Date.now()}-${i}`; }));
+
+        const imported = convertImportedTranscriptToAppShape(parsed);
         const hasData = imported.some(y => y.courses.length > 0);
         hidePDFImportModal();
         if (!hasData) { showImportToast('No courses found in the transcript.', true); return; }
