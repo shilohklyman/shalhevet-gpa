@@ -1710,7 +1710,10 @@ Return ONLY the JSON array. Nothing else.`
                     },
                     {
                         role: 'user',
-                        content: 'Parse this transcript:\n\n' + fullText
+                        content: `Parse this Shalhevet High School transcript. The text may have scrambled column order due to PDF extraction. Look for course names you would recognize from a Jewish high school (English, Math, Science, History, Talmud, Tanakh, Hebrew, etc.) and match them with nearby letter grades and credit values.
+
+Transcript text:
+${fullText}`
                     }
                 ],
                 max_tokens: 4000
