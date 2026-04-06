@@ -28,6 +28,7 @@
                 'sun': '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
                 'pencil': '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4Z"/><path d="m15 5 3 3"/>',
                 'rotate-ccw': '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/>',
+                'trash': '<path d="M3 6h18"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/>',
                 'school': '<path d="m2 9 10-5 10 5"/><path d="M4 10v8"/><path d="M20 10v8"/><path d="M8 14v4"/><path d="M12 12v6"/><path d="M16 14v4"/><path d="M2 18h20"/>',
                 'search': '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
                 'tag': '<path d="M20 10 10 20l-7-7V4h9l8 8Z"/><path d="M7 7h.01"/>',
@@ -290,23 +291,18 @@
         <div class="flex items-center gap-1.5 md:gap-4">
             <div class="hidden md:flex items-center gap-1">
                 <button onclick="showPage('gpa')" data-page="gpa" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all">
-                    <span class="hidden lg:inline">GPA Calculator</span>
-                    <span class="lg:hidden">GPA</span>
+                    <span class="hidden lg:inline">GPA Calculator</span><span class="lg:hidden">GPA</span>
                 </button>
                 <button onclick="showPage('activities')" data-page="activities" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all">
-                    <span class="hidden lg:inline">Tasks and Activities</span>
-                    <span class="lg:hidden">Tasks</span>
+                    <span class="hidden lg:inline">Tasks and Activities</span><span class="lg:hidden">Tasks</span>
                 </button>
                 <button onclick="showPage('college')" data-page="college" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all">
-                    <span class="hidden lg:inline">Upperclassmen Resources</span>
-                    <span class="lg:hidden">College</span>
+                    <span class="hidden lg:inline">Upperclassmen Resources</span><span class="lg:hidden">College</span>
                 </button>
                 <button onclick="showPage('cocurr')" data-page="cocurr" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all">
-                    <span class="hidden lg:inline">Co-Curricular Tracker</span>
-                    <span class="lg:hidden">Activities</span>
+                    <span class="hidden lg:inline">Co-Curricular Tracker</span><span class="lg:hidden">Activities</span>
                 </button>
             </div>
-
             <div class="flex items-center gap-1.5">
                 <div id="sync-status" class="sync-status mr-2 hidden md:block"></div>
                 <div id="auth-nav-area">
@@ -337,19 +333,17 @@
     </div>
 
     <main class="max-w-[1400px] mx-auto p-4 md:p-8">
-        
+
         <!-- HOME PAGE -->
         <div id="page-home" class="page-content space-y-8 md:space-y-10 py-6 md:py-10 max-w-[980px] mx-auto">
             <div class="text-center space-y-3 md:space-y-4 pt-2">
                 <h1 class="text-3xl md:text-5xl font-bold leading-[1.1] text-zinc-900 dark:text-white">
-                    Your student<br />
-                    <span class="text-shalhevet">dashboard.</span>
+                    Your student<br /><span class="text-shalhevet">dashboard.</span>
                 </h1>
                 <p class="text-zinc-500 dark:text-zinc-400 text-sm md:text-base font-medium max-w-[450px] mx-auto leading-relaxed">
                     Everything you need to manage your academic life, activities, and future plans in one place.
                 </p>
             </div>
-
             <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
                 <button onclick="showPage('gpa')" class="group w-full flex items-start justify-between gap-4 p-4 md:p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[24px] transition-all duration-300 hover:border-shalhevet hover:shadow-lg hover:shadow-red-900/5 hover:-translate-y-0.5">
                     <div class="flex items-start gap-4 md:gap-5">
@@ -365,7 +359,6 @@
                         <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"></i>
                     </div>
                 </button>
-
                 <button onclick="showPage('activities')" class="group w-full flex items-start justify-between gap-4 p-4 md:p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[24px] transition-all duration-300 hover:border-shalhevet hover:shadow-lg hover:shadow-red-900/5 hover:-translate-y-0.5">
                     <div class="flex items-start gap-4 md:gap-5">
                         <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
@@ -380,7 +373,6 @@
                         <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"></i>
                     </div>
                 </button>
-
                 <button onclick="showPage('college')" class="group w-full flex items-start justify-between gap-4 p-4 md:p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[24px] transition-all duration-300 hover:border-shalhevet hover:shadow-lg hover:shadow-red-900/5 hover:-translate-y-0.5">
                     <div class="flex items-start gap-4 md:gap-5">
                         <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
@@ -395,7 +387,6 @@
                         <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"></i>
                     </div>
                 </button>
-
                 <button onclick="showPage('cocurr')" class="group w-full flex items-start justify-between gap-4 p-4 md:p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[24px] transition-all duration-300 hover:border-shalhevet hover:shadow-lg hover:shadow-red-900/5 hover:-translate-y-0.5">
                     <div class="flex items-start gap-4 md:gap-5">
                         <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
@@ -416,14 +407,9 @@
         <!-- GPA PAGE -->
         <div id="page-gpa" class="page-content hidden space-y-8">
             <div class="text-left space-y-3 no-print-gpa">
-                <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
-                    GPA <span class="text-shalhevet">Calculator</span>
-                </h1>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">
-                    Track your weighted and unweighted GPA across all four years. SAS and Honors courses are auto-weighted; Advanced track stays unweighted per Shalhevet policy.
-                </p>
+                <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">GPA <span class="text-shalhevet">Calculator</span></h1>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Track your weighted and unweighted GPA across all four years. SAS and Honors courses are auto-weighted; Advanced track stays unweighted per Shalhevet policy.</p>
             </div>
-
             <div class="bg-white dark:bg-zinc-900 rounded-[24px] p-6 md:p-8 flex flex-col md:flex-row justify-around items-center gap-6 md:gap-8 shadow-xl border border-zinc-200 dark:border-zinc-800 no-print-gpa">
                 <div class="text-center space-y-1 flex-1">
                     <div id="total-uw" class="text-3xl md:text-4xl font-bold text-shalhevet leading-none">0.00</div>
@@ -440,52 +426,43 @@
                     <div class="text-xs font-bold text-zinc-400">Total Credits</div>
                 </div>
             </div>
-
             <div id="gpa-years-container" class="space-y-6 no-print-gpa"></div>
             <div id="print-transcript" class="print-transcript"></div>
-
             <div class="flex flex-col md:flex-row justify-center items-center gap-4 no-print">
                 <button onclick="window.print()" class="bg-shalhevet hover:bg-red-700 text-white font-bold rounded-xl h-12 px-8 flex items-center justify-center gap-2 shadow-lg shadow-red-900/20 w-full md:w-auto transition-all text-sm">
                     <i data-lucide="download" class="w-4 h-4"></i> Export Unofficial Transcript
                 </button>
                 <button onclick="showPDFPrivacyWarning()" class="border border-shalhevet text-shalhevet hover:bg-red-950/20 rounded-xl h-12 px-8 font-bold w-full md:w-auto transition-all text-sm flex items-center justify-center gap-2">
-                    <i data-lucide="arrow-right" class="w-4 h-4 rotate-[-90deg]"></i> Import PDF Transcript
+                    <i data-lucide="download" class="w-4 h-4 rotate-180"></i> Import PDF Transcript
                 </button>
                 <input type="file" id="import-transcript-input" accept=".pdf,application/pdf" class="hidden" onchange="importTranscriptPDF(event)">
-                <button onclick="resetGPA()" class="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-red-500 hover:text-red-400 rounded-xl h-12 px-8 font-bold w-full md:w-auto transition-all text-sm">
-                    <i data-lucide="rotate-ccw" class="w-4 h-4 mr-2 inline"></i> Clear All Data
+                <button onclick="resetGPA()" class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-red-500 hover:text-red-400 rounded-xl h-12 px-8 font-bold w-full md:w-auto transition-all text-sm">
+                    <i data-lucide="trash" class="w-4 h-4 mr-2 inline"></i> Clear All Data
                 </button>
             </div>
-
             <div class="grid md:grid-cols-2 gap-5 no-print max-w-[1120px] mx-auto">
                 <div class="gpa-reference-card bg-white dark:bg-zinc-900 rounded-[20px] p-3.5 md:p-4 border border-zinc-200 dark:border-zinc-800 shadow-sm">
                     <div class="space-y-3">
-                        <div>
-                            <h4 class="text-xs font-bold text-shalhevet uppercase tracking-widest">HOW IT WORKS</h4>
-                            <div class="h-0.5 w-12 bg-shalhevet mt-1.5"></div>
-                        </div>
-                        <ul class="gpa-reference-list space-y-2 text-[13px] md:text-sm text-zinc-600 dark:text-zinc-300 font-medium leading-relaxed">
+                        <div><h4 class="text-xs font-bold text-shalhevet uppercase tracking-widest">HOW IT WORKS</h4><div class="h-0.5 w-12 bg-shalhevet mt-1.5"></div></div>
+                        <ul class="gpa-reference-list space-y-4 text-[13px] md:text-sm text-zinc-600 dark:text-zinc-300 font-medium leading-relaxed">
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Unweighted (REG):</strong> Standard 4.0 scale. All courses calculated equally.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Weighted (WT):</strong> SAS and Honors courses receive a +1.0 bonus point.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Advanced Track:</strong> Unweighted per Shalhevet policy — no bonus point applied.</span></li>
-                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Auto-Weighting:</strong> Course names with "SAS", "Honors", or "BMT" auto-toggle to WT. You can override manually at any time.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Auto-Weighting:</strong> Course names with "SAS", "Honors", or "BMT" auto-toggle to WT.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Credits:</strong> Most courses = 0.5 credits per semester.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">In-Progress Courses:</strong> Leaving a grade as "—" keeps the course on your transcript draft without counting it in GPA totals yet.</span></li>
-                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Sync S2 Toggle:</strong> The slide toggle on each S1 course mirrors that course into semester 2 — copying the name, credits, and weight. Only the S2 grade stays editable.</span></li>
-                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Transcript Export:</strong> The unofficial transcript groups courses by year and only counts semesters that already have a real letter grade entered.</span></li>
-                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">PDF Import:</strong> Sends your transcript to an AI for processing. Official transcripts contain personal details (name, address, DOB, parent names). <strong class="text-shalhevet">The AI is instructed to extract only courses and grades,</strong> and this app stores no personal data.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Sync S2 Toggle:</strong> Mirrors S1 course into semester 2. Only the S2 grade stays editable.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Transcript Export:</strong> Groups courses by year and only counts semesters with a real letter grade.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">PDF Import:</strong> Sends your transcript to AI for processing. <strong class="text-shalhevet">Only courses and grades are extracted.</strong> No personal data is stored.</span></li>
                         </ul>
                     </div>
                 </div>
                 <div class="gpa-reference-card bg-white dark:bg-zinc-900 rounded-[20px] p-3.5 md:p-4 border border-zinc-200 dark:border-zinc-800 shadow-sm">
                     <div class="space-y-3">
-                        <div>
-                            <h4 class="text-xs font-bold text-shalhevet uppercase tracking-widest">GRADE SCALE</h4>
-                            <div class="h-0.5 w-12 bg-shalhevet mt-1.5"></div>
-                        </div>
+                        <div><h4 class="text-xs font-bold text-shalhevet uppercase tracking-widest">GRADE SCALE</h4><div class="h-0.5 w-12 bg-shalhevet mt-1.5"></div></div>
                         <div class="overflow-x-auto">
                             <table class="gpa-scale-table w-full text-[13px] md:text-sm border-separate border-spacing-0">
-                               <thead>
+                                <thead>
                                     <tr class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider">
                                         <th class="text-left pb-2.5 border-b border-zinc-200 dark:border-zinc-700">Grade</th>
                                         <th class="text-left pb-2.5 border-b border-zinc-200 dark:border-zinc-700">Range</th>
@@ -499,7 +476,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="gpa-disclaimer no-print text-center max-w-[1120px] mx-auto">
                 <p class="text-[11px] md:text-xs font-medium text-zinc-400 dark:text-zinc-500 leading-relaxed">
                     <strong class="text-zinc-500 dark:text-zinc-400">Unofficial use only.</strong> This tool is for personal planning and does not reflect your official GPA. For questions about your actual GPA, contact <strong class="text-zinc-500 dark:text-zinc-400">Ed Support</strong> or <strong class="text-zinc-500 dark:text-zinc-400">College Counseling</strong>.
@@ -510,14 +486,9 @@
         <!-- ACTIVITIES PAGE -->
         <div id="page-activities" class="page-content hidden space-y-8">
             <div class="text-left space-y-3">
-                <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
-                    Tasks and <span class="text-shalhevet">Activities</span>
-                </h1>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">
-                    Manage your daily school workload, meetings, and deadlines.
-                </p>
+                <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">Tasks and <span class="text-shalhevet">Activities</span></h1>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Manage your daily school workload, meetings, and deadlines.</p>
             </div>
-
             <div id="task-form-container" class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
                     <h3 class="text-xs font-bold text-zinc-400">Add Activity</h3>
@@ -552,7 +523,6 @@
                     <button onclick="addTask()" class="w-full bg-shalhevet hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-red-900/20 text-sm">Add to Schedule</button>
                 </div>
             </div>
-
             <div class="grid lg:grid-cols-[380px_1fr] gap-6 md:gap-10 items-start">
                 <div class="bg-white dark:bg-zinc-900 rounded-[32px] p-5 border border-zinc-200 dark:border-zinc-800 shadow-sm relative overflow-hidden">
                     <div class="flex items-center justify-between mb-4 px-2">
@@ -571,7 +541,6 @@
                     </div>
                     <div id="calendar-days" class="calendar-grid gap-0.5"></div>
                 </div>
-
                 <div class="space-y-6">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 px-2">
                         <h2 id="selected-date-label" class="font-bold text-base md:text-lg"></h2>
@@ -588,14 +557,9 @@
         <!-- COLLEGE PAGE -->
         <div id="page-college" class="page-content hidden space-y-8">
             <div class="text-left space-y-3">
-                <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
-                    Upperclassmen <span class="text-shalhevet">Resources</span>
-                </h1>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">
-                    Keep track of every College, Yeshiva, and Seminary you're considering. Add institutions, write notes on deadlines and impressions, and track your status.
-                </p>
+                <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">Upperclassmen <span class="text-shalhevet">Resources</span></h1>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Keep track of every College, Yeshiva, and Seminary you're considering.</p>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="bg-white dark:bg-zinc-900 rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-zinc-100 dark:border-zinc-800">
                     <div class="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-950/20 flex items-center justify-center text-shalhevet"><i data-lucide="school" class="w-5 h-5"></i></div>
@@ -610,7 +574,6 @@
                     <div><div id="col-stat-researching" class="text-2xl font-bold leading-none">0</div><div class="text-xs font-bold text-zinc-400 mt-1">Researching</div></div>
                 </div>
             </div>
-
             <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
                     <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-wider">ADD INSTITUTION</h3>
@@ -647,21 +610,15 @@
                     </div>
                 </div>
             </div>
-
             <div id="college-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
         </div>
 
         <!-- CO-CURRICULAR PAGE -->
         <div id="page-cocurr" class="page-content hidden space-y-8">
             <div class="text-left space-y-3">
-                <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
-                    Co-Curricular <span class="text-shalhevet">Tracker</span>
-                </h1>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">
-                    Log everything outside the classroom in one structured place. Track what you did, the role you held, and the results or impact you can speak to later.
-                </p>
+                <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">Co-Curricular <span class="text-shalhevet">Tracker</span></h1>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Log everything outside the classroom in one structured place.</p>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="bg-white dark:bg-zinc-900 rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-zinc-100 dark:border-zinc-800">
                     <div class="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-950/20 flex items-center justify-center text-shalhevet"><i data-lucide="trophy" class="w-5 h-5"></i></div>
@@ -676,7 +633,6 @@
                     <div><div id="cc-stat-hours" class="text-2xl font-bold leading-none">0h</div><div class="text-xs font-bold text-zinc-400 mt-1">Weekly Hours</div></div>
                 </div>
             </div>
-
             <div id="cc-form-container" class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="p-6 space-y-6">
                     <h2 class="text-lg font-bold uppercase tracking-wider">ADD ACTIVITY</h2>
@@ -725,7 +681,6 @@
                     <button onclick="addCoCurr()" class="w-full bg-shalhevet hover:bg-red-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-red-900/20 text-sm">Add Entry</button>
                 </div>
             </div>
-
             <div id="cocurr-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
         </div>
 
@@ -733,9 +688,7 @@
 
     <footer class="py-8 md:py-12 no-print">
         <div class="max-w-[1200px] mx-auto px-6 text-center">
-            <p class="text-[11px] font-bold text-zinc-400 dark:text-zinc-600">
-                MANAGED AND DEVELOPED BY ADAM SANDLER '27
-            </p>
+            <p class="text-[11px] font-bold text-zinc-400 dark:text-zinc-600">MANAGED AND DEVELOPED BY ADAM SANDLER '27</p>
         </div>
     </footer>
 
@@ -760,7 +713,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
         let currentUser = null;
         let saveTimeout = null;
 
@@ -768,30 +720,20 @@
             const provider = new GoogleAuthProvider();
             try { await signInWithPopup(auth, provider); } catch(e) { console.error('Sign in failed', e); }
         };
-
-        window.signOutUser = async function() {
-            await signOut(auth);
-            location.reload();
-        };
-
+        window.signOutUser = async function() { await signOut(auth); location.reload(); };
         window.enableGuestMode = function() {
             document.getElementById('auth-gate').classList.remove('visible');
-            if (localStorage.getItem('guest_banner_dismissed') !== 'true') {
-                document.getElementById('guest-banner').classList.remove('hidden');
-            }
+            if (localStorage.getItem('guest_banner_dismissed') !== 'true') document.getElementById('guest-banner').classList.remove('hidden');
             renderAll();
         };
-
         window.dismissGuestBanner = function() {
             document.getElementById('guest-banner').classList.add('hidden');
             localStorage.setItem('guest_banner_dismissed', 'true');
         };
-
         window.toggleProfileDropdown = function() {
             const dd = document.getElementById('profile-dropdown');
             if (dd) dd.classList.toggle('open');
         };
-
         document.addEventListener('click', (e) => {
             const btn = document.getElementById('profile-btn');
             const dd = document.getElementById('profile-dropdown');
@@ -808,9 +750,7 @@
                     if (data.tasks) window.tasks = stripSampleTasks(data.tasks);
                     if (data.colleges) window.colleges = stripSampleColleges(data.colleges);
                     if (data.cocurrs) window.cocurrs = stripSampleCoCurrs(data.cocurrs);
-                } else {
-                    await saveToFirestore(uid);
-                }
+                } else { await saveToFirestore(uid); }
                 setSyncStatus('synced');
             } catch(e) { console.error('Load failed', e); setSyncStatus(''); }
             renderAll();
@@ -820,9 +760,7 @@
             if (!uid) return;
             setSyncStatus('syncing');
             try {
-                await setDoc(doc(db, 'users', uid), {
-                    gpaData: window.gpaData, tasks: window.tasks, colleges: window.colleges, cocurrs: window.cocurrs, updatedAt: Date.now()
-                });
+                await setDoc(doc(db, 'users', uid), { gpaData: window.gpaData, tasks: window.tasks, colleges: window.colleges, cocurrs: window.cocurrs, updatedAt: Date.now() });
                 setSyncStatus('synced');
             } catch(e) { console.error('Save failed', e); setSyncStatus(''); }
         }
@@ -878,8 +816,8 @@
     </script>
 
     <script>
-        const SHALHEVET_COURSES = ["English Composition", "English Composition (Honors)", "American Literature", "American Literature (Honors)", "Banned Books", "Banned Books (Honors)", "British Literature (SAS)", "Journalism", "Journalism (Honors)", "Creative Writing", "Film, Literature & Composition", "Film, Literature & Composition (Honors)", "Free Will and Time Travel (SAS)", "World History", "U.S. History", "U.S. History (Honors)", "Civil War & Reconstruction (SAS)", "Civics (SAS)", "Comparative Government (Honors)", "Economics (SAS)", "Medieval Jewish History (SAS)", "Positive Psychology", "Psychology (SAS)", "Topics in U.S. History (SAS)", "U.S. Government & Economics", "WW II (SAS)", "Biology", "Engineering", "Chemistry", "Chemistry (Honors)", "Chemistry (SAS)", "Intro to Computer Science (Honors)", "Computer Science (SAS)", "Computer Science 2 (SAS)", "Anatomy and Physiology (Honors)", "Biochemistry (SAS)", "Biology (SAS)", "Environmental Science", "Physics", "Physics (SAS)", "Algebra 1", "Geometry", "Geometry (Advanced)", "Geometry (Honors)", "Algebra 2", "Algebra 2 (Advanced)", "Algebra 2 (Honors)", "Precalculus", "Precalculus (Advanced)", "Precalculus (Honors)", "Calculus", "Calculus (SAS)", "Multivariable Calculus (SAS)", "Statistics (Honors)", "Visual Art", "Tech Theater & Drama", "Art Composition & Design", "Art History (Honors)", "Photography", "Studio Art (SAS)", "Hebrew 100", "Hebrew 101", "Hebrew 102", "Hebrew 103", "Hebrew 110", "Hebrew 111", "Hebrew 112", "Hebrew 113 (Honors)", "Hebrew 120", "Hebrew 121", "Hebrew 122", "Israeli Culture & Conversation", "Hebrew Film & Literature (SAS)", "Tanakh 1", "Tanakh 1 (Advanced)", "Tanakh 2", "Tanakh 2 (Advanced)", "Tanakh 3", "Tanakh 3 (Advanced)", "Tanakh 4", "Tanakh 4 (Advanced)", "Talmud 1", "Talmud 1 (Advanced)", "Talmud 2", "Talmud 2 (Advanced)", "Talmud 3", "Talmud 3 (Advanced)", "Talmud 4", "Talmud 4 (Advanced)", "Honors Gemara Shiur", "Beit Midrash Track (BMT)", "Halacha 1", "Halacha 2", "Israel Education", "Israel Education (SAS)", "Jewish Philosophy", "Jewish Philosophy (Advanced)", "Jewish Philosophy (Honors)"];
-        const SHALHEVET_ACTIVITIES = ["Basketball (Varsity)", "Basketball (JV)", "Baseball", "Volleyball", "Soccer", "Cross Country", "Tennis", "Flag Football", "Swimming", "Model UN", "Robotics (Firehawks)", "The Boiling Point", "Yearbook", "Drama / Theater", "Nitzotzei Torah", "Art Club", "Investment Club", "Mock Trial", "Film Appreciation Club", "Agenda", "Fairness", "SAC", "Tanya Club", "Music Club", "Literary Magazine", "Streetwear Club", "Ski Club", "Philosophy Club"];
+        const SHALHEVET_COURSES = ["English Composition","English Composition (Honors)","American Literature","American Literature (Honors)","Banned Books","Banned Books (Honors)","British Literature (SAS)","Journalism","Journalism (Honors)","Creative Writing","Film, Literature & Composition","Film, Literature & Composition (Honors)","Free Will and Time Travel (SAS)","World History","U.S. History","U.S. History (Honors)","Civil War & Reconstruction (SAS)","Civics (SAS)","Comparative Government (Honors)","Economics (SAS)","Medieval Jewish History (SAS)","Positive Psychology","Psychology (SAS)","Topics in U.S. History (SAS)","U.S. Government & Economics","WW II (SAS)","Biology","Engineering","Chemistry","Chemistry (Honors)","Chemistry (SAS)","Intro to Computer Science (Honors)","Computer Science (SAS)","Computer Science 2 (SAS)","Anatomy and Physiology (Honors)","Biochemistry (SAS)","Biology (SAS)","Environmental Science","Physics","Physics (SAS)","Algebra 1","Geometry","Geometry (Advanced)","Geometry (Honors)","Algebra 2","Algebra 2 (Advanced)","Algebra 2 (Honors)","Precalculus","Precalculus (Advanced)","Precalculus (Honors)","Calculus","Calculus (SAS)","Multivariable Calculus (SAS)","Statistics (Honors)","Visual Art","Tech Theater & Drama","Art Composition & Design","Art History (Honors)","Photography","Studio Art (SAS)","Hebrew 100","Hebrew 101","Hebrew 102","Hebrew 103","Hebrew 110","Hebrew 111","Hebrew 112","Hebrew 113 (Honors)","Hebrew 120","Hebrew 121","Hebrew 122","Israeli Culture & Conversation","Hebrew Film & Literature (SAS)","Tanakh 1","Tanakh 1 (Advanced)","Tanakh 2","Tanakh 2 (Advanced)","Tanakh 3","Tanakh 3 (Advanced)","Tanakh 4","Tanakh 4 (Advanced)","Talmud 1","Talmud 1 (Advanced)","Talmud 2","Talmud 2 (Advanced)","Talmud 3","Talmud 3 (Advanced)","Talmud 4","Talmud 4 (Advanced)","Honors Gemara Shiur","Beit Midrash Track (BMT)","Halacha 1","Halacha 2","Israel Education","Israel Education (SAS)","Jewish Philosophy","Jewish Philosophy (Advanced)","Jewish Philosophy (Honors)"];
+        const SHALHEVET_ACTIVITIES = ["Basketball (Varsity)","Basketball (JV)","Baseball","Volleyball","Soccer","Cross Country","Tennis","Flag Football","Swimming","Model UN","Robotics (Firehawks)","The Boiling Point","Yearbook","Drama / Theater","Nitzotzei Torah","Art Club","Investment Club","Mock Trial","Film Appreciation Club","Agenda","Fairness","SAC","Tanya Club","Music Club","Literary Magazine","Streetwear Club","Ski Club","Philosophy Club"];
         const GRADE_SCALE = { '—': null, 'A+': 4.0, 'A': 4.0, 'A-': 3.67, 'B+': 3.33, 'B': 3.0, 'B-': 2.67, 'C+': 2.33, 'C': 2.0, 'C-': 1.67, 'D+': 1.33, 'D': 1.0, 'F': 0.0 };
         const DETAILED_SCALE = [
             { grade: "A / A+", range: "92.5–100%", uw: "4.00", wt: "5.00" },
@@ -894,53 +832,34 @@
             { grade: "D", range: "62.5–66%", uw: "1.00", wt: "2.00" },
             { grade: "D- / F", range: "0–62%", uw: "0.00", wt: "0.00" },
         ];
-
         const EMPTY_GPA = [
-            { name: "9th Grade", courses: [] }, { name: "10th Grade", courses: [] }, { name: "11th Grade", courses: [] }, { name: "12th Grade", courses: [] }
+            { name: "9th Grade", courses: [] }, { name: "10th Grade", courses: [] },
+            { name: "11th Grade", courses: [] }, { name: "12th Grade", courses: [] }
         ];
 
         function normalizeGPAData(data) {
             const source = Array.isArray(data) ? data : [];
             return EMPTY_GPA.map((fallbackYear, index) => {
                 const year = source[index] || {};
-                return {
-                    name: typeof year.name === 'string' && year.name.trim() ? year.name : fallbackYear.name,
-                    courses: Array.isArray(year.courses) ? year.courses : []
-                };
+                return { name: typeof year.name === 'string' && year.name.trim() ? year.name : fallbackYear.name, courses: Array.isArray(year.courses) ? year.courses : [] };
             });
         }
 
-        const SAMPLE_TASK_SIGNATURES = [
-            ['English Essay: Banned Books', 'English', 'HIGH', 'Homework'],
-            ['Math Quiz: Calculus Limits', 'Math', 'MEDIUM', 'Test'],
-            ['Boiling Point Meeting', 'The Boiling Point', 'LOW', 'Meeting']
-        ];
-        const SAMPLE_COLLEGE_SIGNATURES = [
-            ['UCLA', 'College', 'TARGET', 'APPLYING'],
-            ['Columbia University', 'College', 'REACH', 'RESEARCHING']
-        ];
-        const SAMPLE_COCURR_SIGNATURES = [
-            ['The Boiling Point', 'Editor-in-Chief', 'Club'],
-            ['Basketball (Varsity)', 'Captain', 'Sport']
-        ];
+        const SAMPLE_TASK_SIGNATURES = [['English Essay: Banned Books','English','HIGH','Homework'],['Math Quiz: Calculus Limits','Math','MEDIUM','Test'],['Boiling Point Meeting','The Boiling Point','LOW','Meeting']];
+        const SAMPLE_COLLEGE_SIGNATURES = [['UCLA','College','TARGET','APPLYING'],['Columbia University','College','REACH','RESEARCHING']];
+        const SAMPLE_COCURR_SIGNATURES = [['The Boiling Point','Editor-in-Chief','Club'],['Basketball (Varsity)','Captain','Sport']];
 
         function stripSampleTasks(tasks) {
             if (!Array.isArray(tasks)) return [];
-            return tasks.filter((task) => !SAMPLE_TASK_SIGNATURES.some(([title, category, priority, type]) =>
-                task && task.title === title && task.category === category && task.priority === priority && task.type === type
-            ));
+            return tasks.filter(task => !SAMPLE_TASK_SIGNATURES.some(([title,category,priority,type]) => task && task.title===title && task.category===category && task.priority===priority && task.type===type));
         }
         function stripSampleCoCurrs(items) {
             if (!Array.isArray(items)) return [];
-            return items.filter((item) => !SAMPLE_COCURR_SIGNATURES.some(([name, role, category]) =>
-                item && item.name === name && item.role === role && item.category === category
-            ));
+            return items.filter(item => !SAMPLE_COCURR_SIGNATURES.some(([name,role,category]) => item && item.name===name && item.role===role && item.category===category));
         }
         function stripSampleColleges(items) {
             if (!Array.isArray(items)) return [];
-            return items.filter((item) => !SAMPLE_COLLEGE_SIGNATURES.some(([name, type, rank, status]) =>
-                item && item.name === name && item.type === type && item.rank === rank && item.status === status
-            ));
+            return items.filter(item => !SAMPLE_COLLEGE_SIGNATURES.some(([name,type,rank,status]) => item && item.name===name && item.type===type && item.rank===rank && item.status===status));
         }
 
         function transcriptLevel(name = '') {
@@ -954,37 +873,30 @@
             const upper = name.toUpperCase();
             return (upper.includes('SAS') || upper.includes('HONORS') || upper.includes('BMT') || upper.includes('BEIT MIDRASH TRACK')) && !upper.includes('ADVANCED');
         }
-        function getSemesterCourseName(course, sIdx) {
-            return sIdx === 0 || course.sync ? (course.name || '') : (course.s2name ?? course.name ?? '');
-        }
-        function getSemesterCourseCredits(course, sIdx) {
-            const raw = sIdx === 0 || course.sync ? course.credits : (course.s2credits ?? course.credits);
-            return parseFloat(raw || 0);
-        }
-        function getSemesterCourseWeight(course, sIdx) {
-            return sIdx === 0 || course.sync ? !!course.wt : (course.s2wt ?? course.wt ?? false);
-        }
+        function getSemesterCourseName(course, sIdx) { return sIdx === 0 || course.sync ? (course.name || '') : (course.s2name ?? course.name ?? ''); }
+        function getSemesterCourseCredits(course, sIdx) { const raw = sIdx === 0 || course.sync ? course.credits : (course.s2credits ?? course.credits); return parseFloat(raw || 0); }
+        function getSemesterCourseWeight(course, sIdx) { return sIdx === 0 || course.sync ? !!course.wt : (course.s2wt ?? course.wt ?? false); }
+
         function transcriptRowsForCourse(course) {
-            const s1Name = getSemesterCourseName(course, 0);
-            const s2Name = getSemesterCourseName(course, 1);
-            const s1Credits = getSemesterCourseCredits(course, 0);
-            const s2Credits = getSemesterCourseCredits(course, 1);
+            const s1Name = getSemesterCourseName(course, 0), s2Name = getSemesterCourseName(course, 1);
+            const s1Credits = getSemesterCourseCredits(course, 0), s2Credits = getSemesterCourseCredits(course, 1);
             const splitRows = !course.sync && (s1Name !== s2Name || s1Credits !== s2Credits);
             if (splitRows) {
                 return [
                     { name: s1Name || s2Name || 'Untitled Course', level: transcriptLevel(s1Name), s1grade: course.s1grade === '—' ? '' : course.s1grade, s2grade: '', credit: course.s1grade && course.s1grade !== '—' ? s1Credits.toFixed(1) : '' },
                     { name: s2Name || s1Name || 'Untitled Course', level: transcriptLevel(s2Name), s1grade: '', s2grade: course.s2grade === '—' ? '' : course.s2grade, credit: course.s2grade && course.s2grade !== '—' ? s2Credits.toFixed(1) : '' }
-                ].filter((row) => row.s1grade || row.s2grade || row.name);
+                ].filter(row => row.s1grade || row.s2grade || row.name);
             }
             let total = 0;
             if (course.s1grade && course.s1grade !== '—') total += s1Credits;
             if (course.s2grade && course.s2grade !== '—') total += s2Credits;
             return [{ name: s1Name || s2Name || 'Untitled Course', level: transcriptLevel(s1Name || s2Name), s1grade: course.s1grade === '—' ? '' : course.s1grade, s2grade: course.s2grade === '—' ? '' : course.s2grade, credit: total ? total.toFixed(1) : '' }];
         }
+
         function transcriptWeightedGPA(year) {
             let totalPoints = 0, totalCredits = 0;
-            year.courses.forEach((course) => {
-                ['s1grade', 's2grade'].forEach((gradeKey, idx) => {
+            year.courses.forEach(course => {
+                ['s1grade','s2grade'].forEach((gradeKey, idx) => {
                     const pts = GRADE_SCALE[course[gradeKey]];
                     if (pts !== null && pts !== undefined) {
                         const credits = getSemesterCourseCredits(course, idx);
@@ -995,6 +907,7 @@
             });
             return totalCredits ? (totalPoints / totalCredits).toFixed(2) : '0.00';
         }
+
         function renderTranscriptPrint() {
             const container = document.getElementById('print-transcript');
             if (!container) return;
@@ -1018,8 +931,7 @@
         localStorage.setItem('colleges', JSON.stringify(window.colleges));
         localStorage.setItem('cocurrs', JSON.stringify(window.cocurrs));
 
-        let editingCCId = null;
-        let editingTaskId = null;
+        let editingCCId = null, editingTaskId = null;
         let currentCalendarDate = new Date();
         let selectedDate = new Date().toLocaleDateString('en-CA');
 
@@ -1044,13 +956,10 @@
         function showPage(id) {
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
             document.getElementById(`page-${id}`).classList.remove('hidden');
-            document.querySelectorAll('.nav-link').forEach(l => {
-                l.classList.remove('bg-shalhevet', 'text-white', 'shadow-lg', 'shadow-red-900/20');
-                l.classList.add('text-white/60');
-            });
+            document.querySelectorAll('.nav-link').forEach(l => { l.classList.remove('bg-shalhevet','text-white','shadow-lg','shadow-red-900/20'); l.classList.add('text-white/60'); });
             if (id !== 'home') {
                 const activeLink = document.querySelector(`.nav-link[data-page="${id}"]`);
-                if (activeLink) { activeLink.classList.add('bg-shalhevet', 'text-white', 'shadow-lg', 'shadow-red-900/20'); activeLink.classList.remove('text-white/60'); }
+                if (activeLink) { activeLink.classList.add('bg-shalhevet','text-white','shadow-lg','shadow-red-900/20'); activeLink.classList.remove('text-white/60'); }
             }
             window.scrollTo(0,0);
             renderAll();
@@ -1076,7 +985,7 @@
                 if (year.courses.length === 0) {
                     html += `<div class="px-6 md:px-8 py-10 text-center"><p class="text-xs font-bold text-zinc-300 dark:text-zinc-600 uppercase tracking-wider">No courses added for this year</p></div>`;
                 } else {
-                    ['SEMESTER 1', 'SEMESTER 2'].forEach((sem, sIdx) => {
+                    ['SEMESTER 1','SEMESTER 2'].forEach((sem, sIdx) => {
                         html += `<div class="gpa-semester-block px-6 md:px-8 py-5 ${sIdx === 0 ? 'border-b border-zinc-200 dark:border-zinc-800' : ''}"><div class="space-y-3"><div><div class="text-[11px] font-bold text-shalhevet uppercase tracking-[0.18em]">${sem}</div><div class="mt-2.5 h-px bg-zinc-200 dark:bg-zinc-700"></div></div>`;
                         year.courses.forEach((c, cIdx) => {
                             const gradeKey = sIdx === 0 ? 's1grade' : 's2grade';
@@ -1100,8 +1009,7 @@
                             </div>`;
                             const pts = GRADE_SCALE[c[gradeKey]];
                             if (pts !== null) {
-                                const credits = getSemesterCourseCredits(c, sIdx);
-                                const wt = getSemesterCourseWeight(c, sIdx);
+                                const credits = getSemesterCourseCredits(c, sIdx), wt = getSemesterCourseWeight(c, sIdx);
                                 tUW += pts * credits; tWT += (pts + (wt ? 1 : 0)) * credits; tCr += credits;
                                 yearUW += pts * credits; yearWT += (pts + (wt ? 1 : 0)) * credits; yearCr += credits;
                             }
@@ -1348,7 +1256,7 @@
             if (!grid) return;
             grid.innerHTML = '';
             document.getElementById('cc-stat-total').innerText = window.cocurrs.length;
-            document.getElementById('cc-stat-leadership').innerText = window.cocurrs.filter(c => ['Captain', 'Founder', 'President', 'Lead', 'Head'].some(k => c.role.toLowerCase().includes(k.toLowerCase()))).length;
+            document.getElementById('cc-stat-leadership').innerText = window.cocurrs.filter(c => ['Captain','Founder','President','Lead','Head'].some(k => c.role.toLowerCase().includes(k.toLowerCase()))).length;
             document.getElementById('cc-stat-hours').innerText = window.cocurrs.reduce((acc, c) => acc + (c.active ? parseInt(c.hours || 0, 10) : 0), 0) + 'h';
             if (window.cocurrs.length === 0) {
                 grid.innerHTML = `<div class="col-span-full text-center py-16 bg-zinc-50/50 dark:bg-zinc-900/30 rounded-[32px] border-2 border-dashed border-zinc-100 dark:border-zinc-800/50"><div class="w-12 h-12 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm text-zinc-300"><i data-lucide="clipboard-list"></i></div><h3 class="text-zinc-900 dark:text-white font-bold text-xs">No activities added</h3><p class="text-zinc-400 font-bold text-[11px] mt-1 mb-4">Log your first co-curricular activity.</p></div>`;
@@ -1404,7 +1312,7 @@
             overlay.id = 'pdf-privacy-warning';
             overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:20000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);padding:16px;';
             overlay.innerHTML = `
-                <div style="background:#fff;border-radius:28px;width:100%;max-width:460px;box-shadow:0 12px 60px rgba(0,0,0,0.25);overflow:hidden;" class="dark:bg-zinc-900">
+                <div style="background:#fff;border-radius:28px;width:100%;max-width:460px;box-shadow:0 12px 60px rgba(0,0,0,0.25);overflow:hidden;">
                     <div style="background:#fef2f2;padding:24px 28px 18px;border-bottom:1px solid #fecaca;">
                         <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
                             <div style="width:36px;height:36px;background:#fee2e2;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -1441,10 +1349,7 @@
             const file = event.target.files[0];
             if (!file) return;
             event.target.value = '';
-
-            // Show a loading modal
             showPDFImportModal('reading');
-
             const reader = new FileReader();
             reader.onload = async function(e) {
                 const base64PDF = e.target.result.split(',')[1];
@@ -1456,77 +1361,22 @@
                         body: JSON.stringify({
                             model: 'claude-sonnet-4-20250514',
                             max_tokens: 4000,
-                            system: `You are a transcript parser. Extract ONLY academic course data from the uploaded school transcript PDF and return ONLY a valid JSON array — no markdown, no explanation, no backticks.
-
-PRIVACY RULES — STRICTLY IGNORE AND DO NOT INCLUDE:
-- Student name, parent/guardian names
-- Home address, mailing address, city, state, zip
-- Phone numbers, email addresses
-- Student ID, Social Security Number, or any ID numbers
-- Date of birth, age
-- School counselor or teacher names
-- Any other personally identifiable information (PII)
-
-The JSON must be an array of exactly 4 year objects in this format:
-[
-  { "name": "9th Grade", "courses": [...] },
-  { "name": "10th Grade", "courses": [...] },
-  { "name": "11th Grade", "courses": [...] },
-  { "name": "12th Grade", "courses": [...] }
-]
-
-Each course object:
-{
-  "id": "<unique string, e.g. timestamp + index>",
-  "name": "<course name>",
-  "s1grade": "<letter grade or — if missing>",
-  "s2grade": "<letter grade or — if missing>",
-  "credits": <number, typically 0.5>,
-  "wt": <true if Honors/SAS/AP/IB only — NOT for Advanced track>
-}
-
-Rules:
-- Match each course to the correct grade year (9th, 10th, 11th, 12th) based on the transcript.
-- If a year has no courses, return an empty courses array.
-- Valid letter grades: A+, A, A-, B+, B, B-, C+, C, C-, D+, D, F, or — for missing/in-progress.
-- Credits are usually 0.5 per semester or 1.0 for a full-year course. Default to 0.5 if unclear.
-- wt should be true for Honors, SAS, AP, and IB courses only. Advanced/ADV track courses are NOT weighted — set wt to false for any course with "Advanced" in the name.
-- Return ONLY the JSON array. Nothing else.`,
-                            messages: [{
-                                role: 'user',
-                                content: [{
-                                    type: 'document',
-                                    source: { type: 'base64', media_type: 'application/pdf', data: base64PDF }
-                                }, {
-                                    type: 'text',
-                                    text: 'Parse this transcript PDF and return the course data as the JSON array described.'
-                                }]
-                            }]
+                            system: `You are a transcript parser. Extract ONLY academic course data from the uploaded school transcript PDF and return ONLY a valid JSON array — no markdown, no explanation, no backticks.\n\nPRIVACY RULES — STRICTLY IGNORE AND DO NOT INCLUDE:\n- Student name, parent/guardian names\n- Home address, mailing address, city, state, zip\n- Phone numbers, email addresses\n- Student ID, Social Security Number, or any ID numbers\n- Date of birth, age\n- School counselor or teacher names\n- Any other personally identifiable information (PII)\n\nThe JSON must be an array of exactly 4 year objects:\n[\n  { "name": "9th Grade", "courses": [...] },\n  { "name": "10th Grade", "courses": [...] },\n  { "name": "11th Grade", "courses": [...] },\n  { "name": "12th Grade", "courses": [...] }\n]\n\nEach course object:\n{\n  "id": "<unique string>",\n  "name": "<course name>",\n  "s1grade": "<letter grade or — if missing>",\n  "s2grade": "<letter grade or — if missing>",\n  "credits": <number, typically 0.5>,\n  "wt": <true if Honors/SAS/AP/IB — NOT for Advanced track>\n}\n\nReturn ONLY the JSON array. Nothing else.`,
+                            messages: [{ role: 'user', content: [{ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: base64PDF } }, { type: 'text', text: 'Parse this transcript PDF and return the course data as the JSON array described.' }] }]
                         })
                     });
-
-                    if (!response.ok) {
-                        const err = await response.json().catch(() => ({}));
-                        throw new Error(err?.error?.message || `API error ${response.status}`);
-                    }
-
+                    if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err?.error?.message || `API error ${response.status}`); }
                     const data = await response.json();
                     const rawText = (data.content || []).map(b => b.text || '').join('').trim();
                     const clean = rawText.replace(/^```json|^```|```$/gm, '').trim();
                     const parsed = JSON.parse(clean);
-
                     if (!Array.isArray(parsed)) throw new Error('Unexpected response format');
-
                     const imported = normalizeGPAData(parsed);
-                    // Assign unique ids if missing
                     imported.forEach(year => year.courses.forEach((c, i) => { if (!c.id) c.id = `${Date.now()}-${i}`; }));
                     const hasData = imported.some(y => y.courses.length > 0);
-
                     hidePDFImportModal();
                     if (!hasData) { showImportToast('No courses found in the transcript.', true); return; }
-
                     showPDFImportPreview(imported);
-
                 } catch(err) {
                     hidePDFImportModal();
                     console.error('PDF import error:', err);
@@ -1536,19 +1386,13 @@ Rules:
             reader.readAsDataURL(file);
         }
 
-        // ── PDF Import Modal (loading state) ────────────────────────────────────
         function showPDFImportModal(state) {
             let modal = document.getElementById('pdf-import-modal');
             if (!modal) {
                 modal = document.createElement('div');
                 modal.id = 'pdf-import-modal';
                 modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:20000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
-                modal.innerHTML = `
-                    <div style="background:var(--modal-bg,#fff);border-radius:24px;padding:36px 40px;max-width:380px;width:90%;text-align:center;box-shadow:0 8px 48px rgba(0,0,0,0.22);" class="dark:bg-zinc-900 bg-white">
-                        <div id="pdf-import-spinner" style="width:44px;height:44px;border:3px solid #f4f4f5;border-top-color:#cc0000;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px;"></div>
-                        <p id="pdf-import-status" style="font-weight:700;font-size:15px;" class="text-zinc-900 dark:text-white"></p>
-                        <p id="pdf-import-sub" style="font-size:12px;font-weight:600;margin-top:6px;" class="text-zinc-400"></p>
-                    </div>`;
+                modal.innerHTML = `<div style="background:#fff;border-radius:24px;padding:36px 40px;max-width:380px;width:90%;text-align:center;box-shadow:0 8px 48px rgba(0,0,0,0.22);"><div id="pdf-import-spinner" style="width:44px;height:44px;border:3px solid #f4f4f5;border-top-color:#cc0000;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px;"></div><p id="pdf-import-status" style="font-weight:700;font-size:15px;color:#18181b;"></p><p id="pdf-import-sub" style="font-size:12px;font-weight:600;margin-top:6px;color:#71717a;"></p></div>`;
                 const style = document.createElement('style');
                 style.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
                 document.head.appendChild(style);
@@ -1560,47 +1404,31 @@ Rules:
             if (state === 'reading') { status.textContent = 'Reading PDF…'; sub.textContent = 'Preparing your transcript for analysis.'; }
             if (state === 'parsing') { status.textContent = 'Analyzing transcript…'; sub.textContent = 'Claude is extracting your courses and grades. This may take a few seconds.'; }
         }
-        function hidePDFImportModal() {
-            const modal = document.getElementById('pdf-import-modal');
-            if (modal) modal.style.display = 'none';
-        }
+        function hidePDFImportModal() { const modal = document.getElementById('pdf-import-modal'); if (modal) modal.style.display = 'none'; }
 
-        // ── PDF Import Preview ───────────────────────────────────────────────────
         function showPDFImportPreview(imported) {
             let overlay = document.getElementById('pdf-preview-overlay');
             if (overlay) overlay.remove();
-
             overlay = document.createElement('div');
             overlay.id = 'pdf-preview-overlay';
             overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:20000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);padding:16px;';
-
             const totalCourses = imported.reduce((n, y) => n + y.courses.length, 0);
             const yearsHTML = imported.map(year => {
                 if (!year.courses.length) return '';
-                return `<div style="margin-bottom:12px;">
-                    <div style="font-size:11px;font-weight:800;color:#cc0000;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">${year.name}</div>
-                    ${year.courses.map(c => `
-                        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f4f4f5;font-size:12px;font-weight:600;">
-                            <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:12px;">${c.name}</span>
-                            <span style="color:#71717a;flex-shrink:0;">${c.s1grade || '—'} / ${c.s2grade || '—'}</span>
-                        </div>`).join('')}
-                </div>`;
+                return `<div style="margin-bottom:12px;"><div style="font-size:11px;font-weight:800;color:#cc0000;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">${year.name}</div>${year.courses.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f4f4f5;font-size:12px;font-weight:600;"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:12px;">${c.name}</span><span style="color:#71717a;flex-shrink:0;">${c.s1grade || '—'} / ${c.s2grade || '—'}</span></div>`).join('')}</div>`;
             }).join('');
-
             overlay.innerHTML = `
-                <div style="background:#fff;border-radius:28px;width:100%;max-width:520px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 12px 60px rgba(0,0,0,0.25);" class="dark:bg-zinc-900">
+                <div style="background:#fff;border-radius:28px;width:100%;max-width:520px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 12px 60px rgba(0,0,0,0.25);">
                     <div style="padding:24px 28px 16px;border-bottom:1px solid #f4f4f5;flex-shrink:0;">
-                        <h2 style="font-size:17px;font-weight:800;" class="text-zinc-900 dark:text-white">Transcript Preview</h2>
-                        <p style="font-size:12px;font-weight:600;margin-top:4px;" class="text-zinc-400">${totalCourses} course${totalCourses !== 1 ? 's' : ''} found across ${imported.filter(y=>y.courses.length).length} year${imported.filter(y=>y.courses.length).length!==1?'s':''}. Review before importing.</p>
+                        <h2 style="font-size:17px;font-weight:800;color:#18181b;">Transcript Preview</h2>
+                        <p style="font-size:12px;font-weight:600;margin-top:4px;color:#71717a;">${totalCourses} course${totalCourses !== 1 ? 's' : ''} found. Review before importing.</p>
                     </div>
-                    <div style="overflow-y:auto;padding:20px 28px;flex:1;" class="text-zinc-900 dark:text-white">${yearsHTML || '<p style="color:#71717a;font-size:13px;">No courses detected.</p>'}</div>
+                    <div style="overflow-y:auto;padding:20px 28px;flex:1;color:#18181b;">${yearsHTML || '<p style="color:#71717a;font-size:13px;">No courses detected.</p>'}</div>
                     <div style="padding:16px 28px 24px;display:flex;gap:10px;flex-shrink:0;border-top:1px solid #f4f4f5;">
                         <button onclick="document.getElementById('pdf-preview-overlay').remove()" style="flex:1;height:44px;border-radius:12px;font-weight:700;font-size:13px;background:#f4f4f5;color:#27272a;border:none;cursor:pointer;">Cancel</button>
-                        <button onclick="confirmPDFImport()" style="flex:2;height:44px;border-radius:12px;font-weight:700;font-size:13px;background:#cc0000;color:#fff;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(204,0,0,0.25);">Import ${totalCourses} Courses</button>
+                        <button onclick="confirmPDFImport()" style="flex:2;height:44px;border-radius:12px;font-weight:700;font-size:13px;background:#cc0000;color:#fff;border:none;cursor:pointer;">Import ${totalCourses} Courses</button>
                     </div>
                 </div>`;
-
-            // Stash on overlay element so confirmPDFImport can access it
             overlay._importedData = imported;
             document.body.appendChild(overlay);
         }
@@ -1644,8 +1472,8 @@ Rules:
 
         function updateClock() {
             const now = new Date();
-            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
             const h = now.getHours() % 12 || 12;
             const m = now.getMinutes().toString().padStart(2, '0');
             const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
