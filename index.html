@@ -1677,13 +1677,16 @@ async function importTranscriptPDF(event) {
                 messages: [
                     {
                         role: 'system',
-                        content: `You are a transcript parser. You will receive raw text extracted from a high school transcript. The text may be messy or poorly formatted. Your job is to find ALL courses, grades, and credits regardless of formatting.
+                        content: `You are a transcript parser for Shalhevet High School transcripts. The transcript has courses organized by grade year (Grade 9, Grade 10, Grade 11, Grade 12). Each course has these columns: Course Name, Level (SAS/HON/ADV or blank), S1 grade, S2 grade, and Credit.
 
-Look for patterns like:
-- Course names followed by letter grades (A, B, C, D, F with +/- modifiers)
-- Semester 1 and Semester 2 grades
-- Credit values (usually 0.5 or 1.0)
-- Year or grade level indicators (9th, 10th, 11th, 12th or Freshman, Sophomore, Junior, Senior)
+Level meanings:
+- SAS = Shalhevet Advanced Study (weighted)
+- HON = Honors (weighted)
+- ADV = Advanced (NOT weighted per school policy)
+- blank = Regular (not weighted)
+
+Grades can be: A+, A, A-, B+, B, B-, C+, C, C-, D+, D, F, P, W, NG
+P/W/NG grades should be stored as — since they don't count toward GPA.
 
 Return ONLY a valid JSON array of exactly 4 year objects — no markdown, no explanation, no backticks:
 [
@@ -1699,8 +1702,8 @@ Each course object:
   "name": "<course name>",
   "s1grade": "<letter grade or — if missing>",
   "s2grade": "<letter grade or — if missing>",
-  "credits": <number, typically 0.5>,
-  "wt": <true if Honors/SAS/AP/IB — NOT for Advanced track>
+  "credits": <number from Credit column>,
+  "wt": <true if Level is SAS or HON, false if ADV or blank>
 }
 
 Return ONLY the JSON array. Nothing else.`
