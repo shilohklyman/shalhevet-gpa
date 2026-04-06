@@ -1643,21 +1643,45 @@ async function importTranscriptPDF(event) {
     }
 
     showPDFImportModal('reading');
-    const reader = new FileReader();
-    reader.onload = async function(e) {
-        const base64PDF = e.target.result.split(',')[1];
-        try {
-            showPDFImportModal('parsing');
 
-            // Convert PDF to text first using FileReader
-            const response = await fetch(PROXY_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    messages: [
-                        {
-                            role: 'system',
-                            content: `You are a transcript parser. Extract ONLY academic course data and return ONLY a valid JSON array — no markdown, no explanation, no backticks.
+    try {
+        // Load PDF.js to extract text
+        if (!window.pdfjsLib) {
+            await new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+            window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+            fullText += content.items.map(item => item.str).join(' ') + '\n';
+        }
+
+        if (!fullText.trim()) {
+            hidePDFImportModal();
+            showImportToast('Could not extract text from PDF.', true);
+            return;
+        }
+
+        showPDFImportModal('parsing');
+
+        const response = await fetch(PROXY_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [
+                    {
+                        role: 'system',
+                        content: `You are a transcript parser. Extract ONLY academic course data and return ONLY a valid JSON array — no markdown, no explanation, no backticks.
 
 The JSON must be an array of exactly 4 year objects:
 [
@@ -1678,44 +1702,38 @@ Each course object:
 }
 
 Return ONLY the JSON array. Nothing else.`
-                        },
-                        {
-                            role: 'user',
-                            content: [
-                                {
-                                    type: 'text',
-                                    text: 'Parse this transcript and return the course data as the JSON array described. Here is the transcript content encoded as base64 PDF: ' + base64PDF
-                                }
-                            ]
-                        }
-                    ],
-                    max_tokens: 4000
-                })
-            });
+                    },
+                    {
+                        role: 'user',
+                        content: 'Parse this transcript:\n\n' + fullText
+                    }
+                ],
+                max_tokens: 4000
+            })
+        });
 
-            if (!response.ok) {
-                const err = await response.json().catch(() => ({}));
-                throw new Error(err?.error?.message || `Proxy error ${response.status}`);
-            }
-
-            const data = await response.json();
-            const rawText = data?.choices?.[0]?.message?.content?.trim() || '';
-            const clean = rawText.replace(/^```json|^```|```$/gm, '').trim();
-            const parsed = JSON.parse(clean);
-            if (!Array.isArray(parsed)) throw new Error('Unexpected response format');
-            const imported = normalizeGPAData(parsed);
-            imported.forEach(year => year.courses.forEach((c, i) => { if (!c.id) c.id = `${Date.now()}-${i}`; }));
-            const hasData = imported.some(y => y.courses.length > 0);
-            hidePDFImportModal();
-            if (!hasData) { showImportToast('No courses found in the transcript.', true); return; }
-            showPDFImportPreview(imported);
-        } catch(err) {
-            hidePDFImportModal();
-            console.error('PDF import error:', err);
-            showImportToast('Could not parse transcript: ' + (err.message || 'Unknown error'), true);
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            throw new Error(err?.error?.message || `Proxy error ${response.status}`);
         }
-    };
-    reader.readAsDataURL(file);
+
+        const data = await response.json();
+        const rawText = data?.choices?.[0]?.message?.content?.trim() || '';
+        const clean = rawText.replace(/^```json|^```|```$/gm, '').trim();
+        const parsed = JSON.parse(clean);
+        if (!Array.isArray(parsed)) throw new Error('Unexpected response format');
+        const imported = normalizeGPAData(parsed);
+        imported.forEach(year => year.courses.forEach((c, i) => { if (!c.id) c.id = `${Date.now()}-${i}`; }));
+        const hasData = imported.some(y => y.courses.length > 0);
+        hidePDFImportModal();
+        if (!hasData) { showImportToast('No courses found in the transcript.', true); return; }
+        showPDFImportPreview(imported);
+
+    } catch(err) {
+        hidePDFImportModal();
+        console.error('PDF import error:', err);
+        showImportToast('Could not parse transcript: ' + (err.message || 'Unknown error'), true);
+    }
 }
 
         function showPDFImportModal(state) {
