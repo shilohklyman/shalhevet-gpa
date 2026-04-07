@@ -1116,21 +1116,55 @@ function corsHeaders(request) {
         function getSemesterCourseCredits(course, sIdx) { const raw = sIdx === 0 || course.sync ? course.credits : (course.s2credits ?? course.credits); return parseFloat(raw || 0); }
         function getSemesterCourseWeight(course, sIdx) { return sIdx === 0 || course.sync ? !!course.wt : (course.s2wt ?? course.wt ?? false); }
 
-        function transcriptRowsForCourse(course) {
-            const s1Name = getSemesterCourseName(course, 0), s2Name = getSemesterCourseName(course, 1);
-            const s1Credits = getSemesterCourseCredits(course, 0), s2Credits = getSemesterCourseCredits(course, 1);
-            const splitRows = !course.sync && (s1Name !== s2Name || s1Credits !== s2Credits);
-            if (splitRows) {
-                return [
-                    { name: s1Name || s2Name || 'Untitled Course', level: transcriptLevel(s1Name), s1grade: course.s1grade === '—' ? '' : course.s1grade, s2grade: '', credit: course.s1grade && course.s1grade !== '—' ? s1Credits.toFixed(1) : '' },
-                    { name: s2Name || s1Name || 'Untitled Course', level: transcriptLevel(s2Name), s1grade: '', s2grade: course.s2grade === '—' ? '' : course.s2grade, credit: course.s2grade && course.s2grade !== '—' ? s2Credits.toFixed(1) : '' }
-                ].filter(row => row.s1grade || row.s2grade || row.name);
-            }
-            let total = 0;
-            if (course.s1grade && course.s1grade !== '—') total += s1Credits;
-            if (course.s2grade && course.s2grade !== '—') total += s2Credits;
-            return [{ name: s1Name || s2Name || 'Untitled Course', level: transcriptLevel(s1Name || s2Name), s1grade: course.s1grade === '—' ? '' : course.s1grade, s2grade: course.s2grade === '—' ? '' : course.s2grade, credit: total ? total.toFixed(1) : '' }];
+function transcriptRowsForCourse(course) {
+    const s1Name = (getSemesterCourseName(course, 0) || '').trim();
+    const s2Name = (getSemesterCourseName(course, 1) || '').trim();
+    const s1Credits = getSemesterCourseCredits(course, 0);
+    const s2Credits = getSemesterCourseCredits(course, 1);
+
+    const s1HasData = !!s1Name || (course.s1grade && course.s1grade !== '—') || s1Credits > 0;
+    const s2HasData = !!s2Name || (course.s2grade && course.s2grade !== '—') || s2Credits > 0;
+
+    const splitRows = !course.sync && (s1Name !== s2Name || s1Credits !== s2Credits || !s1Name || !s2Name);
+
+    if (splitRows) {
+        const rows = [];
+
+        if (s1HasData) {
+            rows.push({
+                name: s1Name || 'Untitled Course',
+                level: transcriptLevel(s1Name),
+                s1grade: course.s1grade === '—' ? '' : course.s1grade,
+                s2grade: '',
+                credit: s1Credits ? String(parseFloat(s1Credits.toFixed(2))) : ''
+            });
         }
+
+        if (s2HasData) {
+            rows.push({
+                name: s2Name || 'Untitled Course',
+                level: transcriptLevel(s2Name),
+                s1grade: '',
+                s2grade: course.s2grade === '—' ? '' : course.s2grade,
+                credit: s2Credits ? String(parseFloat(s2Credits.toFixed(2))) : ''
+            });
+        }
+
+        return rows;
+    }
+
+    let total = 0;
+    if (course.s1grade && course.s1grade !== '—') total += s1Credits;
+    if (course.s2grade && course.s2grade !== '—') total += s2Credits;
+
+    return [{
+        name: s1Name || s2Name || 'Untitled Course',
+        level: transcriptLevel(s1Name || s2Name),
+        s1grade: course.s1grade === '—' ? '' : course.s1grade,
+        s2grade: course.s2grade === '—' ? '' : course.s2grade,
+        credit: total ? String(parseFloat(total.toFixed(2))) : ''
+    }];
+}
 
         function transcriptWeightedGPA(year) {
             let totalPoints = 0, totalCredits = 0;
@@ -1238,14 +1272,21 @@ function corsHeaders(request) {
                 } else {
                     ['SEMESTER 1','SEMESTER 2'].forEach((sem, sIdx) => {
                         html += `<div class="gpa-semester-block px-3 md:px-8 py-5 ${sIdx === 0 ? 'border-b border-zinc-200 dark:border-zinc-800' : ''}"><div class="space-y-3"><div><div class="text-[11px] font-bold text-shalhevet uppercase tracking-[0.18em]">${sem}</div><div class="mt-2.5 h-px bg-zinc-200 dark:bg-zinc-700"></div></div>`;
-                        year.courses.forEach((c, cIdx) => {
+                                               year.courses.forEach((c, cIdx) => {
                             const gradeKey = sIdx === 0 ? 's1grade' : 's2grade';
                             const isSynced = sIdx === 1 && c.sync;
                             const nameField = sIdx === 0 ? 'name' : 's2name';
                             const creditsField = sIdx === 0 ? 'credits' : 's2credits';
                             const weightOn = getSemesterCourseWeight(c, sIdx);
-                            const courseName = getSemesterCourseName(c, sIdx);
+                            const courseName = (getSemesterCourseName(c, sIdx) || '').trim();
                             const courseCredits = getSemesterCourseCredits(c, sIdx);
+
+                            const hasSemesterData =
+                                !!courseName ||
+                                (c[gradeKey] && c[gradeKey] !== '—') ||
+                                courseCredits > 0;
+
+                            if (!hasSemesterData) return;
                             html += `<div class="gpa-course-row space-y-3">
                                 <div class="grid grid-cols-1 md:grid-cols-[1fr_108px_98px_116px_28px] gap-3 md:gap-4 items-end">
                                 <div class="space-y-1.5">
@@ -1609,25 +1650,111 @@ function convertImportedTranscriptToAppShape(parsed) {
     return normalizedYears.map((year, yIdx) => ({
         name: year.name || EMPTY_GPA[yIdx].name,
         courses: (year.courses || []).map((c, cIdx) => {
+            const s1name = String(c.name ?? '').trim();
+            const s2name = String(c.s2name ?? '').trim();
+
             const s1grade = normalizeImportedGrade(c.s1grade);
             const s2grade = normalizeImportedGrade(c.s2grade);
-            const wt = !!c.wt;
-            const rawCredits = Number(c.credits ?? 0.5) || 0.5;
-            const semesterCredits = rawCredits;
 
-            return {
-                id: c.id || `import-${Date.now()}-${yIdx}-${cIdx}`,
-                name: c.name || '',
-                s2name: c.name || '',
-                s1grade,
-                s2grade,
-                credits: semesterCredits,
-                s2credits: semesterCredits,
-                wt,
-                s2wt: wt,
-                sync: true
-            };
-        })
+            let credits = Number(c.credits ?? 0) || 0;
+            let s2credits = Number(c.s2credits ?? 0) || 0;
+
+            let wt = !!c.wt;
+            let s2wt = !!(c.s2wt ?? c.wt);
+
+            const hasS1 = !!s1name || s1grade !== '—' || credits > 0;
+            const hasS2 = !!s2name || s2grade !== '—' || s2credits > 0;
+
+            const hasExplicitS2Credits = c.s2credits !== undefined && c.s2credits !== null && c.s2credits !== '';
+            const hasExplicitS2Name = c.s2name !== undefined && c.s2name !== null && c.s2name !== '';
+
+            const combinedName = `${s1name} ${s2name}`.trim().toUpperCase();
+
+            // Exclude PE entirely
+            if (/\b(PHYSICAL EDUCATION|PHYS ED|P\.?E\.?|PE)\b/i.test(combinedName)) {
+                return null;
+            }
+
+            // Weighting rules
+            if (combinedName.includes('ADVANCED')) {
+                wt = false;
+                s2wt = false;
+            } else {
+                if (s1name.toUpperCase().includes('HONORS') || s1name.toUpperCase().includes('SAS') || s1name.toUpperCase().includes('BMT') || s1name.toUpperCase().includes('BEIT MIDRASH TRACK')) wt = true;
+                if (s2name.toUpperCase().includes('HONORS') || s2name.toUpperCase().includes('SAS') || s2name.toUpperCase().includes('BMT') || s2name.toUpperCase().includes('BEIT MIDRASH TRACK')) s2wt = true;
+            }
+
+            const isBMT = combinedName.includes('BMT') || combinedName.includes('BEIT MIDRASH TRACK');
+
+            // Semester 1 only
+            if (hasS1 && !hasS2) {
+                if (!credits) credits = Number(c.credits ?? 0.5) || 0.5;
+
+                return {
+                    id: c.id || `import-${Date.now()}-${yIdx}-${cIdx}`,
+                    name: s1name,
+                    s2name: '',
+                    s1grade,
+                    s2grade: '—',
+                    credits,
+                    s2credits: 0,
+                    wt,
+                    s2wt: false,
+                    sync: false
+                };
+            }
+
+            // Semester 2 only
+            if (!hasS1 && hasS2) {
+                if (!s2credits) s2credits = Number(c.s2credits ?? c.credits ?? 0.5) || 0.5;
+
+                return {
+                    id: c.id || `import-${Date.now()}-${yIdx}-${cIdx}`,
+                    name: '',
+                    s2name,
+                    s1grade: '—',
+                    s2grade,
+                    credits: 0,
+                    s2credits,
+                    wt: false,
+                    s2wt,
+                    sync: false
+                };
+            }
+
+            // Both semesters
+            if (hasS1 && hasS2) {
+                if (isBMT) {
+                    if (!credits) credits = 1.0;
+                    if (!s2credits) s2credits = 1.0;
+                } else if (credits > 0 && hasExplicitS2Credits && s2credits > 0) {
+                    // Trust explicit semester credits
+                } else {
+                    const overallCredits = Number(c.credits ?? c.s2credits ?? 0.5) || 0.5;
+                    credits = overallCredits / 2;
+                    s2credits = overallCredits / 2;
+                }
+
+                const sameCourse = !!s1name && !!s2name && s1name === s2name;
+                const sameCredits = credits === s2credits;
+                const sameWeight = wt === s2wt;
+
+                return {
+                    id: c.id || `import-${Date.now()}-${yIdx}-${cIdx}`,
+                    name: s1name,
+                    s2name: hasExplicitS2Name ? s2name : (s2name || s1name),
+                    s1grade,
+                    s2grade,
+                    credits,
+                    s2credits,
+                    wt,
+                    s2wt,
+                    sync: sameCourse && sameCredits && sameWeight
+                };
+            }
+
+            return null;
+        }).filter(Boolean)
     }));
 }
         function sanitizeTranscriptText(text) {
@@ -1714,20 +1841,36 @@ Return ONLY a valid JSON array of exactly 4 year objects — no markdown, no exp
 Each course object:
 {
   "id": "<unique string>",
-  "name": "<course name>",
-  "s1grade": "<letter grade or — if missing>",
-  "s2grade": "<letter grade or — if missing>",
-  "credits": <number from Credit column>,
-  "wt": <true if Level is SAS or HON, false if ADV or blank>
+  "name": "<semester 1 course name, or empty string if no semester 1 course>",
+  "s2name": "<semester 2 course name, or empty string if no semester 2 course>",
+  "s1grade": "<semester 1 letter grade or — if missing>",
+  "s2grade": "<semester 2 letter grade or — if missing>",
+  "credits": <semester 1 credits: 0, 0.25, 0.5, or 1.0>,
+  "s2credits": <semester 2 credits: 0, 0.25, 0.5, or 1.0>,
+  "wt": <true if semester 1 is SAS/HON/BMT, false otherwise>,
+  "s2wt": <true if semester 2 is SAS/HON/BMT, false otherwise>,
+  "sync": <true only if the same class continues in both semesters with same credits and same weighting; otherwise false>
 }
 
-Return ONLY the JSON array. Nothing else.`;
+Return ONLY the JSON array. Nothing else.
 
-        const userPrompt = `Parse this Shalhevet High School transcript.
-        const userPrompt = `Parse this Shalhevet High School transcript.
-The text may have scrambled column order due to PDF extraction.
-Personal information may already be redacted. Ignore any redacted fields.
-Look for course names you would recognize from a Jewish high school (English, Math, Science, History, Talmud, Tanakh, Hebrew, etc.) and match them with nearby letter grades and credit values.
+                const userPrompt = `Parse this Shalhevet High School transcript carefully.
+
+Important parsing instructions:
+- Use the semester columns carefully.
+- Do NOT move semester 1 classes into semester 2.
+- Do NOT move semester 2 classes into semester 1.
+- If a class appears in only one semester, keep it only in that semester.
+- Exclude Physical Education / PE / Phys Ed entirely.
+- Most classes are 0.5 credits in a single semester.
+- Some classes are 0.25 credits in a single semester.
+- Only BMT should be 1.0 in a semester.
+- If a class spans both semesters and the transcript gives 1.0 total for the full year, return 0.5 for semester 1 and 0.5 for semester 2.
+- If a class spans both semesters and the transcript gives 0.5 total for the full year, return 0.25 for semester 1 and 0.25 for semester 2.
+- If a class exists in only one semester, do NOT divide its credit.
+- Preserve semester-specific course names when they differ.
+- If the transcript text is messy, prefer keeping a course in only one semester rather than incorrectly duplicating it into both.
+- Personal information may already be redacted. Ignore any redacted fields.
 
 Transcript text:
 ${sanitizedText}`;
@@ -1770,9 +1913,18 @@ Rules:
 - SAS and HON => wt = true
 - ADV and blank => wt = false
 - P, W, NG => "—"
+- Exclude Physical Education / PE / Phys Ed entirely
+- Do not move semester 1 classes into semester 2
+- Do not move semester 2 classes into semester 1
+- If a class exists in only one semester, leave the other semester blank
+- Most one-semester classes are 0.5 credits
+- Some one-semester classes are 0.25 credits
+- If a class spans both semesters and the transcript shows 1.0 total for the full year, return 0.5 for semester 1 and 0.5 for semester 2
+- If a class spans both semesters and the transcript shows 0.5 total for the full year, return 0.25 for semester 1 and 0.25 for semester 2
+- If a class exists in only one semester, do not divide its credit
 - Return no markdown
 - Return no explanation
-- Return only valid JSON`
+- Return only valid JSON
                     },
                     {
                         role: 'user',
