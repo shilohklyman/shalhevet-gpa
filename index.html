@@ -1630,6 +1630,26 @@ function convertImportedTranscriptToAppShape(parsed) {
         })
     }));
 }
+        function sanitizeTranscriptText(text) {
+    if (!text) return '';
+
+    let cleaned = text;
+
+    // Labeled personal fields
+    cleaned = cleaned.replace(/(Student\s*Name\s*:?\s*)(.*?)(?=(Date\s*of\s*Birth|DOB|Address|Parent|Guardian|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gi, '$1[REDACTED] ');
+    cleaned = cleaned.replace(/(Date\s*of\s*Birth\s*:?\s*)(.*?)(?=(Address|Parent|Guardian|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gi, '$1[REDACTED] ');
+    cleaned = cleaned.replace(/\b(DOB\s*:?\s*)(.*?)(?=(Address|Parent|Guardian|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gi, '$1[REDACTED] ');
+    cleaned = cleaned.replace(/(Address\s*:?\s*)(.*?)(?=(Parent|Guardian|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gi, '$1[REDACTED] ');
+    cleaned = cleaned.replace(/((Parent|Guardian)(\/Guardian)?\s*Name\s*:?\s*)(.*?)(?=(Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gi, '$1[REDACTED] ');
+    cleaned = cleaned.replace(/(Student\s*ID\s*:?\s*)(.*?)(?=(Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gi, '$1[REDACTED] ');
+
+    // Extra targeted patterns
+    cleaned = cleaned.replace(/\b\d{3}-\d{2}-\d{4}\b/g, '[REDACTED-SSN]');
+    cleaned = cleaned.replace(/\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/g, '[REDACTED-DATE]');
+    cleaned = cleaned.replace(/\b\d{5}(?:-\d{4})?\b/g, '[REDACTED-ZIP]');
+
+    return cleaned;
+}
 async function importTranscriptPDF(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -1660,6 +1680,8 @@ async function importTranscriptPDF(event) {
 
         console.log('Extracted text:', fullText);
 
+        const sanitizedText = sanitizeTranscriptText(fullText);
+        console.log('Sanitized text:', sanitizedText);
         if (!fullText.trim()) {
             hidePDFImportModal();
             showImportToast('Could not extract text from PDF.', true);
@@ -1702,12 +1724,13 @@ Each course object:
 Return ONLY the JSON array. Nothing else.`;
 
         const userPrompt = `Parse this Shalhevet High School transcript.
+        const userPrompt = `Parse this Shalhevet High School transcript.
 The text may have scrambled column order due to PDF extraction.
+Personal information may already be redacted. Ignore any redacted fields.
 Look for course names you would recognize from a Jewish high school (English, Math, Science, History, Talmud, Tanakh, Hebrew, etc.) and match them with nearby letter grades and credit values.
 
 Transcript text:
-${fullText}`;
-
+${sanitizedText}`;
                 console.log('Transcript text being sent:', fullText.slice(0, 4000));
 
         const response = await fetch(PROXY_URL, {
