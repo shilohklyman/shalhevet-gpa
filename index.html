@@ -1857,25 +1857,16 @@ async function importTranscriptPDF(event) {
 
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-        let fullText = '';
-        for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
+                let fullText = '';
 
-            const items = content.items
-                .filter(item => item.str && item.str.trim())
-                .map(item => ({
-                    text: item.str.trim(),
-                    x: item.transform[4],
-                    y: item.transform[5]
-                }))
-                .sort((a, b) => {
-                    if (Math.abs(b.y - a.y) > 2) return b.y - a.y;
-                    return a.x - b.x;
-                });
+        function buildColumnText(items) {
+            const sorted = items.sort((a, b) => {
+                if (Math.abs(b.y - a.y) > 2) return b.y - a.y;
+                return a.x - b.x;
+            });
 
             const lines = [];
-            for (const item of items) {
+            for (const item of sorted) {
                 const lastLine = lines[lines.length - 1];
                 if (!lastLine || Math.abs(lastLine.y - item.y) > 2) {
                     lines.push({ y: item.y, parts: [item] });
@@ -1884,7 +1875,7 @@ async function importTranscriptPDF(event) {
                 }
             }
 
-            const pageText = lines
+            return lines
                 .map(line =>
                     line.parts
                         .sort((a, b) => a.x - b.x)
@@ -1892,8 +1883,30 @@ async function importTranscriptPDF(event) {
                         .join(' ')
                 )
                 .join('\n');
+        }
 
-            fullText += `\n--- PAGE ${i} ---\n${pageText}\n`;
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const viewport = page.getViewport({ scale: 1 });
+            const midX = viewport.width / 2;
+            const content = await page.getTextContent();
+
+            const items = content.items
+                .filter(item => item.str && item.str.trim())
+                .map(item => ({
+                    text: item.str.trim(),
+                    x: item.transform[4],
+                    y: item.transform[5]
+                }));
+
+            const leftItems = items.filter(item => item.x < midX);
+            const rightItems = items.filter(item => item.x >= midX);
+
+            const leftText = buildColumnText(leftItems);
+            const rightText = buildColumnText(rightItems);
+
+            fullText += `\n--- PAGE ${i} LEFT COLUMN ---\n${leftText}\n`;
+            fullText += `\n--- PAGE ${i} RIGHT COLUMN ---\n${rightText}\n`;
         }
         console.log('Extracted text:', fullText);
 
