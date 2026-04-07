@@ -1659,9 +1659,9 @@ function convertImportedTranscriptToAppShape(parsed) {
             let credits = Number(c.credits ?? 0) || 0;
             let s2credits = Number(c.s2credits ?? 0) || 0;
 
-            let wt = !!c.wt;
-            let s2wt = !!(c.s2wt ?? c.wt);
-
+            let wt = false;
+            let s2wt = false;
+            
             const hasS1 = !!s1name || s1grade !== '—' || credits > 0;
             const hasS2 = !!s2name || s2grade !== '—' || s2credits > 0;
 
@@ -1675,20 +1675,34 @@ function convertImportedTranscriptToAppShape(parsed) {
                 return null;
             }
 
-            // Weighting rules
-            if (combinedName.includes('ADVANCED')) {
-                wt = false;
-                s2wt = false;
-            } else {
-                if (s1name.toUpperCase().includes('HONORS') || s1name.toUpperCase().includes('SAS') || s1name.toUpperCase().includes('BMT') || s1name.toUpperCase().includes('BEIT MIDRASH TRACK')) wt = true;
-                if (s2name.toUpperCase().includes('HONORS') || s2name.toUpperCase().includes('SAS') || s2name.toUpperCase().includes('BMT') || s2name.toUpperCase().includes('BEIT MIDRASH TRACK')) s2wt = true;
-            }
+                        // Weighting rules are enforced by course name, not by AI guess
+            const s1Upper = s1name.toUpperCase();
+            const s2Upper = s2name.toUpperCase();
 
+            wt =
+                !!s1name &&
+                !s1Upper.includes('ADVANCED') &&
+                (
+                    s1Upper.includes('HONORS') ||
+                    s1Upper.includes('SAS') ||
+                    s1Upper.includes('BMT') ||
+                    s1Upper.includes('BEIT MIDRASH TRACK')
+                );
+
+            s2wt =
+                !!s2name &&
+                !s2Upper.includes('ADVANCED') &&
+                (
+                    s2Upper.includes('HONORS') ||
+                    s2Upper.includes('SAS') ||
+                    s2Upper.includes('BMT') ||
+                    s2Upper.includes('BEIT MIDRASH TRACK')
+                );
             const isBMT = combinedName.includes('BMT') || combinedName.includes('BEIT MIDRASH TRACK');
 
-            // Semester 1 only
+                       // Semester 1 only
             if (hasS1 && !hasS2) {
-                if (!credits) credits = Number(c.credits ?? 0.5) || 0.5;
+                credits = Number(c.credits ?? 0.5) || 0.5;
 
                 return {
                     id: c.id || `import-${Date.now()}-${yIdx}-${cIdx}`,
@@ -1706,7 +1720,7 @@ function convertImportedTranscriptToAppShape(parsed) {
 
             // Semester 2 only
             if (!hasS1 && hasS2) {
-                if (!s2credits) s2credits = Number(c.s2credits ?? c.credits ?? 0.5) || 0.5;
+                s2credits = Number(c.s2credits ?? c.credits ?? 0.5) || 0.5;
 
                 return {
                     id: c.id || `import-${Date.now()}-${yIdx}-${cIdx}`,
@@ -1725,10 +1739,10 @@ function convertImportedTranscriptToAppShape(parsed) {
             // Both semesters
             if (hasS1 && hasS2) {
                 if (isBMT) {
-                    if (!credits) credits = 1.0;
-                    if (!s2credits) s2credits = 1.0;
+                    credits = 1.0;
+                    s2credits = 1.0;
                 } else if (credits > 0 && hasExplicitS2Credits && s2credits > 0) {
-                    // Trust explicit semester credits
+                    // Explicit semester credits were provided, keep them
                 } else {
                     const overallCredits = Number(c.credits ?? c.s2credits ?? 0.5) || 0.5;
                     credits = overallCredits / 2;
@@ -1752,7 +1766,6 @@ function convertImportedTranscriptToAppShape(parsed) {
                     sync: sameCourse && sameCredits && sameWeight
                 };
             }
-
             return null;
         }).filter(Boolean)
     }));
@@ -1861,6 +1874,10 @@ Important parsing instructions:
 - Do NOT move semester 1 classes into semester 2.
 - Do NOT move semester 2 classes into semester 1.
 - If a class appears in only one semester, keep it only in that semester.
+- If you are unsure whether a class belongs in both semesters, prefer keeping it in only the clearly supported semester rather than duplicating it.
+- Preserve the actual semester placement shown by nearby grades and credit values.
+- Do not infer a second-semester entry unless the transcript clearly supports it.
+- Do not infer a first-semester entry unless the transcript clearly supports it.
 - Exclude Physical Education / PE / Phys Ed entirely.
 - Most classes are 0.5 credits in a single semester.
 - Some classes are 0.25 credits in a single semester.
@@ -1869,7 +1886,6 @@ Important parsing instructions:
 - If a class spans both semesters and the transcript gives 0.5 total for the full year, return 0.25 for semester 1 and 0.25 for semester 2.
 - If a class exists in only one semester, do NOT divide its credit.
 - Preserve semester-specific course names when they differ.
-- If the transcript text is messy, prefer keeping a course in only one semester rather than incorrectly duplicating it into both.
 - Personal information may already be redacted. Ignore any redacted fields.
 
 Transcript text:
