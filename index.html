@@ -1830,7 +1830,7 @@ async function importTranscriptPDF(event) {
 
         showPDFImportModal('parsing');
 
-        const systemPrompt = `You are a transcript parser for Shalhevet High School transcripts.
+               const systemPrompt = `You are a transcript parser for Shalhevet High School transcripts.
 The transcript has courses organized by grade year (Grade 9, Grade 10, Grade 11, Grade 12).
 Each course has these columns: Course Name, Level (SAS/HON/ADV or blank), S1 grade, S2 grade, and Credit.
 
@@ -1843,13 +1843,15 @@ Level meanings:
 Grades can be: A+, A, A-, B+, B, B-, C+, C, C-, D+, D, F, P, W, NG
 P/W/NG grades should be stored as — since they don't count toward GPA.
 
-Return ONLY a valid JSON array of exactly 4 year objects — no markdown, no explanation, no backticks:
-[
-  { "name": "9th Grade", "courses": [...] },
-  { "name": "10th Grade", "courses": [...] },
-  { "name": "11th Grade", "courses": [...] },
-  { "name": "12th Grade", "courses": [...] }
-]
+Return ONLY a valid JSON object of this exact shape:
+{
+  "years": [
+    { "name": "9th Grade", "courses": [] },
+    { "name": "10th Grade", "courses": [] },
+    { "name": "11th Grade", "courses": [] },
+    { "name": "12th Grade", "courses": [] }
+  ]
+}
 
 Each course object:
 {
@@ -1860,33 +1862,31 @@ Each course object:
   "s2grade": "<semester 2 letter grade or — if missing>",
   "credits": <semester 1 credits: 0, 0.25, 0.5, or 1.0>,
   "s2credits": <semester 2 credits: 0, 0.25, 0.5, or 1.0>,
-  "wt": <true if semester 1 is SAS/HON/BMT, false otherwise>,
-  "s2wt": <true if semester 2 is SAS/HON/BMT, false otherwise>,
-  "sync": <true only if the same class continues in both semesters with same credits and same weighting; otherwise false>
+  "wt": <true if semester 1 is weighted, else false>,
+  "s2wt": <true if semester 2 is weighted, else false>,
+  "sync": <true only if the same class continues in both semesters with same credits and weighting; otherwise false>
 }
 
-Return ONLY the JSON array. Nothing else.
+Return ONLY the JSON object. Nothing else.`;
 
-                const userPrompt = `Parse this Shalhevet High School transcript carefully.
+        const userPrompt = `Parse this Shalhevet High School transcript carefully.
 
 Important parsing instructions:
 - Use the semester columns carefully.
 - Do NOT move semester 1 classes into semester 2.
 - Do NOT move semester 2 classes into semester 1.
 - If a class appears in only one semester, keep it only in that semester.
-- If you are unsure whether a class belongs in both semesters, prefer keeping it in only the clearly supported semester rather than duplicating it.
-- Preserve the actual semester placement shown by nearby grades and credit values.
-- Do not infer a second-semester entry unless the transcript clearly supports it.
-- Do not infer a first-semester entry unless the transcript clearly supports it.
 - Exclude Physical Education / PE / Phys Ed entirely.
 - Most classes are 0.5 credits in a single semester.
 - Some classes are 0.25 credits in a single semester.
 - Only BMT should be 1.0 in a semester.
-- If a class spans both semesters and the transcript gives 1.0 total for the full year, return 0.5 for semester 1 and 0.5 for semester 2.
-- If a class spans both semesters and the transcript gives 0.5 total for the full year, return 0.25 for semester 1 and 0.25 for semester 2.
-- If a class exists in only one semester, do NOT divide its credit.
+- If a class spans both semesters:
+  - if the transcript gives 1.0 total for the full year, return 0.5 for semester 1 and 0.5 for semester 2
+  - if the transcript gives 0.5 total for the full year, return 0.25 for semester 1 and 0.25 for semester 2
+- Do NOT divide credits for classes that are only in one semester.
 - Preserve semester-specific course names when they differ.
-- Personal information may already be redacted. Ignore any redacted fields.
+
+Personal information may already be redacted. Ignore any redacted fields.
 
 Transcript text:
 ${sanitizedText}`;
