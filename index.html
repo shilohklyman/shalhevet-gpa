@@ -1039,52 +1039,6 @@
     </script>
 
     <script>
-export default {
-  async fetch(request, env) {
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders(request) });
-    }
-
-    if (request.method !== 'POST') {
-      return new Response('Method Not Allowed', {
-        status: 405,
-        headers: corsHeaders(request)
-      });
-    }
-
-    try {
-      const body = await request.json();
-
-      const upstream = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${env.OPENAI_API_KEY}`
-        },
-        body: JSON.stringify(body)
-      });
-
-      const text = await upstream.text();
-
-      return new Response(text, {
-        status: upstream.status,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders(request)
-        }
-      });
-    } catch (err) {
-      return new Response(JSON.stringify({ error: String(err) }), {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders(request)
-        }
-      });
-    }
-  }
-};
-
 function corsHeaders(request) {
   const origin = request.headers.get('Origin') || '';
   const allowed = [
