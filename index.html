@@ -1770,26 +1770,72 @@ function convertImportedTranscriptToAppShape(parsed) {
         }).filter(Boolean)
     }));
 }
-        function sanitizeTranscriptText(text) {
+function sanitizeTranscriptText(text) {
     if (!text) return '';
 
     let cleaned = text;
 
-    // Labeled personal fields
-    cleaned = cleaned.replace(/(Student\s*Name\s*:?\s*)(.*?)(?=(Date\s*of\s*Birth|DOB|Address|Parent|Guardian|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gi, '$1[REDACTED] ');
-    cleaned = cleaned.replace(/(Date\s*of\s*Birth\s*:?\s*)(.*?)(?=(Address|Parent|Guardian|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gi, '$1[REDACTED] ');
-    cleaned = cleaned.replace(/\b(DOB\s*:?\s*)(.*?)(?=(Address|Parent|Guardian|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gi, '$1[REDACTED] ');
-    cleaned = cleaned.replace(/(Address\s*:?\s*)(.*?)(?=(Parent|Guardian|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gi, '$1[REDACTED] ');
-    cleaned = cleaned.replace(/((Parent|Guardian)(\/Guardian)?\s*Name\s*:?\s*)(.*?)(?=(Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gi, '$1[REDACTED] ');
-    cleaned = cleaned.replace(/(Student\s*ID\s*:?\s*)(.*?)(?=(Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gi, '$1[REDACTED] ');
+    // Common labeled fields
+    cleaned = cleaned.replace(/(Student\s*Name\s*:?\s*)(.*?)(?=(Date\s*of\s*Birth|DOB|Address|Parent|Guardian|Par\/Guar|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gis, '$1[REDACTED] ');
+    cleaned = cleaned.replace(/(Student\s*:?\s*)(.*?)(?=(DOB|Date\s*of\s*Birth|Par\/Guar|Parent|Guardian|Address|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gis, '$1[REDACTED] ');
+    cleaned = cleaned.replace(/(Date\s*of\s*Birth\s*:?\s*)(.*?)(?=(Address|Parent|Guardian|Par\/Guar|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gis, '$1[REDACTED] ');
+    cleaned = cleaned.replace(/\b(DOB\s*:?\s*)(.*?)(?=(Address|Parent|Guardian|Par\/Guar|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gis, '$1[REDACTED] ');
+    cleaned = cleaned.replace(/(Address\s*:?\s*)(.*?)(?=(Parent|Guardian|Par\/Guar|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|Phone|$))/gis, '$1[REDACTED] ');
+    cleaned = cleaned.replace(/((Parent|Guardian)(\/Guardian)?\s*Name\s*:?\s*)(.*?)(?=(Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gis, '$1[REDACTED] ');
+    cleaned = cleaned.replace(/(Par\/Guar\s*:?\s*)(.*?)(?=(Address|Phone|Student\s*ID|Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gis, '$1[REDACTED] ');
+    cleaned = cleaned.replace(/(Student\s*ID\s*:?\s*)(.*?)(?=(Grade\s*9|9th\s*Grade|Grade\s*10|10th\s*Grade|Grade\s*11|11th\s*Grade|Grade\s*12|12th\s*Grade|$))/gis, '$1[REDACTED] ');
 
-    // Extra targeted patterns
+    // Phones / email / URLs
+    cleaned = cleaned.replace(/\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?)\d{3}[-.\s]?\d{4}\b/g, '[REDACTED-PHONE]');
+    cleaned = cleaned.replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, '[REDACTED-EMAIL]');
+    cleaned = cleaned.replace(/https?:\/\/\S+/gi, '[REDACTED-URL]');
+    cleaned = cleaned.replace(/\bwww\.\S+/gi, '[REDACTED-URL]');
+
+    // SSN / dates / ZIP
     cleaned = cleaned.replace(/\b\d{3}-\d{2}-\d{4}\b/g, '[REDACTED-SSN]');
     cleaned = cleaned.replace(/\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/g, '[REDACTED-DATE]');
     cleaned = cleaned.replace(/\b\d{5}(?:-\d{4})?\b/g, '[REDACTED-ZIP]');
 
     return cleaned;
 }
+
+function focusTranscriptText(text) {
+    if (!text) return '';
+
+    let focused = text;
+
+    const startMatch = focused.match(/Grade\s*9\s*Weighted\s*GPA\s*:/i);
+    if (startMatch) {
+        focused = focused.slice(startMatch.index);
+    }
+
+    const endMarkers = [
+        /Grade\s*Scale/i,
+        /Course\s*Levels/i,
+        /Current\s*Year\s*Courses/i,
+        /Signature\s*:/i,
+        /Printed\s+\[REDACTED-DATE\]/i,
+        /Printed\s+\d{1,2}\/\d{1,2}\/\d{2,4}/i
+    ];
+
+    let cutIndex = focused.length;
+    for (const marker of endMarkers) {
+        const match = marker.exec(focused);
+        if (match && match.index < cutIndex) {
+            cutIndex = match.index;
+        }
+    }
+
+    focused = focused.slice(0, cutIndex);
+
+    focused = focused.replace(/Expected\s+Graduation\s*:[^\n]*/gi, '');
+    focused = focused.replace(/Cumulative\s+Weighted\s+GPA\s*:[^\n]*/gi, '');
+    focused = focused.replace(/Cumulative\s+Unweighted\s+GPA\s*:[^\n]*/gi, '');
+    focused = focused.replace(/Credits\s+Earned\s*:[^\n]*/gi, '');
+
+    return focused.trim();
+}
+
 async function importTranscriptPDF(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -1852,6 +1898,7 @@ async function importTranscriptPDF(event) {
         console.log('Extracted text:', fullText);
 
         const sanitizedText = sanitizeTranscriptText(fullText);
+        const focusedText = focusTranscriptText(sanitizedText) || sanitizedText;
         console.log('Sanitized text:', sanitizedText);
         if (!fullText.trim()) {
             hidePDFImportModal();
@@ -1920,9 +1967,8 @@ Important parsing instructions:
 Personal information may already be redacted. Ignore any redacted fields.
 
 Transcript text:
-${sanitizedText}`;
-                console.log('Transcript text being sent:', fullText.slice(0, 4000));
-
+${focusedText}`;
+        console.log('Transcript text being sent:', focusedText.slice(0, 4000));
         const response = await fetch(PROXY_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
