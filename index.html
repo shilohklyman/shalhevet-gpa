@@ -1951,8 +1951,13 @@ Rules:
         });
 
         if (!response.ok) {
-            const err = await response.json().catch(() => ({}));
-            throw new Error(err?.error?.message || `Proxy error ${response.status}`);
+            let errObj = {};
+            try { errObj = await response.json(); } catch (e) {}
+            const msg =
+                errObj?.error?.message ||
+                errObj?.error ||
+                ('Proxy error ' + response.status);
+            throw new Error(String(msg));
         }
 
                         const data = await response.json();
