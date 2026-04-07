@@ -1815,9 +1815,40 @@ async function importTranscriptPDF(event) {
         for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
             const content = await page.getTextContent();
-            fullText += content.items.map(item => item.str).join(' ') + '\n';
-        }
 
+            const items = content.items
+                .filter(item => item.str && item.str.trim())
+                .map(item => ({
+                    text: item.str.trim(),
+                    x: item.transform[4],
+                    y: item.transform[5]
+                }))
+                .sort((a, b) => {
+                    if (Math.abs(b.y - a.y) > 2) return b.y - a.y;
+                    return a.x - b.x;
+                });
+
+            const lines = [];
+            for (const item of items) {
+                const lastLine = lines[lines.length - 1];
+                if (!lastLine || Math.abs(lastLine.y - item.y) > 2) {
+                    lines.push({ y: item.y, parts: [item] });
+                } else {
+                    lastLine.parts.push(item);
+                }
+            }
+
+            const pageText = lines
+                .map(line =>
+                    line.parts
+                        .sort((a, b) => a.x - b.x)
+                        .map(part => part.text)
+                        .join(' ')
+                )
+                .join('\n');
+
+            fullText += `\n--- PAGE ${i} ---\n${pageText}\n`;
+        }
         console.log('Extracted text:', fullText);
 
         const sanitizedText = sanitizeTranscriptText(fullText);
