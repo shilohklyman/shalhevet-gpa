@@ -1903,44 +1903,7 @@ ${sanitizedText}`;
                 messages: [
                     {
                         role: 'system',
-                        content: `You are a transcript parser for Shalhevet High School transcripts.
-
-Return ONLY a JSON object in this exact format:
-{
-  "years": [
-    { "name": "9th Grade", "courses": [] },
-    { "name": "10th Grade", "courses": [] },
-    { "name": "11th Grade", "courses": [] },
-    { "name": "12th Grade", "courses": [] }
-  ]
-}
-
-Each course must be:
-{
-  "id": "<unique string>",
-  "name": "<course name>",
-  "s1grade": "<letter grade or —>",
-  "s2grade": "<letter grade or —>",
-  "credits": <number>,
-  "wt": <true or false>
-}
-
-Rules:
-- SAS and HON => wt = true
-- ADV and blank => wt = false
-- P, W, NG => "—"
-- Exclude Physical Education / PE / Phys Ed entirely
-- Do not move semester 1 classes into semester 2
-- Do not move semester 2 classes into semester 1
-- If a class exists in only one semester, leave the other semester blank
-- Most one-semester classes are 0.5 credits
-- Some one-semester classes are 0.25 credits
-- If a class spans both semesters and the transcript shows 1.0 total for the full year, return 0.5 for semester 1 and 0.5 for semester 2
-- If a class spans both semesters and the transcript shows 0.5 total for the full year, return 0.25 for semester 1 and 0.25 for semester 2
-- If a class exists in only one semester, do not divide its credit
-- Return no markdown
-- Return no explanation
-- Return only valid JSON
+                        content: systemPrompt
                     },
                     {
                         role: 'user',
