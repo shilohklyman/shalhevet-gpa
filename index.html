@@ -1835,7 +1835,264 @@ function focusTranscriptText(text) {
 
     return focused.trim();
 }
+function parseCreditToken(text) {
+    const n = parseFloat(String(text || '').trim());
+    return [0.25, 0.5, 1.0].includes(n) ? n : null;
+}
 
+function normalizeLevelToken(text) {
+    const t = String(text || '').trim().toUpperCase();
+    if (t === 'ADV' || t === 'HON' || t === 'SAS' || t === 'BLE') return t;
+    return '';
+}
+
+function cleanJoinedText(parts) {
+    return parts
+        .sort((a, b) => a.x - b.x)
+        .map(part => part.text)
+        .join(' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function groupItemsIntoLines(items, tolerance = 2.5) {
+    const sorted = [...items].sort((a, b) => {
+        if (Math.abs(b.y - a.y) > tolerance) return b.y - a.y;
+        return a.x - b.x;
+    });
+
+    const lines = [];
+    for (const item of sorted) {
+        const last = lines[lines.length - 1];
+        if (!last || Math.abs(last.y - item.y) > tolerance) {
+            lines.push({ y: item.y, parts: [item] });
+        } else {
+            last.parts.push(item);
+        }
+    }
+    return lines;
+}
+
+function buildCourseFromParsedRow({ name, level, s1grade, s2grade, credit, yearIndex, rowIndex }) {
+    const cleanName = String(name || '').replace(/\s+/g, ' ').trim();
+    if (!cleanName) return null;
+    if (/\b(PHYSICAL EDUCATION|PHYS ED|P\.?E\.?|PE)\b/i.test(cleanName)) return null;
+
+    const safeLevel = normalizeLevelToken(level);
+    const normalizedS1 = normalizeImportedGrade(s1grade);
+    const normalizedS2 = normalizeImportedGrade(s2grade);
+
+    let wt = isWeightedCourseName(cleanName) || safeLevel === 'HON' || safeLevel === 'SAS';
+    if (safeLevel === 'ADV' || /\bADVANCED\b/i.test(cleanName)) wt = false;
+
+    const isBMT = /\b(BMT|BEIT MIDRASH TRACK)\b/i.test(cleanName);
+
+    // One-semester S1 only
+    if (normalizedS1 !== '—' && normalizedS2 === '—') {
+        return {
+            id: `pdf-${Date.now()}-${yearIndex}-${rowIndex}`,
+            name: cleanName,
+            s2name: '',
+            s1grade: normalizedS1,
+            s2grade: '—',
+            credits: credit,
+            s2credits: 0,
+            wt,
+            s2wt: false,
+            sync: false
+        };
+    }
+
+    // One-semester S2 only
+    if (normalizedS1 === '—' && normalizedS2 !== '—') {
+        return {
+            id: `pdf-${Date.now()}-${yearIndex}-${rowIndex}`,
+            name: '',
+            s2name: cleanName,
+            s1grade: '—',
+            s2grade: normalizedS2,
+            credits: 0,
+            s2credits: credit,
+            wt: false,
+            s2wt: wt,
+            sync: false
+        };
+    }
+
+    // Full-year course
+    if (normalizedS1 !== '—' && normalizedS2 !== '—') {
+        let semCredit = credit;
+        if (!isBMT) {
+            if (credit === 1.0) semCredit = 0.5;
+            else if (credit === 0.5) semCredit = 0.25;
+        }
+
+        return {
+            id: `pdf-${Date.now()}-${yearIndex}-${rowIndex}`,
+            name: cleanName,
+            s2name: cleanName,
+            s1grade: normalizedS1,
+            s2grade: normalizedS2,
+            credits: semCredit,
+            s2credits: semCredit,
+            wt,
+            s2wt: wt,
+            sync: true
+        };
+    }
+
+    return null;
+}
+
+async function parseShalhevetTranscriptDirectly(pdf) {
+    const result = normalizeGPAData([]);
+
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        const page = await pdf.getPage(pageNum);
+        const viewport = page.getViewport({ scale: 1 });
+        const pageWidth = viewport.width;
+        const midX = pageWidth / 2;
+
+        const content = await page.getTextContent();
+        const items = content.items
+            .filter(item => item.str && item.str.trim())
+            .map(item => ({
+                text: item.str.trim(),
+                x: item.transform[4],
+                y: item.transform[5]
+            }));
+
+        const footerMarkers = items.filter(item =>
+            /Grade\s*Scale|Course\s*Levels|Current\s*Year\s*Courses|Signature\s*:|Printed/i.test(item.text)
+        );
+        const footerTopY = footerMarkers.length ? Math.max(...footerMarkers.map(i => i.y)) : -Infinity;
+
+        const yearHeaders = items
+            .map(item => {
+                const m = item.text.match(/Grade\s*(9|10|11|12)\s*Weighted\s*GPA/i);
+                if (!m) return null;
+                return {
+                    grade: Number(m[1]),
+                    yearIndex: Number(m[1]) - 9,
+                    x: item.x,
+                    y: item.y,
+                    side: item.x < midX ? 'left' : 'right'
+                };
+            })
+            .filter(Boolean);
+
+        for (const side of ['left', 'right']) {
+            const sideHeaders = yearHeaders
+                .filter(h => h.side === side)
+                .sort((a, b) => b.y - a.y);
+
+            const sideMinX = side === 'left' ? 0 : midX;
+            const sideMaxX = side === 'left' ? midX : pageWidth;
+
+            for (let hIndex = 0; hIndex < sideHeaders.length; hIndex++) {
+                const header = sideHeaders[hIndex];
+                const nextHeader = sideHeaders[hIndex + 1];
+
+                const sectionTopY = header.y - 8;
+                const sectionBottomY = nextHeader ? nextHeader.y + 8 : footerTopY > -Infinity ? footerTopY + 8 : -Infinity;
+
+                const headerLineItems = items.filter(item =>
+                    item.x >= sideMinX &&
+                    item.x < sideMaxX &&
+                    Math.abs(item.y - header.y) <= 3
+                );
+
+                const levelItem = headerLineItems.find(i => /^Level$/i.test(i.text));
+                const s1Item = headerLineItems.find(i => /^S1$/i.test(i.text));
+                const s2Item = headerLineItems.find(i => /^S2$/i.test(i.text));
+                const creditItem = headerLineItems.find(i => /^Credit$/i.test(i.text));
+
+                if (!levelItem || !s1Item || !s2Item || !creditItem) continue;
+
+                const sectionItems = items.filter(item =>
+                    item.x >= sideMinX &&
+                    item.x < sideMaxX &&
+                    item.y < sectionTopY &&
+                    item.y > sectionBottomY
+                );
+
+                const lines = groupItemsIntoLines(sectionItems);
+
+                lines.forEach((line, rowIndex) => {
+                    const joined = cleanJoinedText(line.parts);
+
+                    if (!joined) return;
+                    if (/^\d{2}-\d{2}$/.test(joined)) return;
+                    if (/^(Level|S1|S2|Credit)$/i.test(joined)) return;
+                    if (/^(Expected Graduation|Cumulative Weighted GPA|Cumulative Unweighted GPA|Credits Earned|Grade Scale|Course Levels|Current Year Courses|Signature|Printed)/i.test(joined)) return;
+
+                    const nameParts = [];
+                    const levelParts = [];
+                    const s1Parts = [];
+                    const s2Parts = [];
+                    const creditParts = [];
+
+                    const levelBoundary = levelItem.x - 12;
+                    const s1Boundary = (levelItem.x + s1Item.x) / 2;
+                    const s2Boundary = (s1Item.x + s2Item.x) / 2;
+                    const creditBoundary = (s2Item.x + creditItem.x) / 2;
+
+                    line.parts.forEach(part => {
+                        if (part.x < levelBoundary) nameParts.push(part);
+                        else if (part.x < s1Boundary) levelParts.push(part);
+                        else if (part.x < s2Boundary) s1Parts.push(part);
+                        else if (part.x < creditBoundary) s2Parts.push(part);
+                        else creditParts.push(part);
+                    });
+
+                    const name = cleanJoinedText(nameParts);
+                    const level = cleanJoinedText(levelParts);
+                    const s1grade = cleanJoinedText(s1Parts);
+                    const s2grade = cleanJoinedText(s2Parts);
+                    const creditText = cleanJoinedText(creditParts);
+                    const credit = parseCreditToken(creditText);
+
+                    if (!name || credit === null) return;
+
+                    const course = buildCourseFromParsedRow({
+                        name,
+                        level,
+                        s1grade,
+                        s2grade,
+                        credit,
+                        yearIndex: header.yearIndex,
+                        rowIndex
+                    });
+
+                    if (course) {
+                        result[header.yearIndex].courses.push(course);
+                    }
+                });
+            }
+        }
+    }
+
+    // De-duplicate accidental repeats
+    result.forEach(year => {
+        const seen = new Set();
+        year.courses = year.courses.filter(course => {
+            const key = [
+                course.name,
+                course.s2name,
+                course.s1grade,
+                course.s2grade,
+                course.credits,
+                course.s2credits
+            ].join('|');
+
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+    });
+
+    return result;
+}
 async function importTranscriptPDF(event) {
     const file = event.target.files[0];
     if (!file) return;
