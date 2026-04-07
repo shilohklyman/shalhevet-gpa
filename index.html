@@ -1597,7 +1597,39 @@ function corsHeaders(request) {
                 </div>`;
             document.body.appendChild(overlay);
         }
+function normalizeImportedGrade(grade) {
+    const valid = new Set(['A+','A','A-','B+','B','B-','C+','C','C-','D+','D','F','—']);
+    const g = String(grade || '—').trim().toUpperCase();
+    return valid.has(g) ? g : '—';
+}
 
+function convertImportedTranscriptToAppShape(parsed) {
+    const normalizedYears = normalizeGPAData(parsed);
+
+    return normalizedYears.map((year, yIdx) => ({
+        name: year.name || EMPTY_GPA[yIdx].name,
+        courses: (year.courses || []).map((c, cIdx) => {
+            const s1grade = normalizeImportedGrade(c.s1grade);
+            const s2grade = normalizeImportedGrade(c.s2grade);
+            const wt = !!c.wt;
+            const rawCredits = Number(c.credits ?? 0.5) || 0.5;
+            const semesterCredits = rawCredits;
+
+            return {
+                id: c.id || `import-${Date.now()}-${yIdx}-${cIdx}`,
+                name: c.name || '',
+                s2name: c.name || '',
+                s1grade,
+                s2grade,
+                credits: semesterCredits,
+                s2credits: semesterCredits,
+                wt,
+                s2wt: wt,
+                sync: true
+            };
+        })
+    }));
+}
 async function importTranscriptPDF(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -1676,6 +1708,8 @@ Look for course names you would recognize from a Jewish high school (English, Ma
 Transcript text:
 ${fullText}`;
 
+                console.log('Transcript text being sent:', fullText.slice(0, 4000));
+
         const response = await fetch(PROXY_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1683,9 +1717,44 @@ ${fullText}`;
                 model: 'gpt-4o-mini',
                 temperature: 0,
                 max_tokens: 4000,
+                response_format: { type: 'json_object' },
                 messages: [
-                    { role: 'system', content: systemPrompt },
-                    { role: 'user', content: userPrompt }
+                    {
+                        role: 'system',
+                        content: `You are a transcript parser for Shalhevet High School transcripts.
+
+Return ONLY a JSON object in this exact format:
+{
+  "years": [
+    { "name": "9th Grade", "courses": [] },
+    { "name": "10th Grade", "courses": [] },
+    { "name": "11th Grade", "courses": [] },
+    { "name": "12th Grade", "courses": [] }
+  ]
+}
+
+Each course must be:
+{
+  "id": "<unique string>",
+  "name": "<course name>",
+  "s1grade": "<letter grade or —>",
+  "s2grade": "<letter grade or —>",
+  "credits": <number>,
+  "wt": <true or false>
+}
+
+Rules:
+- SAS and HON => wt = true
+- ADV and blank => wt = false
+- P, W, NG => "—"
+- Return no markdown
+- Return no explanation
+- Return only valid JSON`
+                    },
+                    {
+                        role: 'user',
+                        content: userPrompt
+                    }
                 ]
             })
         });
@@ -1695,21 +1764,18 @@ ${fullText}`;
             throw new Error(err?.error?.message || `Proxy error ${response.status}`);
         }
 
-                const data = await response.json();
+                        const data = await response.json();
         console.log('OpenAI raw response:', data);
 
         const rawText = data?.choices?.[0]?.message?.content?.trim() || '';
         if (!rawText) throw new Error('OpenAI returned no content.');
 
-        const clean = rawText.replace(/^```json\s*|^```\s*|```$/gm, '').trim();
-        const jsonMatch = clean.match(/\[[\s\S]*\]/);
+        const parsedObject = JSON.parse(rawText);
+        const parsed = parsedObject?.years;
 
-        if (!jsonMatch) {
-            throw new Error('Could not find JSON array in OpenAI response.');
+        if (!Array.isArray(parsed)) {
+            throw new Error('OpenAI did not return a valid years array.');
         }
-
-        const parsed = JSON.parse(jsonMatch[0]);
-        if (!Array.isArray(parsed)) throw new Error('Unexpected response format');
 
         const imported = convertImportedTranscriptToAppShape(parsed);
         const hasData = imported.some(y => y.courses.length > 0);
