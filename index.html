@@ -103,23 +103,46 @@
         .modal-overlay.open { display: flex; }
         .auth-gate { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .auth-gate.visible { opacity: 1; pointer-events: auto; }
+        .auth-gate-loading { opacity: 0.5; }
         .profile-dropdown { display: none; }
         .profile-dropdown.open { display: block; }
         #hamburger-btn { transition: background-color 0.2s, color 0.2s; }
         #hamburger-btn.active { background-color: #cc0000; color: white; border-color: #cc0000; }
         select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem center; padding-right: 2rem !important; }
         .print-transcript { display: none; }
-        .transcript-sheet { display: flex; flex-direction: column; gap: 20px; }
-        .transcript-year { background: white; border: 1px solid #e4e4e7; border-radius: 22px; overflow: hidden; }
-        .transcript-year-header { padding: 18px 22px 14px; border-bottom: 2px solid #18181b; }
-        .transcript-year-title { font-size: 1.1rem; font-weight: 800; color: #18181b; letter-spacing: 0.02em; }
+        .transcript-sheet { display: flex; flex-direction: column; gap: 14px; }
+        .transcript-print-header { border: 1px solid #e4e4e7; border-radius: 16px; padding: 14px 18px; background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%); }
+        .transcript-print-brand { font-size: 17px; font-weight: 800; color: #18181b; letter-spacing: 0.01em; }
+        .transcript-print-sub { margin-top: 2px; font-size: 11px; font-weight: 700; color: #71717a; letter-spacing: 0.02em; }
+        .transcript-year { background: white; border: 1px solid #e4e4e7; border-radius: 16px; overflow: hidden; }
+        .transcript-year-header { padding: 13px 18px; border-bottom: 1px solid #d4d4d8; background: #fcfcfc; }
+        .transcript-year-title { font-size: 14px; font-weight: 800; color: #18181b; letter-spacing: 0.04em; text-transform: uppercase; }
         .transcript-table { width: 100%; border-collapse: collapse; }
-        .transcript-table th { padding: 12px 18px; font-size: 11px; font-weight: 800; color: #71717a; text-transform: uppercase; letter-spacing: 0.12em; border-bottom: 1px solid #d4d4d8; }
-        .transcript-table td { padding: 12px 18px; font-size: 14px; font-weight: 700; color: #27272a; border-bottom: 1px solid #e4e4e7; }
+        .transcript-table th { padding: 8px 12px; font-size: 10px; font-weight: 800; color: #71717a; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 1px solid #d4d4d8; }
+        .transcript-table td { padding: 8px 12px; font-size: 12px; font-weight: 600; color: #27272a; border-bottom: 1px solid #ececf0; }
         .transcript-table tbody tr:last-child td { border-bottom: none; }
         .transcript-table .course-col { width: 58%; }
         .transcript-table .level-col, .transcript-table .grade-col, .transcript-table .credit-col { width: 10.5%; text-align: center; }
         .transcript-empty { padding: 32px 22px; color: #71717a; font-size: 13px; font-weight: 700; }
+
+        /* ── Official-style print transcript ── */
+        .tp-page { font-family: "Plus Jakarta Sans", Arial, sans-serif; font-size: 9pt; color: #000; background: #fff; }
+        .tp-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12pt; border-bottom: 1.5pt solid #000; padding-bottom: 7pt; }
+        .tp-top-left { font-size: 7.5pt; line-height: 1.6; }
+        .tp-title { font-size: 14pt; font-weight: 800; text-align: center; flex: 1; padding: 0 10pt; }
+        .tp-top-right { font-size: 7.5pt; text-align: right; }
+        .tp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16pt; }
+        .tp-year { margin-bottom: 9pt; }
+        .tp-year-header { border-bottom: 1pt solid #000; padding-bottom: 2pt; margin-bottom: 1pt; }
+        .tp-year-title { font-size: 8pt; font-weight: 800; }
+        .tp-col-headers { display: grid; grid-template-columns: 1fr 34pt 17pt 17pt 20pt; font-size: 6.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #555; border-bottom: 0.5pt solid #bbb; padding: 1.5pt 0; }
+        .tp-col-headers span { text-align: center; }
+        .tp-col-headers span:first-child { text-align: left; }
+        .tp-academic-year { font-size: 7pt; font-weight: 800; padding: 2pt 0 1pt; }
+        .tp-row { display: grid; grid-template-columns: 1fr 34pt 17pt 17pt 20pt; font-size: 7.5pt; padding: 1.5pt 0; border-bottom: 0.25pt solid #e0e0e0; }
+        .tp-row span { text-align: center; }
+        .tp-row span:first-child { text-align: left; padding-right: 3pt; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .tp-empty { font-size: 7pt; color: #888; padding: 4pt 0; font-style: italic; }
         .gpa-reference-card { height: 100%; }
         .gpa-disclaimer { border-top: 1px solid #e4e4e7; padding-top: 18px; }
         .gpa-year-card { border-width: 1px; box-shadow: 0 1px 2px rgba(24, 24, 27, 0.03); }
@@ -136,6 +159,8 @@
         .dark .gpa-year-footer, .dark .gpa-course-row { border-color: rgba(255, 255, 255, 0.09); }
         .dark .gpa-reference-list li { color: rgba(244, 244, 245, 0.78); }
         .dark .gpa-reference-list li strong { color: rgba(255, 255, 255, 0.92); }
+        .gpa-reference-list li strong.attention-red { color: #dc2626 !important; }
+        .dark .gpa-reference-list li strong.attention-red { color: #ef4444 !important; }
         .dark .gpa-scale-table thead tr { color: rgba(255, 255, 255, 0.42); }
         .dark .gpa-scale-table th, .dark .gpa-scale-table td { border-color: rgba(255, 255, 255, 0.22); }
         .dark .gpa-scale-table tbody { color: rgba(255, 255, 255, 0.78); }
@@ -151,13 +176,15 @@
             padding-right: 2rem;
         }
         @media print {
-            @page { margin: 0.55in; }
+            @page { margin: 0.5in; }
             nav, .no-print, .no-print-gpa, .auth-gate, #guest-banner { display: none !important; }
             .page-content { display: none !important; }
             #page-gpa { display: block !important; }
             .print-transcript { display: block !important; }
-            body { background: white !important; color: black !important; }
+            body { background: white !important; color: black !important; font-family: "Plus Jakarta Sans", "Inter", "Avenir Next", "Helvetica Neue", Arial, sans-serif !important; }
+            #print-transcript, #print-transcript * { font-family: "Plus Jakarta Sans", "Inter", "Avenir Next", "Helvetica Neue", Arial, sans-serif !important; }
             .transcript-year { break-inside: avoid; border-color: #d4d4d8; box-shadow: none; }
+            .tp-page { page-break-inside: avoid; }
         }
     </style>
 </head>
@@ -215,13 +242,13 @@
                 <button onclick="document.getElementById('privacy-modal').classList.remove('open')" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div class="overflow-y-auto hide-scrollbar space-y-5 text-sm text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed flex-1">
-                <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Last updated: April 6, 2026</p>
+                <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Last updated: April 8, 2026</p>
                 <div class="space-y-1.5">
                     <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Information We Collect</h3>
                     <ul class="space-y-2">
                         <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Account information:</strong> If you sign in with Google, we receive your name, email address, and profile photo from Google solely to identify your account.</span></li>
-                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Academic data:</strong> GPA entries, course names, grades, credits, tasks, college list entries, and co-curricular activities that you manually enter.</span></li>
-                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Transcript data (optional):</strong> If you use the PDF import feature, your transcript is processed to extract course names, grades, and credits only.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Academic data:</strong> GPA entries, course names, grades, credits, tasks, college list entries, and co-curricular activities that you manually enter. This data is private to your account by default; other students/users cannot view it.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Transcript data (optional):</strong> If you use the PDF import feature, your transcript is first parsed locally on your device. OpenAI is only contacted if the local result is incomplete. Personal fields are redacted before any transmission. Only course names, grades, and credits are extracted and stored.</span></li>
                     </ul>
                 </div>
                 <div class="space-y-1.5">
@@ -231,9 +258,11 @@
                 <div class="space-y-1.5">
                     <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Data Storage &amp; Security</h3>
                     <ul class="space-y-2">
-                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Signed-in users:</strong> Data is stored in Google Firebase/Firestore, which is protected by Google's security infrastructure.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Signed-in users:</strong> Data is stored in Google Firebase/Firestore and tied to your user account for private access and sync.</span></li>
                         <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Guest users:</strong> Data is stored locally in your browser and never transmitted to any server.</span></li>
-                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>We do not sell, rent, or share your personal data with any third party for commercial purposes.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Confidentiality:</strong> We do not sell, rent, or share your academic data for commercial purposes, and we do not operate any public data feed or student-visible database.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Access controls:</strong> Student records are intended to be visible only to the signed-in account owner inside the app experience.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Important technical note:</strong> Like most cloud apps, authorized project administrators and cloud providers may have limited technical access when required for maintenance, reliability, or security. No intentional manual review of student academic records is part of normal operation.</span></li>
                     </ul>
                 </div>
                 <div class="space-y-1.5">
@@ -241,12 +270,12 @@
                     <p>The Dashboard relies on the following third-party services, each with their own privacy policies:</p>
                     <ul class="space-y-2 mt-2">
                         <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Google Firebase:</strong> Used for authentication and cloud data storage.</span></li>
-                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">OpenAI:</strong> Used only when you choose to import a PDF transcript. Your transcript is transmitted to OpenAI for processing and is subject to OpenAI's Privacy Policy.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">OpenAI:</strong> Used as a secondary step during PDF transcript import, only when the local parser produces an incomplete result. Personal fields are redacted before transmission. Only redacted academic text (course names, grades, credits) is sent, and it is subject to OpenAI's Privacy Policy.</span></li>
                     </ul>
                 </div>
                 <div class="space-y-1.5">
                     <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Your Rights</h3>
-                    <p>You may delete your data at any time using the "Clear All Data" option in the GPA Calculator. Guest users can clear their data by clearing their browser's local storage.</p>
+                    <p>You may delete your data at any time using the "Clear All Data" option in the GPA Tracker. Guest users can clear their data by clearing their browser's local storage.</p>
                 </div>
                 <div class="space-y-1.5">
                     <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Changes to This Policy</h3>
@@ -271,51 +300,47 @@
                 <button onclick="document.getElementById('tos-modal').classList.remove('open')" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div class="overflow-y-auto hide-scrollbar space-y-5 text-sm text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed flex-1">
-                <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Last updated: April 6, 2026</p>
+                <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Last updated: April 8, 2026</p>
                 <div class="space-y-1.5">
-                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">1. About</h3>
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">About</h3>
                     <p>The Shalhevet Dashboard is an unofficial student tool for personal academic planning. It is intended for use by Shalhevet High School students. By using the Dashboard, you agree to these Terms of Service.</p>
                 </div>
                 <div class="space-y-1.5">
-                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">2. Use of Site</h3>
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Use of Site</h3>
                     <p>You agree to use the Dashboard only for its intended purpose of personal academic planning. You may not use it for any unlawful purpose, attempt to disrupt or interfere with its operation, or use it in any way that could harm other users or the developer.</p>
                 </div>
                 <div class="space-y-1.5">
-                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">3. Intellectual Property</h3>
-                    <p>All content, design, and code within the Shalhevet Dashboard is the intellectual property of its developer. You may not copy, reproduce, distribute, or create derivative works from any part of the Dashboard without explicit permission.</p>
-                </div>
-                <div class="space-y-1.5">
-                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">4. Disclaimer</h3>
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Disclaimer</h3>
                     <p>All GPA calculations, transcript exports, and academic data displayed are for personal planning purposes only and do not reflect your official academic record. The Dashboard is not affiliated with or endorsed by Shalhevet High School. For your official GPA or transcript, contact Ed Support or College Counseling at Shalhevet.</p>
                 </div>
                 <div class="space-y-1.5">
-                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">5. Your Account &amp; Data</h3>
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Your Account &amp; Data</h3>
                     <ul class="space-y-2">
-                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Signed-in users:</strong> Your data (GPA, tasks, college list, co-curricular activities) is stored in Google's Firebase/Firestore cloud. Signing in with Google is subject to Google's own Terms of Service and Privacy Policy.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Signed-in users:</strong> Your data (GPA, tasks, college list, co-curricular activities) is stored in Google's Firebase/Firestore cloud and tied to your account for private access and sync. Signing in with Google is subject to Google's own Terms of Service and Privacy Policy.</span></li>
                         <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Guest users:</strong> Your data is stored locally on your device using browser storage. It is not transmitted to any server and will be lost if you clear your browser data.</span></li>
-                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>We do not sell, share, or monetize your data with any third party.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>We do not sell, share, or monetize your data with any third party, and no other student/user can access your account data.</span></li>
                     </ul>
                 </div>
                 <div class="space-y-1.5">
-                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">6. AI Usage</h3>
-                    <p>When you use the "Import PDF Transcript" feature, your transcript is transmitted to OpenAI's API for processing. By using this feature, you acknowledge and agree that:</p>
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">AI Usage</h3>
+                    <p>When you use the "Import PDF Transcript" feature, your transcript is first parsed locally on your device. OpenAI's API is only contacted if the local result is incomplete. By using this feature, you acknowledge and agree that:</p>
                     <ul class="space-y-2 mt-2">
-                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>Your transcript may contain personally identifiable information (PII), including your name, address, and date of birth.</span></li>
-                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>This data is sent to a third-party AI service (OpenAI) and is subject to OpenAI's Privacy Policy.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>Personal fields (name, date of birth, address, parent/guardian names) are redacted from the text before anything is transmitted.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>If the AI is used, only redacted academic text is sent to OpenAI — not the full PDF — and it is subject to OpenAI's Privacy Policy.</span></li>
                         <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>Only course names, grades, and credits are extracted and stored by the Dashboard. No other data is retained.</span></li>
                         <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span>You use this feature at your own discretion and risk.</span></li>
                     </ul>
                 </div>
                 <div class="space-y-1.5">
-                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">7. Limitation of Liability</h3>
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Limitation of Liability</h3>
                     <p>The Dashboard is provided "as is" without any warranty of accuracy, reliability, or uptime. The developer is not liable for any errors in calculations, data loss, service interruptions, or any damages arising from your use of the Dashboard.</p>
                 </div>
                 <div class="space-y-1.5">
-                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">8. Right to Change Terms</h3>
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Changes to Terms</h3>
                     <p>The developer reserves the right to modify, suspend, or discontinue the Dashboard or these Terms at any time without notice. Continued use of the Dashboard after changes are posted constitutes acceptance of the updated terms.</p>
                 </div>
                 <div class="space-y-1.5">
-                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">9. Contact</h3>
+                    <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Contact</h3>
                     <p>For questions or concerns regarding these Terms, please email us at <a href="mailto:contactshalidashboard@gmail.com" class="text-shalhevet hover:underline">contactshalidashboard@gmail.com</a>.</p>
                 </div>
             </div>
@@ -387,7 +412,7 @@
                         <input id="edit-cc-role" type="text" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none">
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="space-y-1.5">
                         <label class="text-xs font-bold text-zinc-400">Category</label>
                         <select id="edit-cc-category" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
@@ -397,6 +422,14 @@
                     <div class="space-y-1.5">
                         <label class="text-xs font-bold text-zinc-400">Weekly Hours</label>
                         <input id="edit-cc-hours" type="number" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-zinc-400">Status</label>
+                        <select id="edit-cc-status" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                            <option value="IN_PROGRESS">In Progress</option>
+                            <option value="OFF_SEASON">Off-Season</option>
+                            <option value="ENDED">Ended</option>
+                        </select>
                     </div>
                 </div>
                 <div class="space-y-1.5">
@@ -462,7 +495,7 @@
         <div class="flex items-center gap-1.5 md:gap-4">
             <div class="hidden md:flex items-center gap-1">
                 <button onclick="showPage('gpa')" data-page="gpa" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all">
-                    <span class="hidden lg:inline">GPA Calculator</span><span class="lg:hidden">GPA</span>
+                    <span class="hidden lg:inline">GPA Tracker</span><span class="lg:hidden">GPA</span>
                 </button>
                 <button onclick="showPage('activities')" data-page="activities" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all">
                     <span class="hidden lg:inline">Tasks and Activities</span><span class="lg:hidden">Tasks</span>
@@ -471,7 +504,7 @@
                     <span class="hidden lg:inline">Upperclassmen Resources</span><span class="lg:hidden">College</span>
                 </button>
                 <button onclick="showPage('cocurr')" data-page="cocurr" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all">
-                    <span class="hidden lg:inline">Co-Curricular Tracker</span><span class="lg:hidden">Activities</span>
+                    <span class="hidden lg:inline">Co-Curricular Log</span><span class="lg:hidden">Activities</span>
                 </button>
             </div>
             <div class="flex items-center gap-1.5">
@@ -538,8 +571,8 @@
                             <i data-lucide="bar-chart-3" class="text-shalhevet w-5 h-5 md:w-6 md:h-6"></i>
                         </div>
                         <div class="text-left space-y-1">
-                            <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">GPA Calculator</h3>
-                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Track weighted and unweighted GPA across all four years.</p>
+                            <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">GPA Tracker</h3>
+                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Calculate your weighted and unweighted GPA across all four years.</p>
                         </div>
                     </div>
                     <div class="w-7 h-7 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-shalhevet group-hover:text-white mt-1">
@@ -553,7 +586,7 @@
                         </div>
                         <div class="text-left space-y-1">
                             <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">Tasks and Activities</h3>
-                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Manage your daily school workload, meetings, and deadlines.</p>
+                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Track assignments, tests, meetings, and events by date and priority with a built-in calendar view.</p>
                         </div>
                     </div>
                     <div class="w-7 h-7 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-shalhevet group-hover:text-white mt-1">
@@ -567,7 +600,7 @@
                         </div>
                         <div class="text-left space-y-1">
                             <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">Upperclassmen Resources</h3>
-                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Organize your applications, status, and impressions.</p>
+                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Build your college, yeshiva, and seminary list, track statuses, and save decision notes in one place.</p>
                         </div>
                     </div>
                     <div class="w-7 h-7 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-shalhevet group-hover:text-white mt-1">
@@ -580,8 +613,8 @@
                             <i data-lucide="clipboard-list" class="text-shalhevet w-5 h-5 md:w-6 md:h-6"></i>
                         </div>
                         <div class="text-left space-y-1">
-                            <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">Co-Curricular Tracker</h3>
-                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Log clubs, sports, and leadership for your resume.</p>
+                            <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">Co-Curricular Log</h3>
+                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Document roles, hours, grade levels, and impact notes for activities, resumes, and applications.</p>
                         </div>
                     </div>
                     <div class="w-7 h-7 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-shalhevet group-hover:text-white mt-1">
@@ -594,8 +627,15 @@
         <!-- GPA PAGE -->
         <div id="page-gpa" class="page-content hidden space-y-8">
             <div class="text-left space-y-3 no-print-gpa">
-                <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">GPA <span class="text-shalhevet">Calculator</span></h1>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Track your weighted and unweighted GPA across all four years. SAS and Honors courses are auto-weighted, and Advanced courses stay unweighted per Shalhevet policy. Already have a transcript? Import it directly — your entire course history is filled in seconds, no manual entry needed.</p>
+                <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">GPA <span class="text-shalhevet">Tracker</span></h1>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[1100px] leading-relaxed">Calculate your weighted and unweighted GPA across all four years, and automatically track graduation requirements as you add courses. SAS and Honors courses are auto-weighted, and Advanced courses stay unweighted per Shalhevet policy. Already have a transcript? Import it directly — your entire course history is filled in seconds, no manual entry needed.</p>
+            </div>
+            <div class="no-print-gpa w-full max-w-[1120px] mx-auto">
+                <div class="w-full rounded-2xl border border-amber-300/80 dark:border-amber-700/70 bg-amber-50/90 dark:bg-amber-950/20 px-4 md:px-5 py-3 flex items-center justify-center">
+                    <p class="text-sm font-semibold text-amber-900 dark:text-amber-200 leading-relaxed text-center">
+                        <span class="font-bold">PDF Import Notice:</span> This feature is actively being refined and is already highly useful. Importing usually saves significant time and is generally accurate, but please do a quick review of courses and grades after each import.
+                    </p>
+                </div>
             </div>
             <div class="bg-white dark:bg-zinc-900 rounded-[24px] p-6 md:p-8 flex flex-col md:flex-row justify-around items-center gap-6 md:gap-8 shadow-xl border border-zinc-200 dark:border-zinc-800 no-print-gpa">
                 <div class="text-center space-y-1 flex-1">
@@ -613,10 +653,11 @@
                     <div class="text-xs font-bold text-zinc-400">Total Credits</div>
                 </div>
             </div>
+            <div id="graduation-requirements" class="gpa-reference-card bg-white dark:bg-zinc-900 rounded-[20px] p-4 md:p-5 border border-zinc-200 dark:border-zinc-800 shadow-sm no-print max-w-[1120px] mx-auto"></div>
             <div id="gpa-years-container" class="space-y-6 no-print-gpa"></div>
             <div id="print-transcript" class="print-transcript"></div>
             <div class="flex flex-col md:flex-row justify-center items-center gap-4 no-print">
-                <button onclick="window.print()" class="bg-shalhevet hover:bg-red-700 text-white font-bold rounded-xl h-12 px-8 flex items-center justify-center gap-2 shadow-lg shadow-red-900/20 w-full md:w-auto transition-all text-sm">
+                <button onclick="exportTranscriptPDF()" class="bg-shalhevet hover:bg-red-700 text-white font-bold rounded-xl h-12 px-8 flex items-center justify-center gap-2 shadow-lg shadow-red-900/20 w-full md:w-auto transition-all text-sm">
                     <i data-lucide="download" class="w-4 h-4"></i> Export Unofficial Transcript
                 </button>
                 <button onclick="showPDFPrivacyWarning()" class="border border-shalhevet text-shalhevet hover:bg-red-950/20 rounded-xl h-12 px-8 font-bold w-full md:w-auto transition-all text-sm flex items-center justify-center gap-2">
@@ -637,10 +678,10 @@
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Advanced Track:</strong> Unweighted per Shalhevet policy — no bonus point applied.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Auto-Weighting:</strong> Course names with "SAS" or "Honors" auto-toggle to be weighted.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Credits:</strong> Most courses = 0.5 credits per semester.</span></li>
-                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">In-Progress Courses:</strong> Leaving a grade as "—" keeps the course on your transcript draft without counting it in GPA totals yet.</span></li>
                             <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Sync S2 Toggle:</strong> Mirrors semester 1 course into semester 2. Only the Semester 2 grade stays editable.</span></li>
-                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Transcript Export:</strong> Generates an unofficial transcript from the grades you've entered, organized by year. Not an official school document.</span></li>
-                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">PDF Import:</strong> Sends your transcript to OpenAI for processing. <strong class="text-shalhevet">Only courses and grades are extracted.</strong> No personal data is stored.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Pass / Withdraw / No Grade:</strong> Grades of Pass (P), Withdraw (W), or No Grade (NG) are not factored into GPA.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">Unofficial Transcript Export:</strong> Generates a transcript from the grades you've entered, organized by year. Not an official school document.</span></li>
+                            <li class="flex gap-2.5"><span class="text-zinc-500 dark:text-zinc-500 mt-0.5">•</span><span><strong class="text-zinc-900 dark:text-white">PDF Import:</strong> Your transcript is parsed locally first — no data leaves your device unless the local result is incomplete, in which case redacted academic text is sent to OpenAI for a second pass. <strong class="attention-red text-red-600 dark:text-red-500">Only courses and grades are extracted.</strong> No personal data is stored.</span></li>
                         </ul>
                     </div>
                 </div>
@@ -675,7 +716,7 @@
         <div id="page-activities" class="page-content hidden space-y-8">
             <div class="text-left space-y-3">
                 <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">Tasks and <span class="text-shalhevet">Activities</span></h1>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Manage your daily school workload, meetings, and deadlines.</p>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Plan your school and personal workflow in one timeline. Add assignments, tests, projects, events, and meetings with category, priority, and due date, then use the calendar and search to quickly spot what is due, overdue, and coming next.</p>
             </div>
             <div id="task-form-container" class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
@@ -746,7 +787,7 @@
         <div id="page-college" class="page-content hidden space-y-8">
             <div class="text-left space-y-3">
                 <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">Upperclassmen <span class="text-shalhevet">Resources</span></h1>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Keep track of every College, Yeshiva, or Seminary you're considering.</p>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Build and manage your full college list, including colleges, yeshivot, and seminaries. Track each school by status (from researching to committed), classify reach/target/safety balance, and save notes so your final decisions and application planning stay organized.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="bg-white dark:bg-zinc-900 rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-zinc-100 dark:border-zinc-800">
@@ -804,8 +845,8 @@
         <!-- CO-CURRICULAR PAGE -->
         <div id="page-cocurr" class="page-content hidden space-y-8">
             <div class="text-left space-y-3">
-                <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">Co-Curricular <span class="text-shalhevet">Tracker</span></h1>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Log everything outside the classroom in one structured place.</p>
+                <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">Co-Curricular <span class="text-shalhevet">Log</span></h1>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Keep a structured record of everything beyond grades: clubs, sports, volunteer work, jobs, internships, and projects. Capture your role, weekly time commitment, grade-level participation, and impact details so you can reuse accurate entries for resumes, applications, and interviews.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="bg-white dark:bg-zinc-900 rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-zinc-100 dark:border-zinc-800">
@@ -856,10 +897,11 @@
                         </div>
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-zinc-400">Status</label>
-                            <div class="flex items-center gap-3 h-11 px-4 bg-zinc-50 dark:bg-zinc-900 rounded-xl">
-                                <label class="switch"><input type="checkbox" id="cc-active" checked><span class="slider"></span></label>
-                                <span class="text-xs font-bold text-zinc-500">Active</span>
-                            </div>
+                            <select id="cc-status" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                                <option value="IN_PROGRESS">In Progress</option>
+                                <option value="OFF_SEASON">Off-Season</option>
+                                <option value="ENDED">Ended</option>
+                            </select>
                         </div>
                     </div>
                     <div class="space-y-2">
@@ -882,6 +924,39 @@
     <datalist id="combined-catalog"></datalist>
     <datalist id="activity-catalog"></datalist>
 
+    <!-- Fallback definitions so buttons work even before the Firebase module initializes -->
+    <script>
+        // These stubs allow buttons to respond immediately on click.
+        // The Firebase module script will overwrite these with real implementations once it loads.
+        window.signInWithGoogle = function() {
+            if (window._firebaseSignIn) { window._firebaseSignIn(); }
+            else { console.warn('Auth module not yet ready. Please wait a moment and try again.'); }
+        };
+        window.enableGuestMode = function() {
+            if (window._firebaseGuestMode) { window._firebaseGuestMode(); return; }
+            // Fallback if module hasn't loaded yet
+            const gate = document.getElementById('auth-gate');
+            if (gate) gate.classList.remove('visible');
+            if (localStorage.getItem('guest_banner_dismissed') !== 'true') {
+                const banner = document.getElementById('guest-banner');
+                if (banner) banner.classList.remove('hidden');
+            }
+            if (typeof renderAll === 'function') renderAll();
+        };
+        window.signOutUser = function() {
+            if (window._firebaseSignOut) { window._firebaseSignOut(); }
+            else { location.reload(); }
+        };
+        window.toggleProfileDropdown = function() {
+            if (window._toggleProfileDropdown) { window._toggleProfileDropdown(); }
+        };
+        window.dismissGuestBanner = function() {
+            const banner = document.getElementById('guest-banner');
+            if (banner) banner.classList.add('hidden');
+            localStorage.setItem('guest_banner_dismissed', 'true');
+        };
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -902,23 +977,35 @@
         let currentUser = null;
         let saveTimeout = null;
 
-        window.signInWithGoogle = async function() {
+        const _doSignIn = async function() {
             const provider = new GoogleAuthProvider();
             try { await signInWithPopup(auth, provider); } catch(e) { console.error('Sign in failed', e); }
         };
-        window.signOutUser = async function() { await signOut(auth); location.reload(); };
-        window.enableGuestMode = function() {
+        const _doSignOut = async function() { await signOut(auth); location.reload(); };
+        const _doGuestMode = function() {
             document.getElementById('auth-gate').classList.remove('visible');
             if (localStorage.getItem('guest_banner_dismissed') !== 'true') document.getElementById('guest-banner').classList.remove('hidden');
             renderAll();
         };
+        const _doToggleDropdown = function() {
+            const dd = document.getElementById('profile-dropdown');
+            if (dd) dd.classList.toggle('open');
+        };
+
+        // Register internal references for the stubs defined above
+        window._firebaseSignIn = _doSignIn;
+        window._firebaseSignOut = _doSignOut;
+        window._firebaseGuestMode = _doGuestMode;
+        window._toggleProfileDropdown = _doToggleDropdown;
+
+        // Also override the window functions directly now that module has loaded
+        window.signInWithGoogle = _doSignIn;
+        window.signOutUser = _doSignOut;
+        window.enableGuestMode = _doGuestMode;
+        window.toggleProfileDropdown = _doToggleDropdown;
         window.dismissGuestBanner = function() {
             document.getElementById('guest-banner').classList.add('hidden');
             localStorage.setItem('guest_banner_dismissed', 'true');
-        };
-        window.toggleProfileDropdown = function() {
-            const dd = document.getElementById('profile-dropdown');
-            if (dd) dd.classList.toggle('open');
         };
         document.addEventListener('click', (e) => {
             const btn = document.getElementById('profile-btn');
@@ -1008,7 +1095,22 @@
             else { el.innerText = ''; }
         }
 
+        // Show auth gate after a short delay — if Firebase auth resolves first (user already logged in),
+        // the gate will be dismissed before it appears. This prevents the gate from blocking buttons
+        // during the Firebase initialization window.
+        let authResolved = false;
+        const authGateTimer = setTimeout(() => {
+            if (!authResolved) {
+                const gate = document.getElementById('auth-gate');
+                if (gate && !gate.classList.contains('visible')) {
+                    gate.classList.add('visible');
+                }
+            }
+        }, 1200);
+
         onAuthStateChanged(auth, async (user) => {
+            authResolved = true;
+            clearTimeout(authGateTimer);
             const gate = document.getElementById('auth-gate');
             const navArea = document.getElementById('auth-nav-area');
             if (user) {
@@ -1055,9 +1157,9 @@ function corsHeaders(request) {
 }
         const PROXY_URL = 'https://shali-proxy.adamjsandler09.workers.dev';
 
-        const SHALHEVET_COURSES = ["English Composition","English Composition (Honors)","American Literature","American Literature (Honors)","Banned Books","Banned Books (Honors)","British Literature (SAS)","Journalism","Journalism (Honors)","Creative Writing","Film, Literature & Composition","Film, Literature & Composition (Honors)","Free Will and Time Travel (SAS)","World History","U.S. History","U.S. History (Honors)","Civil War & Reconstruction (SAS)","Civics (SAS)","Comparative Government (Honors)","Economics (SAS)","Medieval Jewish History (SAS)","Positive Psychology","Psychology (SAS)","Topics in U.S. History (SAS)","U.S. Government & Economics","WW II (SAS)","Biology","Engineering","Chemistry","Chemistry (Honors)","Chemistry (SAS)","Intro to Computer Science (Honors)","Computer Science (SAS)","Computer Science 2 (SAS)","Anatomy and Physiology (Honors)","Biochemistry (SAS)","Biology (SAS)","Environmental Science","Physics","Physics (SAS)","Algebra 1","Geometry","Geometry (Advanced)","Geometry (Honors)","Algebra 2","Algebra 2 (Advanced)","Algebra 2 (Honors)","Precalculus","Precalculus (Advanced)","Precalculus (Honors)","Calculus","Calculus (SAS)","Multivariable Calculus (SAS)","Statistics (Honors)","Visual Art","Tech Theater & Drama","Art Composition & Design","Art History (Honors)","Photography","Studio Art (SAS)","Hebrew 100","Hebrew 101","Hebrew 102","Hebrew 103","Hebrew 110","Hebrew 111","Hebrew 112","Hebrew 113 (Honors)","Hebrew 120","Hebrew 121","Hebrew 122","Israeli Culture & Conversation","Hebrew Film & Literature (SAS)","Tanakh 1","Tanakh 1 (Advanced)","Tanakh 2","Tanakh 2 (Advanced)","Tanakh 3","Tanakh 3 (Advanced)","Tanakh 4","Tanakh 4 (Advanced)","Talmud 1","Talmud 1 (Advanced)","Talmud 2","Talmud 2 (Advanced)","Talmud 3","Talmud 3 (Advanced)","Talmud 4","Talmud 4 (Advanced)","Honors Gemara Shiur","Beit Midrash Track (BMT)","Halacha 1","Halacha 2","Israel Education","Israel Education (SAS)","Jewish Philosophy","Jewish Philosophy (Advanced)","Jewish Philosophy (Honors)"];
+        const SHALHEVET_COURSES = ["English Composition","English Composition (Honors)","American Literature","American Literature (Honors)","Banned Books","Banned Books (Honors)","British Literature (SAS)","Journalism","Journalism (Honors)","Creative Writing","Film, Literature & Composition","Film, Literature & Composition (Honors)","Free Will and Time Travel (SAS)","World History","U.S. History","U.S. History (Honors)","Civil War & Reconstruction (SAS)","Civics (SAS)","Comparative Government (Honors)","Economics (SAS)","Medieval Jewish History (SAS)","Positive Psychology","Psychology (SAS)","Topics in U.S. History (SAS)","U.S. Government & Economics","WW II (SAS)","Biology","Engineering","Chemistry","Chemistry (Honors)","Chemistry (SAS)","Intro to Computer Science (Honors)","Computer Science (SAS)","Computer Science 2 (SAS)","Anatomy and Physiology (Honors)","Biochemistry (SAS)","Biology (SAS)","Environmental Science","Physics","Physics (SAS)","Algebra 1","Geometry","Geometry (Advanced)","Geometry (Honors)","Algebra 2","Algebra 2 (Advanced)","Algebra 2 (Honors)","Precalculus","Precalculus (Advanced)","Precalculus (Honors)","Calculus","Calculus (SAS)","Multivariable Calculus (SAS)","Statistics (Honors)","Visual Art","Tech Theater & Drama","Art Composition & Design","Art History (Honors)","Photography","Studio Art (SAS)","Hebrew 100","Hebrew 101","Hebrew 102","Hebrew 103","Hebrew 110","Hebrew 111","Hebrew 112","Hebrew 113 (Honors)","Hebrew 120","Hebrew 121","Hebrew 122","Israeli Culture & Conversation","Hebrew Film & Literature (SAS)","Tanach 1","Tanach 1 (Advanced)","Tanach 2","Tanach 2 (Advanced)","Tanach 3","Tanach 3 (Advanced)","Tanach 4","Tanach 4 (Advanced)","Talmud 1","Talmud 1 (Advanced)","Talmud 2","Talmud 2 (Advanced)","Talmud 3","Talmud 3 (Advanced)","Talmud 4","Talmud 4 (Advanced)","Honors Gemara Shiur","Beit Midrash Track (BMT)","Halacha 1","Halacha 2","Israel Education","Israel Education (SAS)","Jewish Philosophy","Jewish Philosophy (Advanced)","Jewish Philosophy (Honors)","Physical Education 9","Physical Education 10","Physical Education 11","Physical Education 12"];
         const SHALHEVET_ACTIVITIES = ["Basketball (Varsity)","Basketball (JV)","Baseball","Volleyball","Soccer","Cross Country","Tennis","Flag Football","Swimming","Model UN","Robotics (Firehawks)","The Boiling Point","Yearbook","Drama / Theater","Nitzotzei Torah","Art Club","Investment Club","Mock Trial","Film Appreciation Club","Agenda","Fairness","SAC","Tanya Club","Music Club","Literary Magazine","Streetwear Club","Ski Club","Philosophy Club"];
-        const GRADE_SCALE = { '—': null, 'A+': 4.0, 'A': 4.0, 'A-': 3.67, 'B+': 3.33, 'B': 3.0, 'B-': 2.67, 'C+': 2.33, 'C': 2.0, 'C-': 1.67, 'D+': 1.33, 'D': 1.0, 'F': 0.0 };
+        const GRADE_SCALE = { '—': null, 'P': null, 'W': null, 'NG': null, 'A+': 4.0, 'A': 4.0, 'A-': 3.67, 'B+': 3.33, 'B': 3.0, 'B-': 2.67, 'C+': 2.33, 'C': 2.0, 'C-': 1.67, 'D+': 1.33, 'D': 1.0, 'F': 0.0 };
         const DETAILED_SCALE = [
             { grade: "A / A+", range: "92.5–100%", uw: "4.00", wt: "5.00" },
             { grade: "A-", range: "89.5–92%", uw: "3.67", wt: "4.67" },
@@ -1075,13 +1177,188 @@ function corsHeaders(request) {
             { name: "9th Grade", courses: [] }, { name: "10th Grade", courses: [] },
             { name: "11th Grade", courses: [] }, { name: "12th Grade", courses: [] }
         ];
+        const GRAD_REQUIREMENT_SECTIONS = [
+            {
+                title: 'Judaic Studies',
+                items: [
+                    { id: 'tanach', label: 'Tanach', needed: 4 },
+                    { id: 'talmud', label: 'Talmud', needed: 4 },
+                    { id: 'halacha', label: 'Halacha', needed: 2 },
+                    { id: 'israelEd', label: 'Israel Ed', needed: 1 },
+                    { id: 'jewishPhilosophy', label: 'Jewish Philosophy', needed: 1 },
+                    { id: 'hebrew', label: 'Hebrew', needed: 3 }
+                ]
+            },
+            {
+                title: 'General Studies',
+                items: [
+                    { id: 'english', label: 'English', needed: 4 },
+                    { id: 'fineArts', label: 'Fine Arts', needed: 2 },
+                    { id: 'math', label: 'Math', needed: 4, altLabel: 'or through Precalc' },
+                    { id: 'science', label: 'Science', needed: 3 },
+                    { id: 'socialScience', label: 'Social Science', needed: 3 }
+                ]
+            }
+        ];
 
         function normalizeGPAData(data) {
             const source = Array.isArray(data) ? data : [];
             return EMPTY_GPA.map((fallbackYear, index) => {
                 const year = source[index] || {};
-                return { name: typeof year.name === 'string' && year.name.trim() ? year.name : fallbackYear.name, courses: Array.isArray(year.courses) ? year.courses : [] };
+                const courses = Array.isArray(year.courses)
+                    ? year.courses.map(course => ({
+                        ...course,
+                        name: normalizeImportedCourseName(course?.name),
+                        s2name: normalizeImportedCourseName(course?.s2name)
+                    }))
+                    : [];
+                return { name: typeof year.name === 'string' && year.name.trim() ? year.name : fallbackYear.name, courses };
             });
+        }
+
+        function courseNamesForRequirementScan(course) {
+            const names = [];
+            const s1 = normalizeImportedCourseName(course?.name);
+            const s2 = normalizeImportedCourseName(course?.s2name);
+            if (s1) names.push(s1);
+            if (s2 && s2.toUpperCase() !== s1.toUpperCase()) names.push(s2);
+            return names;
+        }
+
+        function hasCourseDataForRequirementScan(course) {
+            if (!course) return false;
+            const s1Grade = normalizeImportedGrade(course.s1grade);
+            const s2Grade = normalizeImportedGrade(course.s2grade);
+            const s1Credits = Number(course.credits || 0);
+            const s2Credits = Number(course.s2credits || 0);
+            return s1Grade !== '—' || s2Grade !== '—' || s1Credits > 0 || s2Credits > 0 || courseNamesForRequirementScan(course).length > 0;
+        }
+
+        function mathLevelRank(name = '') {
+            const upper = String(name || '').toUpperCase();
+            if (upper.includes('MULTIVARIABLE')) return 6;
+            if (upper.includes('CALCULUS')) return 5;
+            if (upper.includes('PRECALCULUS') || upper.includes('STATISTICS')) return 4;
+            if (upper.includes('ALGEBRA 2')) return 3;
+            if (upper.includes('GEOMETRY')) return 2;
+            if (upper.includes('ALGEBRA 1')) return 1;
+            return 0;
+        }
+
+        function inferRequirementTagsFromCourseName(name = '') {
+            const upper = String(name || '').toUpperCase();
+            const tags = new Set();
+            if (!upper) return tags;
+
+            const isHebrewTrack = /\bHEBREW\b|ISRAELI CULTURE & CONVERSATION|HEBREW FILM & LITERATURE/.test(upper);
+            const isJewishHistory = /JEWISH HISTORY/.test(upper);
+
+            if (/\bTANACH\b|\bTANAKH\b/.test(upper)) tags.add('tanach');
+            if (/\bTALMUD\b|\bGEMARA\b|HONORS GEMARA SHIUR|BEIT MIDRASH TRACK|\bBMT\b/.test(upper)) tags.add('talmud');
+            if (/\bHALACHA\b|\bJEWISH LAW\b/.test(upper)) tags.add('halacha');
+            if (isJewishHistory) tags.add('jewishHistory');
+            if (/ISRAEL EDUCATION|HISTORY CULTURE & POLITICS OF ISRAEL/.test(upper)) tags.add('israelEd');
+            if (/JEWISH PHILOSOPHY/.test(upper)) tags.add('jewishPhilosophy');
+            if (isHebrewTrack) tags.add('hebrew');
+
+            if (!isHebrewTrack && (/\bENGLISH\b|LITERATURE|BANNED BOOKS|CREATIVE WRITING|JOURNALISM|FILM, LITERATURE & COMPOSITION|FREE WILL AND TIME TRAVEL/.test(upper))) {
+                tags.add('english');
+            }
+            if (/VISUAL ART|ART COMPOSITION|ART HISTORY|PHOTOGRAPHY|STUDIO ART|TECH THEATER|DRAMA|THEATER/.test(upper)) tags.add('fineArts');
+            if (/ALGEBRA|GEOMETRY|PRECALCULUS|CALCULUS|STATISTICS|MULTIVARIABLE/.test(upper)) tags.add('math');
+            if (/\bBIOLOGY\b|CHEMISTRY|PHYSICS|ENVIRONMENTAL SCIENCE|ANATOMY|BIOCHEMISTRY|ENGINEERING/.test(upper)) tags.add('science');
+            if (!isJewishHistory && (/WORLD HISTORY|U\.S\. HISTORY|US HISTORY|CIVICS|GOVERNMENT|ECONOMICS|PSYCHOLOGY|WW II|CIVIL WAR|COMPARATIVE GOVERNMENT|TOPICS IN U\.S\. HISTORY|POSITIVE PSYCHOLOGY/.test(upper))) {
+                tags.add('socialScience');
+            }
+            return tags;
+        }
+
+        function computeGraduationRequirementProgress() {
+            const trackIds = ['tanach','talmud','halacha','israelEd','jewishPhilosophy','hebrew','english','fineArts','math','science','socialScience'];
+            const categoryYears = new Map(trackIds.map(id => [id, new Set()]));
+            let highestMath = 0;
+
+            (window.gpaData || []).forEach((year, yIdx) => {
+                (year?.courses || []).forEach(course => {
+                    if (!hasCourseDataForRequirementScan(course)) return;
+                    const names = courseNamesForRequirementScan(course);
+                    names.forEach(name => {
+                        const tags = inferRequirementTagsFromCourseName(name);
+                        tags.forEach(tag => categoryYears.get(tag)?.add(yIdx));
+                        highestMath = Math.max(highestMath, mathLevelRank(name));
+                    });
+                });
+            });
+
+            const yearsFor = (id) => categoryYears.get(id)?.size || 0;
+            return {
+                yearsFor,
+                highestMath,
+                scienceYears: yearsFor('science'),
+                socialScienceYears: yearsFor('socialScience')
+            };
+        }
+
+        function renderGraduationRequirements() {
+            const card = document.getElementById('graduation-requirements');
+            if (!card) return;
+            const progress = computeGraduationRequirementProgress();
+            const scienceOrSocialMet = Math.max(progress.scienceYears, progress.socialScienceYears) >= 4;
+
+            function renderRequirementItem(item) {
+                const years = progress.yearsFor(item.id);
+                const mathAltMet = item.id === 'math' && progress.highestMath >= 4;
+                const met = years >= item.needed || mathAltMet;
+                const statusText = item.id === 'math'
+                    ? (mathAltMet && years < item.needed ? `${years}/${item.needed} years (Precalc reached)` : `${Math.min(years, item.needed)}/${item.needed} years`)
+                    : `${Math.min(years, item.needed)}/${item.needed} years`;
+                const suffix = item.altLabel ? ` ${item.altLabel}` : '';
+                return `<li class="flex items-center justify-between gap-3 py-2 border-b border-zinc-100 dark:border-zinc-800/70 last:border-b-0">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <span class="text-xs font-black ${met ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-400'}">${met ? '✓' : '○'}</span>
+                        <span class="text-sm font-semibold text-zinc-800 dark:text-zinc-200 truncate">${item.label}${suffix}</span>
+                    </div>
+                    <span class="text-[11px] font-bold uppercase tracking-wide ${met ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-400'}">${statusText}</span>
+                </li>`;
+            }
+
+            function renderScienceOrSocialRequirementItem() {
+                const combinedYears = Math.max(progress.scienceYears, progress.socialScienceYears);
+                return `
+                    <li class="flex items-center justify-between gap-3 py-2 border-b border-zinc-100 dark:border-zinc-800/70 last:border-b-0">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="text-xs font-black ${scienceOrSocialMet ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-400 dark:text-zinc-500'}">${scienceOrSocialMet ? '✓' : '○'}</span>
+                            <span class="text-sm font-semibold text-zinc-800 dark:text-zinc-200 truncate">Science or Social Science</span>
+                        </div>
+                        <span class="text-[11px] font-bold uppercase tracking-wide ${scienceOrSocialMet ? 'text-emerald-600 dark:text-emerald-400' : 'text-zinc-400 dark:text-zinc-500'}">${Math.min(combinedYears, 4)}/4 years</span>
+                    </li>
+                `;
+            }
+
+            card.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="text-xs font-bold text-shalhevet uppercase tracking-widest">Graduation Requirements</h4>
+                        <p class="text-[12px] mt-1 text-zinc-500 dark:text-zinc-400 font-medium">Auto-filled from courses in your GPA tracker.</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-5">
+                        ${GRAD_REQUIREMENT_SECTIONS.map(section => `
+                            <div class="rounded-[16px] border border-zinc-200 dark:border-zinc-800 p-3.5">
+                                <h5 class="text-sm font-extrabold text-zinc-900 dark:text-white mb-2">${section.title}</h5>
+                                <ul>
+                                    ${section.items.map(renderRequirementItem).join('')}
+                                    ${section.title === 'General Studies' ? renderScienceOrSocialRequirementItem() : ''}
+                                </ul>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-[11px] font-medium text-zinc-400 dark:text-zinc-500"><strong>Graduation rule: complete at least 4 years in either Science or Social Science.</strong></p>
+                        <p class="text-[11px] font-medium text-zinc-400 dark:text-zinc-500">Requirement: complete Civics (SAS), U.S. Government and Economics, or Economics (SAS) by graduation.</p>
+                        <p class="text-[11px] font-medium text-zinc-400 dark:text-zinc-500">Automatic category matching uses course names and may need occasional manual adjustment.</p>
+                    </div>
+                </div>
+            `;
         }
 
         const SAMPLE_TASK_SIGNATURES = [['English Essay: Banned Books','English','HIGH','Homework'],['Math Quiz: Calculus Limits','Math','MEDIUM','Test'],['Boiling Point Meeting','The Boiling Point','LOW','Meeting']];
@@ -1121,6 +1398,7 @@ function transcriptRowsForCourse(course) {
     const s2Name = (getSemesterCourseName(course, 1) || '').trim();
     const s1Credits = getSemesterCourseCredits(course, 0);
     const s2Credits = getSemesterCourseCredits(course, 1);
+    const isPECourse = !!course?.pe || isPECourseName(`${s1Name} ${s2Name}`);
 
     const s1HasData = !!s1Name || (course.s1grade && course.s1grade !== '—') || s1Credits > 0;
     const s2HasData = !!s2Name || (course.s2grade && course.s2grade !== '—') || s2Credits > 0;
@@ -1156,6 +1434,7 @@ function transcriptRowsForCourse(course) {
     let total = 0;
     if (course.s1grade && course.s1grade !== '—') total += s1Credits;
     if (course.s2grade && course.s2grade !== '—') total += s2Credits;
+    if (isPECourse && total === 0) total = s1Credits + s2Credits;
 
     return [{
         name: s1Name || s2Name || 'Untitled Course',
@@ -1181,19 +1460,221 @@ function transcriptRowsForCourse(course) {
             return totalCredits ? (totalPoints / totalCredits).toFixed(2) : '0.00';
         }
 
+        function transcriptUnweightedGPA(year) {
+            let totalPoints = 0, totalCredits = 0;
+            year.courses.forEach(course => {
+                ['s1grade','s2grade'].forEach((gradeKey, idx) => {
+                    const pts = GRADE_SCALE[course[gradeKey]];
+                    if (pts !== null && pts !== undefined) {
+                        const credits = getSemesterCourseCredits(course, idx);
+                        totalPoints += pts * credits;
+                        totalCredits += credits;
+                    }
+                });
+            });
+            return totalCredits ? (totalPoints / totalCredits).toFixed(2) : null;
+        }
+
+        function transcriptTotalCredits(year) {
+            let total = 0;
+            year.courses.forEach(course => {
+                ['s1grade','s2grade'].forEach((gradeKey, idx) => {
+                    const pts = GRADE_SCALE[course[gradeKey]];
+                    const isPass = course[gradeKey] === 'P';
+                    if (pts !== null && pts !== undefined || isPass) {
+                        total += getSemesterCourseCredits(course, idx);
+                    }
+                });
+            });
+            return total;
+        }
+
+        function inferAcademicYear(yearName) {
+            // Derive academic year label (e.g. "23-24") by finding what school year 9th grade started.
+            // We infer: if today is before ~July, the current school year started last calendar year.
+            const now = new Date();
+            const calYear = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;
+            // Find which grade level this year is
+            const gradeMap = { '9th Grade': 0, '10th Grade': 1, '11th Grade': 2, '12th Grade': 3 };
+            const offset = gradeMap[yearName] ?? 0;
+            // Current seniors (12th) started in calYear - 3 as 9th graders
+            // So 9th grade this year = calYear - (3 - offset) ... but we need to figure out
+            // what year this student is in now based on their data.
+            // Simplest: assume 12th grade = current school year.
+            const startYear = calYear - (3 - offset);
+            const short = (y) => String(y).slice(2);
+            return `${short(startYear)}-${short(startYear + 1)}`;
+        }
+
         function renderTranscriptPrint() {
             const container = document.getElementById('print-transcript');
             if (!container) return;
+            const allYears = window.gpaData; // always show all 4 years
+            const hasAny = allYears.some(y => y.courses.length > 0);
+            if (!hasAny) { container.innerHTML = `<div class="transcript-sheet"><div class="transcript-year"><div class="transcript-empty">NO TRANSCRIPT DATA AVAILABLE YET.</div></div></div>`; return; }
+
+            // Cumulative stats
+            let cumWtPoints = 0, cumUnwtPoints = 0, cumCredits = 0, cumTotalCredits = 0;
+            allYears.forEach(year => {
+                year.courses.forEach(course => {
+                    ['s1grade','s2grade'].forEach((gradeKey, idx) => {
+                        const pts = GRADE_SCALE[course[gradeKey]];
+                        const isPass = course[gradeKey] === 'P';
+                        const credits = getSemesterCourseCredits(course, idx);
+                        if (pts !== null && pts !== undefined) {
+                            const wt = getSemesterCourseWeight(course, idx) ? 1 : 0;
+                            cumWtPoints += (pts + wt) * credits;
+                            cumUnwtPoints += pts * credits;
+                            cumCredits += credits;
+                        }
+                        if ((pts !== null && pts !== undefined) || isPass) {
+                            cumTotalCredits += credits;
+                        }
+                    });
+                });
+            });
+            const cumWtGPA = cumCredits ? (cumWtPoints / cumCredits).toFixed(2) : '—';
+            const cumUnwtGPA = cumCredits ? (cumUnwtPoints / cumCredits).toFixed(2) : '—';
+
+            // Graduation year: assume 12th grade = current or next school year
+            const now = new Date();
+            const calYear = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;
+            const gradYear = calYear + 1; // 12th grade ends in spring of calYear+1
+
+            const printedDate = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+
+            function renderYearBlock(year) {
+                const rows = year.courses.flatMap(c => transcriptRowsForCourse(c));
+                const wtGPA = transcriptWeightedGPA(year);
+                const acYear = inferAcademicYear(year.name);
+                const rowsHTML = rows.length ? rows.map(row => `
+                    <div class="tp-row">
+                        <span>${row.name || ''}</span>
+                        <span>${row.level || ''}</span>
+                        <span>${row.s1grade || ''}</span>
+                        <span>${row.s2grade || ''}</span>
+                        <span>${row.credit || ''}</span>
+                    </div>`).join('') : `<div class="tp-empty">No courses recorded.</div>`;
+                return `
+                <div class="tp-year">
+                    <div class="tp-year-header">
+                        <div class="tp-year-title">${year.name} Weighted GPA: ${wtGPA}</div>
+                    </div>
+                    <div class="tp-col-headers">
+                        <span>Course</span><span>Level</span><span>S1</span><span>S2</span><span>Credit</span>
+                    </div>
+                    <div class="tp-academic-year">${acYear}</div>
+                    ${rowsHTML}
+                </div>`;
+            }
+
+            const [y9, y10, y11, y12] = allYears;
+            container.innerHTML = `<div class="tp-page">
+                <div class="tp-top">
+                    <div class="tp-top-left">
+                        <strong>Cumulative Weighted GPA: ${cumWtGPA}*</strong>
+                        <strong>Cumulative Unweighted GPA: ${cumUnwtGPA}*</strong>
+                        <strong>Credits Earned: ${cumTotalCredits.toFixed(2)}</strong>
+                    </div>
+                    <div class="tp-title">Unofficial Transcript</div>
+                    <div class="tp-top-right">Expected Graduation: June ${gradYear}</div>
+                </div>
+                <div class="tp-grid">
+                    <div>${renderYearBlock(y9)}${renderYearBlock(y11)}</div>
+                    <div>${renderYearBlock(y10)}${renderYearBlock(y12)}</div>
+                </div>
+                <div style="margin-top:10pt;border-top:0.5pt solid #ccc;padding-top:5pt;font-size:6.5pt;color:#555;">
+                    * Grades of Pass (P), Withdraw (W), or No Grade (NG) are not factored into GPA. &nbsp;·&nbsp; Printed ${printedDate}
+                </div>
+            </div>`;
+        }
+
+        function transcriptExportFilename() {
+            const now = new Date();
+            const pad = n => String(n).padStart(2, '0');
+            return `Shalhevet-Unofficial-Transcript-${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}.pdf`;
+        }
+
+        async function loadScriptOnce(src, globalCheckFn) {
+            if (globalCheckFn()) return;
+            const existing = document.querySelector(`script[data-src="${src}"]`);
+            if (existing) {
+                await new Promise((resolve, reject) => {
+                    existing.addEventListener('load', resolve, { once: true });
+                    existing.addEventListener('error', reject, { once: true });
+                });
+                return;
+            }
+            await new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.async = true;
+                script.dataset.src = src;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        async function ensureOnePagePDFLibraries() {
+            await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', () => typeof window.html2canvas === 'function');
+            await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', () => !!(window.jspdf && window.jspdf.jsPDF));
+        }
+
+        async function exportTranscriptPDF() {
             const yearsWithCourses = window.gpaData.filter(year => year.courses.length > 0);
-            if (!yearsWithCourses.length) { container.innerHTML = `<div class="transcript-sheet"><div class="transcript-year"><div class="transcript-empty">NO TRANSCRIPT DATA AVAILABLE YET.</div></div></div>`; return; }
-            container.innerHTML = `<div class="transcript-sheet">${yearsWithCourses.map(year => `
-                <section class="transcript-year">
-                    <div class="transcript-year-header"><div class="transcript-year-title">${year.name.toUpperCase()} WEIGHTED GPA: ${transcriptWeightedGPA(year)}</div></div>
-                    <table class="transcript-table">
-                        <thead><tr><th class="course-col text-left">Course</th><th class="level-col">Level</th><th class="grade-col">S1</th><th class="grade-col">S2</th><th class="credit-col">Credit</th></tr></thead>
-                        <tbody>${year.courses.flatMap(course => transcriptRowsForCourse(course)).map(row => `<tr><td class="course-col">${row.name}</td><td class="level-col">${row.level}</td><td class="grade-col">${row.s1grade}</td><td class="grade-col">${row.s2grade}</td><td class="credit-col">${row.credit}</td></tr>`).join('')}</tbody>
-                    </table>
-                </section>`).join('')}</div>`;
+            if (!yearsWithCourses.length) {
+                showImportToast('No transcript data available to export.', true);
+                return;
+            }
+
+            let mount = null;
+            try {
+                showImportToast('Preparing one-page PDF export...');
+                await ensureOnePagePDFLibraries();
+                renderTranscriptPrint();
+
+                const printContainer = document.getElementById('print-transcript');
+                mount = document.createElement('div');
+                mount.style.cssText = 'position:fixed;left:-100000px;top:0;width:1060px;padding:18px;background:#ffffff;z-index:-1;';
+                mount.innerHTML = printContainer ? printContainer.innerHTML : '';
+                document.body.appendChild(mount);
+
+                const canvas = await window.html2canvas(mount, {
+                    backgroundColor: '#ffffff',
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                });
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'pt',
+                    format: 'letter',
+                    compress: true
+                });
+
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const margin = 24;
+                const maxWidth = pageWidth - margin * 2;
+                const maxHeight = pageHeight - margin * 2;
+                const scale = Math.min(maxWidth / canvas.width, maxHeight / canvas.height);
+                const drawWidth = canvas.width * scale;
+                const drawHeight = canvas.height * scale;
+                const x = (pageWidth - drawWidth) / 2;
+                const y = (pageHeight - drawHeight) / 2;
+
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', x, y, drawWidth, drawHeight, undefined, 'FAST');
+                pdf.save(transcriptExportFilename());
+                showImportToast('One-page transcript PDF downloaded.');
+            } catch (error) {
+                console.error('One-page PDF export failed:', error);
+                showImportToast('Could not generate PDF export. Please try again.', true);
+            } finally {
+                if (mount) mount.remove();
+            }
         }
 
         window.gpaData = normalizeGPAData(JSON.parse(localStorage.getItem('gpaData')));
@@ -1203,6 +1684,43 @@ function transcriptRowsForCourse(course) {
         localStorage.setItem('tasks', JSON.stringify(window.tasks));
         localStorage.setItem('colleges', JSON.stringify(window.colleges));
         localStorage.setItem('cocurrs', JSON.stringify(window.cocurrs));
+
+        // Migration: fix known S2-only courses stored with grade in s1grade.
+        (function migrateMisplacedSemesterGrades() {
+            const KNOWN_S2_ONLY = ['visual art'];
+            let changed = false;
+            (window.gpaData || []).forEach(year => {
+                (year.courses || []).forEach(course => {
+                    const courseName = (course.name || course.s2name || '').trim().toLowerCase();
+                    if (KNOWN_S2_ONLY.some(n => courseName === n)) {
+                        const s1g = (course.s1grade || '').trim();
+                        const s2g = (course.s2grade || '').trim();
+                        const hasS1 = s1g !== '' && s1g !== '—';
+                        const hasS2 = s2g !== '' && s2g !== '—';
+                        console.log('Migration check for', courseName, '| s1grade:', JSON.stringify(s1g), '| s2grade:', JSON.stringify(s2g));
+                        if (hasS1 && !hasS2) {
+                            course.s2grade = course.s1grade;
+                            course.s1grade = '—';
+                            course.s2name = course.name || '';
+                            course.name = '';
+                            course.s2credits = course.credits || 0.5;
+                            course.credits = 0;
+                            course.s2wt = course.wt || false;
+                            course.wt = false;
+                            course.sync = false;
+                            changed = true;
+                            console.log('Migrated', courseName, 'to S2 successfully');
+                        }
+                    }
+                });
+            });
+            if (changed) {
+                localStorage.setItem('gpaData', JSON.stringify(window.gpaData));
+                console.log('Migration complete — saved to localStorage');
+            } else {
+                console.log('Migration ran but nothing changed');
+            }
+        })();
 
         let editingCCId = null, editingTaskId = null;
         let currentCalendarDate = new Date();
@@ -1261,7 +1779,7 @@ function transcriptRowsForCourse(course) {
             const container = document.getElementById('gpa-years-container');
             if (!container) return;
             container.innerHTML = '';
-            let tUW = 0, tWT = 0, tCr = 0;
+            let tUW = 0, tWT = 0, tCr = 0, tPECr = 0, tPassCr = 0;
             window.gpaData.forEach((year, yIdx) => {
                 const card = document.createElement('div');
                 card.className = "gpa-year-card bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm";
@@ -1270,43 +1788,70 @@ function transcriptRowsForCourse(course) {
                 if (year.courses.length === 0) {
                     html += `<div class="px-6 md:px-8 py-10 text-center"><p class="text-xs font-bold text-zinc-300 dark:text-zinc-600 uppercase tracking-wider">No courses added for this year</p></div>`;
                 } else {
-                    ['SEMESTER 1','SEMESTER 2'].forEach((sem, sIdx) => {
-                        html += `<div class="gpa-semester-block px-3 md:px-8 py-5 ${sIdx === 0 ? 'border-b border-zinc-200 dark:border-zinc-800' : ''}"><div class="space-y-3"><div><div class="text-[11px] font-bold text-shalhevet uppercase tracking-[0.18em]">${sem}</div><div class="mt-2.5 h-px bg-zinc-200 dark:bg-zinc-700"></div></div>`;
-                                               year.courses.forEach((c, cIdx) => {
+                        ['SEMESTER 1','SEMESTER 2'].forEach((sem, sIdx) => {
+                            html += `<div class="gpa-semester-block px-3 md:px-8 py-5 ${sIdx === 0 ? 'border-b border-zinc-200 dark:border-zinc-800' : ''}"><div class="space-y-3"><div><div class="text-[11px] font-bold text-shalhevet uppercase tracking-[0.18em]">${sem}</div><div class="mt-2.5 h-px bg-zinc-200 dark:bg-zinc-700"></div></div>`;
+                            const semesterDisplayOrder = year.courses
+                                .map((course, index) => ({ course, index }))
+                                .sort((a, b) => {
+                                    const aName = getSemesterCourseName(a.course, sIdx) || `${a.course.name || ''} ${a.course.s2name || ''}`;
+                                    const bName = getSemesterCourseName(b.course, sIdx) || `${b.course.name || ''} ${b.course.s2name || ''}`;
+                                    const aIsPE = !!a.course.pe || isPECourseName(aName);
+                                    const bIsPE = !!b.course.pe || isPECourseName(bName);
+                                    if (aIsPE === bIsPE) return a.index - b.index;
+                                    return aIsPE ? 1 : -1;
+                                });
+                            semesterDisplayOrder.forEach(({ course: c, index: cIdx }) => {
                             const gradeKey = sIdx === 0 ? 's1grade' : 's2grade';
                             const isSynced = sIdx === 1 && c.sync;
+                            const showDeleteAction = sIdx === 0 || (sIdx === 1 && !c.sync);
                             const nameField = sIdx === 0 ? 'name' : 's2name';
                             const creditsField = sIdx === 0 ? 'credits' : 's2credits';
                             const weightOn = getSemesterCourseWeight(c, sIdx);
                             const courseName = (getSemesterCourseName(c, sIdx) || '').trim();
                             const courseCredits = getSemesterCourseCredits(c, sIdx);
+                            const isPECourse = !!c.pe || isPECourseName(courseName || `${c.name || ''} ${c.s2name || ''}`);
+                            const gradeValue = normalizeImportedGrade(c[gradeKey]);
+                            const peGradeDisplay = gradeValue && gradeValue !== '—' ? gradeValue : 'P';
+                            const isNonGpaGrade = isNonGPAGrade(gradeValue);
+                            const nonGpaBadge = isNonGpaGrade
+                                ? `<span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/35 dark:text-amber-300 uppercase tracking-[0.12em]">NON-GPA</span>`
+                                : '';
 
                             const hasSemesterData =
                                 !!courseName ||
-                                (c[gradeKey] && c[gradeKey] !== '—') ||
+                                (gradeValue && gradeValue !== '—') ||
                                 courseCredits > 0;
 
                             if (!hasSemesterData) return;
-                            html += `<div class="gpa-course-row space-y-3">
+                            html += `<div class="gpa-course-row ${isPECourse ? 'pe-course-row space-y-2' : ('space-y-3 ' + (isNonGpaGrade ? 'rounded-[18px] bg-amber-50/70 dark:bg-amber-900/15 border border-amber-200 dark:border-amber-800 p-3' : ''))}">
                                 <div class="grid grid-cols-1 md:grid-cols-[1fr_108px_98px_116px_28px] gap-3 md:gap-4 items-end">
                                 <div class="space-y-1.5">
-                                    ${sIdx === 0 ? `<div class="flex items-center justify-between"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label><div class="flex items-center gap-2"><label class="flex items-center gap-1.5 cursor-pointer"><label class="switch scale-[0.72] origin-right"><input type="checkbox" ${c.sync ? 'checked' : ''} onchange="updateCourse(${yIdx},${cIdx},'sync',this.checked)"><span class="slider"></span></label><span class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">S2</span></label><button onclick="deleteCourse(${yIdx},${cIdx})" class="md:hidden text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button></div></div>` : `<label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label>`}
-                                    <input type="text" list="course-catalog" value="${courseName}" ${isSynced ? 'readonly' : `onchange="updateCourse(${yIdx},${cIdx},'${nameField}',this.value)"`} placeholder="Type or select a course..." class="course-name w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none focus:ring-1 focus:ring-shalhevet">
+                                    ${sIdx === 0
+                                        ? `<div class="flex items-center justify-between"><div class="flex items-center gap-2"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label>${isPECourse ? '<span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 uppercase tracking-[0.12em]">PE CREDIT</span>' : ''}${nonGpaBadge}</div><div class="flex items-center gap-2">${!isPECourse ? `<label class="flex items-center gap-1.5 cursor-pointer"><label class="switch scale-[0.72] origin-right"><input type="checkbox" ${c.sync ? 'checked' : ''} onchange="updateCourse(${yIdx},${cIdx},'sync',this.checked)"><span class="slider"></span></label><span class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">S2</span></label>` : ''}${showDeleteAction ? `<button onclick="deleteCourse(${yIdx},${cIdx})" class="md:hidden text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>` : ''}</div></div>`
+                                        : `<div class="flex items-center justify-between"><div class="flex items-center gap-2"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label>${isPECourse ? '<span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 uppercase tracking-[0.12em]">PE CREDIT</span>' : ''}${nonGpaBadge}</div>${showDeleteAction ? `<button onclick="deleteCourse(${yIdx},${cIdx})" class="md:hidden text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>` : ''}</div>`}
+                                    <input type="text" list="course-catalog" value="${courseName}" ${(isSynced || isPECourse) ? 'readonly' : `onchange="updateCourse(${yIdx},${cIdx},'${nameField}',this.value)"`} placeholder="Type or select a course..." class="course-name w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none focus:ring-1 focus:ring-shalhevet">
                                 </div>
                                 <div class="grid grid-cols-3 gap-2 md:contents">
-                                <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">GRADE</label><select onchange="updateCourse(${yIdx},${cIdx},'${gradeKey}',this.value)" class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none">${Object.keys(GRADE_SCALE).map(g => `<option ${c[gradeKey] === g ? 'selected' : ''}>${g}</option>`).join('')}</select></div>
-                                <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">CREDITS</label><select ${isSynced ? 'disabled' : `onchange="updateCourse(${yIdx},${cIdx},'${creditsField}',this.value)"`} class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none"><option value="0.25" ${courseCredits == 0.25 ? 'selected' : ''}>0.25</option><option value="0.5" ${courseCredits == 0.5 ? 'selected' : ''}>0.5</option><option value="1.0" ${courseCredits == 1.0 ? 'selected' : ''}>1.0</option></select></div>
-                                <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">WEIGHT</label><button ${isSynced ? 'disabled' : `onclick="toggleWeight(${yIdx},${cIdx},${sIdx})"`} class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 font-bold text-[11px] md:text-xs transition-all ${weightOn ? 'bg-shalhevet text-white border-shalhevet' : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'}">${weightOn ? 'SAS/HON' : 'REGULAR'}</button></div>
+                                ${isPECourse
+                                    ? `<div class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-emerald-700 dark:text-emerald-300 font-bold text-[12px] md:text-xs flex items-center justify-center">${peGradeDisplay}</div>
+                                       <div class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-emerald-700 dark:text-emerald-300 font-bold text-[13px] md:text-sm flex items-center justify-center">${String(parseFloat(((courseCredits || 0.5)).toFixed(2)))}</div>
+                                       <div class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-emerald-700 dark:text-emerald-300 font-bold text-[11px] md:text-xs flex items-center justify-center">PE</div>`
+                                    : `<div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">GRADE</label><select onchange="updateCourse(${yIdx},${cIdx},'${gradeKey}',this.value)" class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none">${Object.keys(GRADE_SCALE).map(g => `<option ${gradeValue === g ? 'selected' : ''}>${g}</option>`).join('')}</select></div>
+                                       <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">CREDITS</label><select ${isSynced ? 'disabled' : `onchange="updateCourse(${yIdx},${cIdx},'${creditsField}',this.value)"`} class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none"><option value="0.25" ${courseCredits == 0.25 ? 'selected' : ''}>0.25</option><option value="0.5" ${courseCredits == 0.5 ? 'selected' : ''}>0.5</option><option value="1.0" ${courseCredits == 1.0 ? 'selected' : ''}>1.0</option></select></div>
+                                       <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">WEIGHT</label><button ${(isSynced || isNonGpaGrade) ? 'disabled' : `onclick="toggleWeight(${yIdx},${cIdx},${sIdx})"`} class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 font-bold text-[11px] md:text-xs transition-all ${(isNonGpaGrade ? 'bg-amber-50 text-amber-700 dark:bg-amber-900/25 dark:text-amber-300 border-amber-200 dark:border-amber-800' : (weightOn ? 'bg-shalhevet text-white border-shalhevet' : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'))}">${isNonGpaGrade ? 'NON-GPA' : (weightOn ? 'SAS/HON' : 'REGULAR')}</button></div>`
+                                }
                                 </div>
-                                <div class="hidden md:flex justify-end">${sIdx === 0 ? `<button onclick="deleteCourse(${yIdx},${cIdx})" class="text-zinc-300 hover:text-shalhevet p-1 mb-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>` : '<div></div>'}</div>
+                                <div class="hidden md:flex items-end justify-center h-11 md:h-12">${showDeleteAction ? `<button onclick="deleteCourse(${yIdx},${cIdx})" class="h-11 md:h-12 w-8 flex items-center justify-center text-zinc-300 hover:text-shalhevet transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>` : '<div></div>'}</div>
                                 </div>
                             </div>`;
-                            const pts = GRADE_SCALE[c[gradeKey]];
+                            const pts = GRADE_SCALE[gradeValue];
                             if (pts !== null) {
                                 const credits = getSemesterCourseCredits(c, sIdx), wt = getSemesterCourseWeight(c, sIdx);
                                 tUW += pts * credits; tWT += (pts + (wt ? 1 : 0)) * credits; tCr += credits;
                                 yearUW += pts * credits; yearWT += (pts + (wt ? 1 : 0)) * credits; yearCr += credits;
                             }
+                            if (isPECourse && courseCredits > 0) tPECr += courseCredits;
+                            if (!isPECourse && gradeValue === 'P' && courseCredits > 0) tPassCr += courseCredits;
                         });
                         html += `</div></div>`;
                     });
@@ -1324,8 +1869,9 @@ function transcriptRowsForCourse(course) {
             });
             document.getElementById('total-uw').innerText = tCr > 0 ? (tUW / tCr).toFixed(2) : "0.00";
             document.getElementById('total-wt').innerText = tCr > 0 ? (tWT / tCr).toFixed(2) : "0.00";
-            document.getElementById('total-credits').innerText = tCr.toFixed(1);
+            document.getElementById('total-credits').innerText = (tCr + tPECr + tPassCr).toFixed(1);
             renderTranscriptPrint();
+            renderGraduationRequirements();
             if (window.cloudSave) window.cloudSave();
             lucide.createIcons();
         }
@@ -1352,15 +1898,40 @@ function transcriptRowsForCourse(course) {
             if (field === 'sync' && !val) { course.s2name = course.s2name || course.name || ''; course.s2credits = course.s2credits ?? course.credits ?? 0.5; course.s2wt = course.s2wt ?? course.wt ?? false; }
             if (field === 'name') { course.wt = isWeightedCourseName(val); if (course.sync) course.s2wt = course.wt; const upper = val.toUpperCase(); if (upper.includes('BMT') || upper.includes('BEIT MIDRASH TRACK')) { course.credits = 1.0; if (course.sync) course.s2credits = 1.0; } }
             if (field === 's2name') { course.s2wt = isWeightedCourseName(val); const upper = val.toUpperCase(); if (upper.includes('BMT') || upper.includes('BEIT MIDRASH TRACK')) { course.s2credits = 1.0; } }
+            if (isPECourseName(`${course.name || ''} ${course.s2name || ''}`)) {
+                course.pe = true;
+                course.sync = true;
+                const resolvedPeName = normalizePECourseName(course.name || course.s2name || 'Physical Education');
+                course.name = resolvedPeName;
+                course.s2name = resolvedPeName;
+                course.s1grade = normalizeImportedGrade(course.s1grade) === '—' ? 'P' : normalizeImportedGrade(course.s1grade);
+                course.s2grade = normalizeImportedGrade(course.s2grade) === '—' ? 'P' : normalizeImportedGrade(course.s2grade);
+                course.wt = false;
+                course.s2wt = false;
+                if (!Number(course.credits)) course.credits = 0.5;
+                if (!Number(course.s2credits)) course.s2credits = 0.5;
+            }
             renderGPA();
         }
         function toggleWeight(yIdx, cIdx, sIdx = 0) {
             const course = window.gpaData[yIdx].courses[cIdx];
+            if (isPECourseName(`${course.name || ''} ${course.s2name || ''}`)) return;
             if (sIdx === 0) { course.wt = !course.wt; if (course.sync) course.s2wt = course.wt; }
             else { course.s2wt = !(course.s2wt ?? course.wt ?? false); }
             renderGPA();
         }
         function deleteCourse(yIdx, cIdx) { window.gpaData[yIdx].courses.splice(cIdx, 1); renderGPA(); }
+
+        function swapCourseSemester(yIdx, cIdx) {
+            const course = window.gpaData[yIdx].courses[cIdx];
+            const tmpGrade = course.s1grade; course.s1grade = course.s2grade; course.s2grade = tmpGrade;
+            const tmpName = course.name || ""; course.name = course.s2name || ""; course.s2name = tmpName;
+            const tmpCredits = course.credits || 0; course.credits = course.s2credits || 0; course.s2credits = tmpCredits;
+            const tmpWt = course.wt || false; course.wt = course.s2wt || false; course.s2wt = tmpWt;
+            course.sync = false;
+            if (window.cloudSave) window.cloudSave();
+            renderGPA();
+        }
         function resetGPA() { if(confirm("Clear all GPA data?")) { window.gpaData.forEach(y => y.courses = []); renderGPA(); } }
 
         function renderActivities() {
@@ -1545,30 +2116,56 @@ function transcriptRowsForCourse(course) {
         function updateCollege(id, field, val) { const c = window.colleges.find(x => x.id === id); if(c) c[field] = (field === 'status' || field === 'rank') ? val.toUpperCase() : val; if (window.cloudSave) window.cloudSave(); renderCollege(); }
         function deleteCollege(id) { window.colleges = window.colleges.filter(x => x.id !== id); if (window.cloudSave) window.cloudSave(); renderCollege(); }
 
+        function normalizeCoCurrStatus(item) {
+            const explicit = String(item?.status || '').toUpperCase();
+            if (explicit === 'IN_PROGRESS' || explicit === 'OFF_SEASON' || explicit === 'ENDED') return explicit;
+            if (typeof item?.active === 'boolean') return item.active ? 'IN_PROGRESS' : 'ENDED';
+            return 'IN_PROGRESS';
+        }
+
         function renderCoCurr() {
             const grid = document.getElementById('cocurr-grid');
             if (!grid) return;
             grid.innerHTML = '';
-            document.getElementById('cc-stat-total').innerText = window.cocurrs.length;
-            document.getElementById('cc-stat-leadership').innerText = window.cocurrs.filter(c => ['Captain','Founder','President','Lead','Head'].some(k => c.role.toLowerCase().includes(k.toLowerCase()))).length;
-            document.getElementById('cc-stat-hours').innerText = window.cocurrs.reduce((acc, c) => acc + (c.active ? parseInt(c.hours || 0, 10) : 0), 0) + 'h';
-            if (window.cocurrs.length === 0) {
+            const normalizedItems = (window.cocurrs || []).map(c => ({ ...c, status: normalizeCoCurrStatus(c) }));
+            document.getElementById('cc-stat-total').innerText = normalizedItems.length;
+            document.getElementById('cc-stat-leadership').innerText = normalizedItems.filter(c => ['Captain','Founder','President','Lead','Head'].some(k => c.role.toLowerCase().includes(k.toLowerCase()))).length;
+            document.getElementById('cc-stat-hours').innerText = normalizedItems.reduce((acc, c) => acc + (c.status === 'IN_PROGRESS' ? parseInt(c.hours || 0, 10) : 0), 0) + 'h';
+            if (normalizedItems.length === 0) {
                 grid.innerHTML = `<div class="col-span-full text-center py-16 bg-zinc-50/50 dark:bg-zinc-900/30 rounded-[32px] border-2 border-dashed border-zinc-100 dark:border-zinc-800/50"><div class="w-12 h-12 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm text-zinc-300"><i data-lucide="clipboard-list"></i></div><h3 class="text-zinc-900 dark:text-white font-bold text-xs">No activities added</h3><p class="text-zinc-400 font-bold text-[11px] mt-1 mb-4">Log your first co-curricular activity.</p></div>`;
             } else {
-                window.cocurrs.forEach(c => {
+                normalizedItems.forEach(c => {
+                    const statusMeta = {
+                        IN_PROGRESS: {
+                            card: 'bg-white dark:bg-zinc-900 border-transparent',
+                            dot: 'bg-emerald-500 dark:bg-emerald-400',
+                            label: 'IN PROGRESS'
+                        },
+                        OFF_SEASON: {
+                            card: 'bg-amber-50/50 dark:bg-amber-900/15 border-amber-100 dark:border-amber-900/30',
+                            dot: 'bg-amber-500 dark:bg-amber-400',
+                            label: 'OFF-SEASON'
+                        },
+                        ENDED: {
+                            card: 'bg-zinc-50/30 dark:bg-zinc-900/30 border-zinc-100 dark:border-zinc-800/50',
+                            dot: 'bg-zinc-300 dark:bg-zinc-600',
+                            label: 'ENDED'
+                        }
+                    };
+                    const statusInfo = statusMeta[c.status] || statusMeta.IN_PROGRESS;
                     const card = document.createElement('div');
-                    card.className = `border-2 shadow-sm rounded-[16px] overflow-hidden p-4 space-y-3 transition-all ${c.active ? 'bg-white dark:bg-zinc-900 border-transparent' : 'bg-zinc-50/30 dark:bg-zinc-900/30 border-zinc-100 dark:border-zinc-800/50'}`;
-                    card.innerHTML = `<div class="flex items-start justify-between gap-2"><div class="space-y-1 flex-1 min-w-0"><h3 class="act-name font-bold text-sm truncate">${c.name}</h3><div class="flex flex-wrap items-center gap-2"><span class="badge text-[10px] font-bold px-1.5 py-0 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 uppercase tracking-wider">${c.role.toUpperCase()}</span>${c.hours ? `<span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">${c.hours}H/WK</span>` : ''}</div></div><div class="flex items-center gap-1"><button onclick="startEditCoCurr('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteCoCurr('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div></div><div class="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800/50"><div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full ${c.active ? 'bg-shalhevet' : 'bg-zinc-300'}"></div><span class="badge text-xs font-bold text-zinc-400 uppercase tracking-wider">${c.active ? 'ACTIVE' : 'PAST'}</span></div><div class="flex gap-1">${(c.grades || []).map(g => `<span class="w-5 h-5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-500 text-xs font-bold flex items-center justify-center">${g}</span>`).join('')}</div></div>`;
+                    card.className = `border-2 shadow-sm rounded-[16px] overflow-hidden p-4 space-y-3 transition-all ${statusInfo.card}`;
+                    card.innerHTML = `<div class="flex items-start justify-between gap-2"><div class="space-y-1 flex-1 min-w-0"><h3 class="act-name font-bold text-sm truncate">${c.name}</h3><div class="flex flex-wrap items-center gap-2"><span class="badge text-[10px] font-bold px-1.5 py-0 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 uppercase tracking-wider">${c.role.toUpperCase()}</span>${c.hours ? `<span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">${c.hours}H/WK</span>` : ''}</div></div><div class="flex items-center gap-1"><button onclick="startEditCoCurr('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteCoCurr('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div></div><div class="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800/50"><div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full ${statusInfo.dot}"></div><span class="badge text-xs font-bold text-zinc-400 uppercase tracking-wider">${statusInfo.label}</span></div><div class="flex gap-1">${(c.grades || []).map(g => `<span class="w-5 h-5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-500 text-xs font-bold flex items-center justify-center">${g}</span>`).join('')}</div></div>`;
                     grid.appendChild(card);
                 });
             }
             lucide.createIcons();
         }
         function addCoCurr() {
-            const name = document.getElementById('cc-name').value, role = document.getElementById('cc-role').value, desc = document.getElementById('cc-desc').value, hours = document.getElementById('cc-hours').value, active = document.getElementById('cc-active').checked;
+            const name = document.getElementById('cc-name').value, role = document.getElementById('cc-role').value, desc = document.getElementById('cc-desc').value, hours = document.getElementById('cc-hours').value, category = document.getElementById('cc-category').value, status = document.getElementById('cc-status').value;
             const grades = getSelectedGrades('cc-grade-selector');
             if (!name) return;
-            window.cocurrs.unshift({ id: Date.now().toString(), name, role, desc, grades, hours, active });
+            window.cocurrs.unshift({ id: Date.now().toString(), name, role, desc, grades, hours, category, status: normalizeCoCurrStatus({ status }) });
             if (window.cloudSave) window.cloudSave();
             resetCCForm();
             renderCoCurr();
@@ -1582,21 +2179,22 @@ function transcriptRowsForCourse(course) {
             document.getElementById('edit-cc-desc').value = c.desc;
             document.getElementById('edit-cc-hours').value = c.hours;
             document.getElementById('edit-cc-category').value = c.category || 'Club';
+            document.getElementById('edit-cc-status').value = normalizeCoCurrStatus(c);
             setSelectedGrades('edit-cc-grade-selector', c.grades || []);
             document.getElementById('edit-cc-modal').classList.add('open');
             lucide.createIcons();
         }
         function closeEditCCModal() { document.getElementById('edit-cc-modal').classList.remove('open'); editingCCId = null; }
         function saveEditCC() {
-            const name = document.getElementById('edit-cc-name').value, role = document.getElementById('edit-cc-role').value, desc = document.getElementById('edit-cc-desc').value, hours = document.getElementById('edit-cc-hours').value, category = document.getElementById('edit-cc-category').value, grades = getSelectedGrades('edit-cc-grade-selector');
+            const name = document.getElementById('edit-cc-name').value, role = document.getElementById('edit-cc-role').value, desc = document.getElementById('edit-cc-desc').value, hours = document.getElementById('edit-cc-hours').value, category = document.getElementById('edit-cc-category').value, status = document.getElementById('edit-cc-status').value, grades = getSelectedGrades('edit-cc-grade-selector');
             if (!name) return;
             const idx = window.cocurrs.findIndex(c => c.id === editingCCId);
-            if (idx !== -1) window.cocurrs[idx] = { ...window.cocurrs[idx], name, role, desc, hours, category, grades };
+            if (idx !== -1) window.cocurrs[idx] = { ...window.cocurrs[idx], name, role, desc, hours, category, status: normalizeCoCurrStatus({ status }), grades };
             if (window.cloudSave) window.cloudSave();
             closeEditCCModal();
             renderCoCurr();
         }
-        function resetCCForm() { document.getElementById('cc-name').value = ''; document.getElementById('cc-role').value = ''; document.getElementById('cc-desc').value = ''; document.getElementById('cc-hours').value = ''; document.getElementById('cc-active').checked = true; setSelectedGrades('cc-grade-selector', []); }
+        function resetCCForm() { document.getElementById('cc-name').value = ''; document.getElementById('cc-role').value = ''; document.getElementById('cc-desc').value = ''; document.getElementById('cc-hours').value = ''; document.getElementById('cc-status').value = 'IN_PROGRESS'; setSelectedGrades('cc-grade-selector', []); }
         function deleteCoCurr(id) { window.cocurrs = window.cocurrs.filter(x => x.id !== id); if (window.cloudSave) window.cloudSave(); renderCoCurr(); }
 
         function showPDFPrivacyWarning() {
@@ -1614,22 +2212,18 @@ function transcriptRowsForCourse(course) {
                             </div>
                             <h2 style="font-size:16px;font-weight:800;color:#18181b;">Before you upload</h2>
                         </div>
-                        <p style="font-size:13px;font-weight:600;color:#dc2626;line-height:1.55;">Your transcript contains personal information that will be sent to the AI for processing.</p>
+                        <p style="font-size:13px;font-weight:600;color:#dc2626;line-height:1.55;">Your transcript is parsed locally first. It is only sent to the AI if the local result is incomplete.</p>
                     </div>
                     <div style="padding:20px 28px;">
-                        <p style="font-size:12px;font-weight:700;color:#71717a;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">This includes</p>
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
-                            ${["Student name","Date of birth","Parent / guardian names","Home address"].map(item => `
-                                <div style="display:flex;align-items:center;gap:7px;background:#fef2f2;border-radius:10px;padding:8px 10px;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                                    <span style="font-size:12px;font-weight:700;color:#7f1d1d;">${item}</span>
-                                </div>`).join("")}
+                        <div style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:12px 14px;margin-bottom:14px;">
+                            <p style="font-size:13px;font-weight:800;color:#7f1d1d;line-height:1.5;margin:0;">Personal fields are redacted before any AI call.</p>
+                            <p style="font-size:12px;font-weight:600;color:#991b1b;line-height:1.5;margin:4px 0 0;">Name, date of birth, address, and parent info are stripped from the text before it leaves your device.</p>
                         </div>
                         <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:12px 14px;margin-bottom:16px;">
                             <p style="font-size:13px;font-weight:800;color:#15803d;line-height:1.5;margin:0;">Only course names, grades, and credits are extracted.</p>
                             <p style="font-size:12px;font-weight:600;color:#166534;line-height:1.5;margin:4px 0 0;">No personal data is stored by this app.</p>
                         </div>
-                        <p style="font-size:12px;font-weight:600;color:#71717a;line-height:1.6;margin-bottom:20px;">The full PDF is transmitted to the AI for processing. Only proceed if you are comfortable with this.</p>
+                        <p style="font-size:12px;font-weight:600;color:#71717a;line-height:1.6;margin-bottom:20px;">If the AI is used, only redacted academic text is transmitted — not the full PDF. Only proceed if you are comfortable with this.</p>
                         <div style="display:flex;gap:10px;">
                             <button onclick="document.getElementById('pdf-privacy-warning').remove()" style="flex:1;height:44px;border-radius:12px;font-weight:700;font-size:13px;background:#f4f4f5;color:#27272a;border:none;cursor:pointer;">Cancel</button>
                             <button onclick="document.getElementById('pdf-privacy-warning').remove(); document.getElementById('import-transcript-input').click();" style="flex:2;height:44px;border-radius:12px;font-weight:700;font-size:13px;background:#cc0000;color:#fff;border:none;cursor:pointer;">I understand — Continue</button>
@@ -1639,136 +2233,336 @@ function transcriptRowsForCourse(course) {
             document.body.appendChild(overlay);
         }
 function normalizeImportedGrade(grade) {
-    const valid = new Set(['A+','A','A-','B+','B','B-','C+','C','C-','D+','D','F','—']);
-    const g = String(grade || '—').trim().toUpperCase();
-    return valid.has(g) ? g : '—';
+    const valid = new Set(['A+','A','A-','B+','B','B-','C+','C','C-','D+','D','F','P','W','NG','—']);
+    const raw = String(grade || '—').trim().toUpperCase();
+    return valid.has(raw) ? raw : '—';
+}
+
+function normalizeImportedCourseName(name) {
+    return String(name ?? '')
+        .replace(/\s+/g, ' ')
+        .replace(/\u00A0/g, ' ')
+        .replace(/\(\s*ADVANCED\s*\)/gi, '(Advanced)')
+        .replace(/\(\s*HONORS\s*\)/gi, '(Honors)')
+        .replace(/\(\s*SAS\s*\)/gi, '(SAS)')
+        .replace(/(?:\s*\(Advanced\)){2,}/g, ' (Advanced)')
+        .replace(/(?:\s*\(Honors\)){2,}/g, ' (Honors)')
+        .replace(/(?:\s*\(SAS\)){2,}/g, ' (SAS)')
+        .trim();
+}
+
+function normalizeImportedCredit(raw, options = {}) {
+    const { allowZero = false, fallback = 0.5 } = options;
+    const value = Number(raw);
+    if (!Number.isFinite(value) || value < 0) return fallback;
+    if (value === 0) return allowZero ? 0 : fallback;
+    if (value >= 0.875) return 1.0;
+    if (value >= 0.375) return 0.5;
+    return 0.25;
+}
+
+function parseTranscriptYearIndex(name = '') {
+    const upper = String(name || '').toUpperCase();
+    if (!upper) return -1;
+    if (/GRADE\s*9|9TH/.test(upper)) return 0;
+    if (/GRADE\s*10|10TH/.test(upper)) return 1;
+    if (/GRADE\s*11|11TH/.test(upper)) return 2;
+    if (/GRADE\s*12|12TH/.test(upper)) return 3;
+    return -1;
+}
+
+function mapImportedYearsByLabel(parsedYears) {
+    const source = Array.isArray(parsedYears) ? parsedYears : [];
+    const mapped = EMPTY_GPA.map(y => ({ name: y.name, courses: [] }));
+    const usedIndexes = new Set();
+    const unlabeled = [];
+
+    source.forEach((year, idx) => {
+        const courses = Array.isArray(year?.courses) ? year.courses : [];
+        const labelIndex = parseTranscriptYearIndex(year?.name);
+        if (labelIndex >= 0 && labelIndex < mapped.length) {
+            mapped[labelIndex].courses.push(...courses);
+            usedIndexes.add(labelIndex);
+            return;
+        }
+        unlabeled.push({ idx, courses });
+    });
+
+    let nextIndex = 0;
+    for (const year of unlabeled) {
+        while (nextIndex < mapped.length && usedIndexes.has(nextIndex)) nextIndex += 1;
+        const target = nextIndex < mapped.length ? nextIndex : Math.min(year.idx, mapped.length - 1);
+        mapped[target].courses.push(...year.courses);
+        usedIndexes.add(target);
+    }
+
+    return mapped;
+}
+
+function isPECourseName(name = '') {
+    return /\b(PHYSICAL EDUCATION|PHYS ED|P\.?E\.?|PE)\b/i.test(name);
+}
+
+function normalizePECourseName(name = '') {
+    return normalizeImportedCourseName(name)
+        .replace(/PHYSICAL\s*EDUCATION/gi, 'Physical Education')
+        .replace(/PHYSICALEDUCATION/gi, 'Physical Education')
+        .replace(/PHYSICAL\s*EDUCATION(?=\d)/gi, 'Physical Education ')
+        .replace(/PHYS\s*ED(?=\d)/gi, 'Phys Ed ')
+        .trim();
+}
+
+function isNonGPAGrade(grade = '') {
+    const g = String(grade || '').trim().toUpperCase();
+    return g === 'P' || g === 'W' || g === 'NG';
+}
+
+function normalizePECourseRecord(course) {
+    if (!course) return course;
+    const s1 = normalizeImportedCourseName(course.name);
+    const s2 = normalizeImportedCourseName(course.s2name);
+    const combined = normalizeImportedCourseName(`${s1} ${s2}`);
+    if (!isPECourseName(combined)) return course;
+
+    const resolvedName = normalizePECourseName(s1 || s2 || 'Physical Education');
+    let c1 = normalizeImportedCredit(course.credits, { allowZero: false, fallback: 0.5 });
+    let c2 = normalizeImportedCredit(course.s2credits, { allowZero: false, fallback: 0.5 });
+    const total = c1 + c2;
+
+    // Normalize PE to a full-year default when transcript credit is ambiguous.
+    if (!Number.isFinite(total) || total <= 0 || total >= 0.99) {
+        c1 = 0.5;
+        c2 = 0.5;
+    }
+
+    return {
+        ...course,
+        name: resolvedName,
+        s2name: resolvedName,
+        s1grade: normalizeImportedGrade(course.s1grade) === '—' ? 'P' : normalizeImportedGrade(course.s1grade),
+        s2grade: normalizeImportedGrade(course.s2grade) === '—' ? 'P' : normalizeImportedGrade(course.s2grade),
+        credits: c1,
+        s2credits: c2,
+        wt: false,
+        s2wt: false,
+        sync: true,
+        pe: true
+    };
+}
+
+function inferFullYearCreditSplit(totalCredit) {
+    const normalizedTotal = normalizeImportedCredit(totalCredit, { allowZero: false, fallback: 0.5 });
+    if (normalizedTotal >= 1) return [0.5, 0.5];
+    return [0.25, 0.25];
+}
+
+function buildImportedCourseFingerprint(course) {
+    return [
+        normalizeImportedCourseName(course.name).toUpperCase(),
+        normalizeImportedCourseName(course.s2name).toUpperCase(),
+        normalizeImportedGrade(course.s1grade),
+        normalizeImportedGrade(course.s2grade),
+        Number(course.credits || 0).toFixed(2),
+        Number(course.s2credits || 0).toFixed(2)
+    ].join('|');
+}
+
+function scoreImportedTranscript(imported) {
+    let totalCourses = 0;
+    let untitledCourses = 0;
+    let zeroCreditRows = 0;
+    for (const year of imported || []) {
+        for (const course of year.courses || []) {
+            totalCourses += 1;
+            const n1 = normalizeImportedCourseName(course.name).toUpperCase();
+            const n2 = normalizeImportedCourseName(course.s2name).toUpperCase();
+            if (n1 === 'UNTITLED COURSE' || n2 === 'UNTITLED COURSE') untitledCourses += 1;
+            if ((Number(course.credits) || 0) === 0 && (Number(course.s2credits) || 0) === 0) zeroCreditRows += 1;
+        }
+    }
+    const score = (totalCourses * 6) - (untitledCourses * 6) - (zeroCreditRows * 4);
+    const shouldRetry = totalCourses === 0 || untitledCourses > Math.max(1, Math.floor(totalCourses * 0.12)) || zeroCreditRows > Math.max(1, Math.floor(totalCourses * 0.15));
+    return { score, totalCourses, untitledCourses, zeroCreditRows, shouldRetry };
+}
+
+function countImportedYearsWithCourses(imported) {
+    return (imported || []).filter(year => Array.isArray(year.courses) && year.courses.length > 0).length;
+}
+
+function autoSyncBlankSemesterTwoYears(importedYears) {
+    return (importedYears || []).map(year => {
+        const courses = Array.isArray(year?.courses) ? year.courses : [];
+        if (!courses.length) return year;
+
+        const hasAnyS2Evidence = courses.some(course => {
+            const s1Name = normalizeImportedCourseName(course.name);
+            const s2Name = normalizeImportedCourseName(course.s2name);
+            const s2Grade = normalizeImportedGrade(course.s2grade);
+            const s2Credits = Number(course.s2credits || 0);
+            return (
+                s2Grade !== '—' ||
+                s2Credits > 0 ||
+                (s2Name && s2Name.toUpperCase() !== s1Name.toUpperCase())
+            );
+        });
+
+        if (hasAnyS2Evidence) return year;
+
+        return {
+            ...year,
+            courses: courses.map(course => {
+                const s1Name = normalizeImportedCourseName(course.name);
+                const s1Grade = normalizeImportedGrade(course.s1grade);
+                const s1Credits = Number(course.credits || 0);
+                const hasS1Data = !!s1Name || s1Grade !== '—' || s1Credits > 0;
+                if (!hasS1Data) return course;
+
+                return {
+                    ...course,
+                    s2name: normalizePECourseName(s1Name || normalizeImportedCourseName(course.s2name)),
+                    s2grade: normalizeImportedGrade(course.s2grade),
+                    s2credits: s1Credits > 0 ? s1Credits : normalizeImportedCredit(course.s2credits, { allowZero: false, fallback: 0.5 }),
+                    s2wt: course.s2wt ?? course.wt ?? false,
+                    sync: true
+                };
+            })
+        };
+    });
 }
 
 function convertImportedTranscriptToAppShape(parsed) {
-    const normalizedYears = normalizeGPAData(parsed);
+    const normalizedYears = mapImportedYearsByLabel(parsed);
 
-    return normalizedYears.map((year, yIdx) => ({
-        name: year.name || EMPTY_GPA[yIdx].name,
-        courses: (year.courses || []).map((c, cIdx) => {
-            const s1name = String(c.name ?? '').trim();
-            const s2name = String(c.s2name ?? '').trim();
-
+    return normalizedYears.map((year, yIdx) => {
+        const seen = new Set();
+        const courses = (year.courses || []).map((rawCourse, cIdx) => {
+            const c = rawCourse || {};
+            let s1name = normalizeImportedCourseName(c.name);
+            let s2name = normalizeImportedCourseName(c.s2name);
             const s1grade = normalizeImportedGrade(c.s1grade);
             const s2grade = normalizeImportedGrade(c.s2grade);
 
-            let credits = Number(c.credits ?? 0) || 0;
-            let s2credits = Number(c.s2credits ?? 0) || 0;
-
-            let wt = false;
-            let s2wt = false;
-            
-            const hasS1 = !!s1name || s1grade !== '—' || credits > 0;
-            const hasS2 = !!s2name || s2grade !== '—' || s2credits > 0;
-
+            const hasExplicitS1Credits = c.credits !== undefined && c.credits !== null && c.credits !== '';
             const hasExplicitS2Credits = c.s2credits !== undefined && c.s2credits !== null && c.s2credits !== '';
-            const hasExplicitS2Name = c.s2name !== undefined && c.s2name !== null && c.s2name !== '';
 
-            const combinedName = `${s1name} ${s2name}`.trim().toUpperCase();
+            let credits = hasExplicitS1Credits ? normalizeImportedCredit(c.credits, { allowZero: true, fallback: 0 }) : 0;
+            let s2credits = hasExplicitS2Credits ? normalizeImportedCredit(c.s2credits, { allowZero: true, fallback: 0 }) : 0;
 
-            // Exclude PE entirely
-            if (/\b(PHYSICAL EDUCATION|PHYS ED|P\.?E\.?|PE)\b/i.test(combinedName)) {
-                return null;
+            const combinedName = normalizeImportedCourseName(`${s1name} ${s2name}`);
+
+            const sameCourseName = !!s1name && !!s2name && s1name.toUpperCase() === s2name.toUpperCase();
+            const isBMT = /(?:\bBMT\b|BEIT MIDRASH TRACK)/i.test(combinedName);
+            let hasS1 = !!s1name || s1grade !== '—' || credits > 0;
+            let hasS2 = !!s2name || s2grade !== '—' || s2credits > 0;
+
+            // If the model mirrored the same course name into S2 but provided no S2 grade/credit,
+            // treat it as a first-semester-only row (common for current-year partial transcripts).
+            if (sameCourseName && s2grade === '—' && s2credits === 0 && !hasExplicitS2Credits) {
+                hasS2 = false;
             }
 
-                        // Weighting rules are enforced by course name, not by AI guess
-            const s1Upper = s1name.toUpperCase();
-            const s2Upper = s2name.toUpperCase();
+            if (!hasS1 && !hasS2) return null;
 
-            wt =
-                !!s1name &&
-                !s1Upper.includes('ADVANCED') &&
-                (
-                    s1Upper.includes('HONORS') ||
-                    s1Upper.includes('SAS') ||
-                    s1Upper.includes('BMT') ||
-                    s1Upper.includes('BEIT MIDRASH TRACK')
-                );
-
-            s2wt =
-                !!s2name &&
-                !s2Upper.includes('ADVANCED') &&
-                (
-                    s2Upper.includes('HONORS') ||
-                    s2Upper.includes('SAS') ||
-                    s2Upper.includes('BMT') ||
-                    s2Upper.includes('BEIT MIDRASH TRACK')
-                );
-            const isBMT = combinedName.includes('BMT') || combinedName.includes('BEIT MIDRASH TRACK');
-
-                       // Semester 1 only
             if (hasS1 && !hasS2) {
-                credits = Number(c.credits ?? 0.5) || 0.5;
+                const resolvedName = s1name || 'Untitled Course';
+                const fallbackSingleCredit = isBMT ? 1 : 0.5;
+                credits = normalizeImportedCredit(hasExplicitS1Credits ? c.credits : c.s2credits, { allowZero: false, fallback: fallbackSingleCredit });
 
                 return {
-                    id: c.id || `import-${Date.now()}-${yIdx}-${cIdx}`,
-                    name: s1name,
+                    id: typeof c.id === 'string' && c.id ? c.id : `import-${Date.now()}-${yIdx}-${cIdx}`,
+                    name: resolvedName,
                     s2name: '',
                     s1grade,
                     s2grade: '—',
                     credits,
                     s2credits: 0,
-                    wt,
+                    wt: isWeightedCourseName(resolvedName),
                     s2wt: false,
                     sync: false
                 };
             }
 
-            // Semester 2 only
             if (!hasS1 && hasS2) {
-                s2credits = Number(c.s2credits ?? c.credits ?? 0.5) || 0.5;
+                const resolvedS2Name = s2name || s1name || 'Untitled Course';
+                const fallbackSingleCredit = isBMT ? 1 : 0.5;
+                s2credits = normalizeImportedCredit(hasExplicitS2Credits ? c.s2credits : c.credits, { allowZero: false, fallback: fallbackSingleCredit });
 
                 return {
-                    id: c.id || `import-${Date.now()}-${yIdx}-${cIdx}`,
+                    id: typeof c.id === 'string' && c.id ? c.id : `import-${Date.now()}-${yIdx}-${cIdx}`,
                     name: '',
-                    s2name,
+                    s2name: resolvedS2Name,
                     s1grade: '—',
                     s2grade,
                     credits: 0,
                     s2credits,
                     wt: false,
-                    s2wt,
+                    s2wt: isWeightedCourseName(resolvedS2Name),
                     sync: false
                 };
             }
 
-            // Both semesters
-            if (hasS1 && hasS2) {
-                if (isBMT) {
-                    credits = 1.0;
-                    s2credits = 1.0;
-                } else if (credits > 0 && hasExplicitS2Credits && s2credits > 0) {
-                    // Explicit semester credits were provided, keep them
+            if (!s1name) s1name = s2name || 'Untitled Course';
+            if (!s2name) s2name = s1name || 'Untitled Course';
+
+            if (isBMT) {
+                credits = 1.0;
+                s2credits = 1.0;
+            } else if (hasExplicitS1Credits && hasExplicitS2Credits) {
+                const rawC1 = normalizeImportedCredit(c.credits, { allowZero: false, fallback: 0.5 });
+                const rawC2 = normalizeImportedCredit(c.s2credits, { allowZero: false, fallback: 0.5 });
+                // If both explicit credits are the same large value (e.g. 1.0 each), it means
+                // the transcript listed the total for the course and the parser copied it to both
+                // slots. Split it per the school's rule: 1.0 total → 0.5 each, 0.5 total → 0.25 each.
+                if (rawC1 === rawC2 && rawC1 >= 0.875) {
+                    [credits, s2credits] = inferFullYearCreditSplit(rawC1);
+                } else if (rawC1 === rawC2 && rawC1 >= 0.375 && rawC1 < 0.875) {
+                    // 0.5 each would be fine for independent half-credit semesters,
+                    // but if same name it might be a split total — handled by sameCourseName above.
+                    credits = rawC1;
+                    s2credits = rawC2;
                 } else {
-                    const overallCredits = Number(c.credits ?? c.s2credits ?? 0.5) || 0.5;
-                    credits = overallCredits / 2;
-                    s2credits = overallCredits / 2;
+                    credits = rawC1;
+                    s2credits = rawC2;
                 }
-
-                const sameCourse = !!s1name && !!s2name && s1name === s2name;
-                const sameCredits = credits === s2credits;
-                const sameWeight = wt === s2wt;
-
-                return {
-                    id: c.id || `import-${Date.now()}-${yIdx}-${cIdx}`,
-                    name: s1name,
-                    s2name: hasExplicitS2Name ? s2name : (s2name || s1name),
-                    s1grade,
-                    s2grade,
-                    credits,
-                    s2credits,
-                    wt,
-                    s2wt,
-                    sync: sameCourse && sameCredits && sameWeight
-                };
+            } else if (!hasExplicitS1Credits && !hasExplicitS2Credits) {
+                credits = 0.5;
+                s2credits = 0.5;
+            } else if (sameCourseName) {
+                const singleTotal = hasExplicitS1Credits ? c.credits : c.s2credits;
+                [credits, s2credits] = inferFullYearCreditSplit(singleTotal);
+            } else {
+                credits = hasExplicitS1Credits ? normalizeImportedCredit(c.credits, { allowZero: false, fallback: 0.5 }) : 0.5;
+                s2credits = hasExplicitS2Credits ? normalizeImportedCredit(c.s2credits, { allowZero: false, fallback: 0.5 }) : 0.5;
             }
-            return null;
-        }).filter(Boolean)
-    }));
+
+            const wt = isWeightedCourseName(s1name);
+            const s2wt = isWeightedCourseName(s2name);
+            const sync = s1name.toUpperCase() === s2name.toUpperCase() && credits === s2credits && wt === s2wt;
+
+            return {
+                id: typeof c.id === 'string' && c.id ? c.id : `import-${Date.now()}-${yIdx}-${cIdx}`,
+                name: s1name,
+                s2name,
+                s1grade,
+                s2grade,
+                credits,
+                s2credits,
+                wt,
+                s2wt,
+                sync
+            };
+        }).filter(Boolean).map(normalizePECourseRecord).filter(course => {
+            const key = buildImportedCourseFingerprint(course);
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+
+        return {
+            name: EMPTY_GPA[yIdx].name,
+            courses
+        };
+    });
 }
 function sanitizeTranscriptText(text) {
     if (!text) return '';
@@ -1804,7 +2598,7 @@ function focusTranscriptText(text) {
 
     let focused = text;
 
-    const startMatch = focused.match(/Grade\s*9\s*Weighted\s*GPA\s*:/i);
+    const startMatch = focused.match(/Grade\s*(?:9|10|11|12)\s*Weighted\s*GPA\s*:/i);
     if (startMatch) {
         focused = focused.slice(startMatch.index);
     }
@@ -1818,10 +2612,17 @@ function focusTranscriptText(text) {
         /Printed\s+\d{1,2}\/\d{1,2}\/\d{2,4}/i
     ];
 
+    let lastYearHeaderIndex = -1;
+    const yearHeaderRegex = /Grade\s*(?:9|10|11|12)\s*Weighted\s*GPA\s*:/gi;
+    let yearHeaderMatch;
+    while ((yearHeaderMatch = yearHeaderRegex.exec(focused)) !== null) {
+        lastYearHeaderIndex = yearHeaderMatch.index;
+    }
+
     let cutIndex = focused.length;
     for (const marker of endMarkers) {
         const match = marker.exec(focused);
-        if (match && match.index < cutIndex) {
+        if (match && match.index > lastYearHeaderIndex && match.index < cutIndex) {
             cutIndex = match.index;
         }
     }
@@ -1834,6 +2635,673 @@ function focusTranscriptText(text) {
     focused = focused.replace(/Credits\s+Earned\s*:[^\n]*/gi, '');
 
     return focused.trim();
+}
+
+function redactSensitiveLines(text) {
+    if (!text) return '';
+    const sensitiveLine = /\b(STUDENT|DOB|DATE\s*OF\s*BIRTH|BIRTH|PARENT|GUARDIAN|ADDRESS|PHONE|EMAIL|SSN|SOCIAL\s*SECURITY|STUDENT\s*ID|ID\s*#)\b/i;
+    return text
+        .split('\n')
+        .filter(line => !sensitiveLine.test(line))
+        .join('\n')
+        .trim();
+}
+
+function hasResidualSensitiveMarkers(text) {
+    if (!text) return false;
+    return /\b(STUDENT\s*NAME|DOB|DATE\s*OF\s*BIRTH|PARENT|GUARDIAN|ADDRESS|PHONE|EMAIL|SSN|SOCIAL\s*SECURITY|STUDENT\s*ID)\b/i.test(text);
+}
+
+function isGradeToken(token = '') {
+    return /^(?:A\+|A-|A|B\+|B-|B|C\+|C-|C|D\+|D|F|P|W|NG|—)$/i.test(String(token || '').trim());
+}
+
+function groupPDFItemsIntoLines(items, yTolerance = 2) {
+    const sorted = [...(items || [])].sort((a, b) => {
+        if (Math.abs(b.y - a.y) > yTolerance) return b.y - a.y;
+        return a.x - b.x;
+    });
+    const lines = [];
+    for (const item of sorted) {
+        const lastLine = lines[lines.length - 1];
+        if (!lastLine || Math.abs(lastLine.y - item.y) > yTolerance) {
+            lines.push({ y: item.y, parts: [item] });
+        } else {
+            lastLine.parts.push(item);
+        }
+    }
+    lines.forEach(line => line.parts.sort((a, b) => a.x - b.x));
+    return lines;
+}
+
+function extractSemesterHintsFromColumnItems(columnItems) {
+    const lines = groupPDFItemsIntoLines(columnItems, 1.25);
+    const hints = [];
+    let currentYearIndex = -1;
+    let columns = null;
+    const seenHints = new Set();
+
+    function nearestTokenX(tokens, targetX, maxDistance = 44) {
+        if (!Number.isFinite(targetX)) return null;
+        let best = null;
+        let bestDist = Infinity;
+        for (const token of tokens) {
+            const dist = Math.abs(token.x - targetX);
+            if (dist < bestDist) {
+                bestDist = dist;
+                best = token;
+            }
+        }
+        return best && bestDist <= maxDistance ? { token: best, dist: bestDist } : null;
+    }
+
+    function splitLineByY(parts, tolerance = 0.6) {
+        const sorted = [...(parts || [])].sort((a, b) => b.y - a.y);
+        const rows = [];
+        for (const token of sorted) {
+            const last = rows[rows.length - 1];
+            if (!last || Math.abs(last.y - token.y) > tolerance) {
+                rows.push({ y: token.y, parts: [token] });
+            } else {
+                last.parts.push(token);
+            }
+        }
+        rows.forEach(row => row.parts.sort((a, b) => a.x - b.x));
+        return rows;
+    }
+
+    function processRowParts(parts) {
+        const rowText = (parts || []).map(p => p.text).join(' ').replace(/\s+/g, ' ').trim();
+        if (!rowText) return;
+        if (/^(?:\d{2}-\d{2}|Current Year Courses|Course Levels|Grade Scale|Signature|Printed)/i.test(rowText)) return;
+
+        const numericTokens = parts.filter(p => /^(\d+(?:\.\d+)?)$/.test(p.text));
+        const creditMatch = nearestTokenX(numericTokens, columns.creditX, 64);
+        if (!creditMatch) return;
+
+        const gradeTokens = parts.filter(p => isGradeToken(p.text));
+        if (!gradeTokens.length) return;
+
+        const s1Match = nearestTokenX(gradeTokens, columns.s1X, 52);
+        const s2Match = nearestTokenX(gradeTokens, columns.s2X, 52);
+        if (!s1Match && !s2Match) return;
+
+        let semester = 0;
+        let gradeToken = null;
+        if (s1Match && s2Match) {
+            const sameToken = s1Match.token === s2Match.token;
+            if (sameToken) {
+                const midpoint = (columns.s1X + columns.s2X) / 2;
+                if (Number.isFinite(midpoint) && s1Match.token.x >= midpoint) {
+                    semester = 2;
+                    gradeToken = s2Match.token;
+                } else {
+                    semester = 1;
+                    gradeToken = s1Match.token;
+                }
+            } else {
+                // Two distinct grade tokens means this row likely has both S1 and S2 populated.
+                return;
+            }
+        } else if (s1Match) {
+            semester = 1;
+            gradeToken = s1Match.token;
+        } else {
+            semester = 2;
+            gradeToken = s2Match.token;
+        }
+
+        const leftBoundary = Number.isFinite(columns.levelX) ? columns.levelX : Math.min(columns.s1X, columns.s2X) - 30;
+        const courseParts = parts.filter(p => p.x < leftBoundary - 4 && !isGradeToken(p.text));
+        const courseName = normalizeImportedCourseName(courseParts.map(p => p.text).join(' '));
+        if (!courseName) return;
+        if (/^(Grade|Current Year Courses|Course Levels|Grade Scale)$/i.test(courseName)) return;
+
+        const hint = {
+            yearIndex: currentYearIndex,
+            semester,
+            name: courseName,
+            grade: normalizeImportedGrade(gradeToken?.text || '—'),
+            credit: normalizeImportedCredit(creditMatch.token.text, { allowZero: false, fallback: 0.5 })
+        };
+        const key = `${hint.yearIndex}|${hint.semester}|${normalizeImportedCourseName(hint.name).toUpperCase()}|${hint.grade}|${Number(hint.credit).toFixed(2)}`;
+        if (seenHints.has(key)) return;
+        seenHints.add(key);
+        hints.push(hint);
+    }
+
+    for (const line of lines) {
+        const parts = line.parts || [];
+        const lineText = parts.map(p => p.text).join(' ').replace(/\s+/g, ' ').trim();
+        if (!lineText) continue;
+
+        const yearMatch = lineText.match(/^Grade\s*(9|10|11|12)\s*Weighted\s*GPA/i);
+        if (yearMatch) {
+            currentYearIndex = Number(yearMatch[1]) - 9;
+            columns = null;
+            continue;
+        }
+
+        const upperLine = lineText.toUpperCase();
+        if (upperLine.includes('LEVEL') && upperLine.includes('S1') && upperLine.includes('S2') && upperLine.includes('CREDIT')) {
+            const levelToken = parts.find(p => /^LEVEL$/i.test(p.text));
+            const s1Token = parts.find(p => /^S1$/i.test(p.text));
+            const s2Token = parts.find(p => /^S2$/i.test(p.text));
+            const creditToken = parts.find(p => /^CREDIT$/i.test(p.text));
+            if (s1Token && s2Token && creditToken) {
+                columns = {
+                    levelX: levelToken ? levelToken.x : s1Token.x - 35,
+                    s1X: s1Token.x,
+                    s2X: s2Token.x,
+                    creditX: creditToken.x
+                };
+            }
+            continue;
+        }
+
+        if (currentYearIndex < 0 || !columns) continue;
+        const rowGroups = splitLineByY(parts, 0.6);
+        rowGroups.forEach(group => processRowParts(group.parts));
+    }
+
+    return hints;
+}
+
+function extractSemesterHintsFromPageItems(items, midX) {
+    const left = (items || []).filter(item => item.x < midX);
+    const right = (items || []).filter(item => item.x >= midX);
+    return [
+        ...extractSemesterHintsFromColumnItems(left),
+        ...extractSemesterHintsFromColumnItems(right)
+    ];
+}
+
+function buildSemesterHintKey(yearIndex, name, grade, credit) {
+    return [
+        Number(yearIndex),
+        normalizeImportedCourseName(name).toUpperCase(),
+        normalizeImportedGrade(grade),
+        normalizeImportedCredit(credit, { allowZero: false, fallback: 0.5 }).toFixed(2)
+    ].join('|');
+}
+
+function buildSemesterHintKeyNoCredit(yearIndex, name, grade) {
+    return [
+        Number(yearIndex),
+        normalizeImportedCourseName(name).toUpperCase(),
+        normalizeImportedGrade(grade)
+    ].join('|');
+}
+
+function buildSemesterHintKeyNameOnly(yearIndex, name) {
+    return [
+        Number(yearIndex),
+        normalizeImportedCourseName(name).toUpperCase()
+    ].join('|');
+}
+
+function applySemesterHintsToImported(imported, hints = []) {
+    const strictQueues = new Map();
+    const gradeQueues = new Map();
+    const nameQueues = new Map();
+    const consumedHintIds = new Set();
+
+    function pushHint(map, key, hintRef) {
+        const list = map.get(key) || [];
+        list.push(hintRef);
+        map.set(key, list);
+    }
+
+    function pullSemester(map, key) {
+        const queue = map.get(key);
+        if (!queue || !queue.length) return null;
+        while (queue.length) {
+            const item = queue.shift();
+            if (consumedHintIds.has(item.id)) continue;
+            consumedHintIds.add(item.id);
+            return item.semester;
+        }
+        map.delete(key);
+        return null;
+    }
+
+    (hints || []).forEach((hint, idx) => {
+        const hintRef = { id: idx, semester: hint.semester };
+        const strictKey = buildSemesterHintKey(hint.yearIndex, hint.name, hint.grade, hint.credit);
+        const gradeKey = buildSemesterHintKeyNoCredit(hint.yearIndex, hint.name, hint.grade);
+        const nameKey = buildSemesterHintKeyNameOnly(hint.yearIndex, hint.name);
+        pushHint(strictQueues, strictKey, hintRef);
+        pushHint(gradeQueues, gradeKey, hintRef);
+        pushHint(nameQueues, nameKey, hintRef);
+    });
+
+    const output = (imported || []).map((year, yIdx) => ({
+        ...year,
+        courses: (year.courses || []).map(course => ({ ...course }))
+    }));
+
+    output.forEach((year, yIdx) => {
+        year.courses.forEach(course => {
+            const isPECourse = !!course.pe || isPECourseName(`${course.name || ''} ${course.s2name || ''}`);
+            if (isPECourse) return;
+
+            const s1Grade = normalizeImportedGrade(course.s1grade);
+            const s2Grade = normalizeImportedGrade(course.s2grade);
+            const s1Credits = Number(course.credits || 0);
+            const s2Credits = Number(course.s2credits || 0);
+
+            const hasS1Only = (s1Grade !== '—' || s1Credits > 0 || normalizeImportedCourseName(course.name)) && s2Grade === '—' && s2Credits === 0;
+            const hasS2Only = (s2Grade !== '—' || s2Credits > 0 || normalizeImportedCourseName(course.s2name)) && s1Grade === '—' && s1Credits === 0;
+            if (!hasS1Only && !hasS2Only) return;
+
+            const courseName = normalizeImportedCourseName(course.name || course.s2name);
+            const grade = hasS1Only ? s1Grade : s2Grade;
+            const credit = hasS1Only ? s1Credits : s2Credits;
+            const strictKey = buildSemesterHintKey(yIdx, courseName, grade, credit || 0.5);
+            const gradeKey = buildSemesterHintKeyNoCredit(yIdx, courseName, grade);
+            const nameKey = buildSemesterHintKeyNameOnly(yIdx, courseName);
+
+            let semesterHint = pullSemester(strictQueues, strictKey);
+            if (!semesterHint) semesterHint = pullSemester(gradeQueues, gradeKey);
+            if (!semesterHint) semesterHint = pullSemester(nameQueues, nameKey);
+            if (!semesterHint) return;
+
+            if (semesterHint === 2 && hasS1Only) {
+                course.s2name = course.s2name || course.name || courseName;
+                course.name = '';
+                course.s2grade = course.s1grade;
+                course.s1grade = '—';
+                course.s2credits = course.credits || 0.5;
+                course.credits = 0;
+                course.s2wt = course.wt ?? false;
+                course.wt = false;
+                course.sync = false;
+            } else if (semesterHint === 1 && hasS2Only) {
+                course.name = course.name || course.s2name || courseName;
+                course.s2name = '';
+                course.s1grade = course.s2grade;
+                course.s2grade = '—';
+                course.credits = course.s2credits || 0.5;
+                course.s2credits = 0;
+                course.wt = course.s2wt ?? false;
+                course.s2wt = false;
+                course.sync = false;
+            }
+        });
+    });
+
+    return output;
+}
+
+function resolveHintSemesterForCourse(yearIndex, courseName, grade, hints = []) {
+    const targetYear = Number(yearIndex);
+    const targetName = normalizeImportedCourseName(courseName).toUpperCase();
+    const targetGrade = normalizeImportedGrade(grade);
+
+    let matches = (hints || []).filter(hint =>
+        Number(hint?.yearIndex) === targetYear &&
+        normalizeImportedCourseName(hint?.name).toUpperCase() === targetName
+    );
+
+    if (targetGrade !== '—') {
+        const gradeMatches = matches.filter(hint => normalizeImportedGrade(hint?.grade) === targetGrade);
+        if (gradeMatches.length) matches = gradeMatches;
+    }
+
+    if (!matches.length) return null;
+    const s1Count = matches.filter(h => h.semester === 1).length;
+    const s2Count = matches.filter(h => h.semester === 2).length;
+    if (s1Count === s2Count) return matches[matches.length - 1]?.semester || null;
+    return s2Count > s1Count ? 2 : 1;
+}
+
+function canonicalCourseKey(name = '') {
+    return normalizeImportedCourseName(name)
+        .toUpperCase()
+        .replace(/\(ADVANCED\)|\(HONORS\)|\(SAS\)/g, '')
+        .replace(/[^A-Z0-9]+/g, '')
+        .trim();
+}
+
+function selectBestSemesterHintForCourse(yearIndex, courseName, grade, credit, hintPool = []) {
+    const key = canonicalCourseKey(courseName);
+    const normalizedGrade = normalizeImportedGrade(grade);
+    const normalizedCredit = normalizeImportedCredit(credit, { allowZero: false, fallback: 0.5 });
+    let best = null;
+    let bestScore = -1;
+
+    hintPool.forEach((hint, index) => {
+        if (Number(hint?.yearIndex) !== Number(yearIndex)) return;
+
+        const hintKey = canonicalCourseKey(hint?.name);
+        const hintGrade = normalizeImportedGrade(hint?.grade);
+        const hintCredit = normalizeImportedCredit(hint?.credit, { allowZero: false, fallback: 0.5 });
+
+        let score = 0;
+        if (key && hintKey && key === hintKey) score += 12;
+        else if (key && hintKey && (key.includes(hintKey) || hintKey.includes(key))) score += 8;
+
+        if (normalizedGrade !== '—' && hintGrade === normalizedGrade) score += 4;
+        if (Math.abs(hintCredit - normalizedCredit) < 0.001) score += 2;
+
+        if (score > bestScore) {
+            bestScore = score;
+            best = { index, hint };
+        }
+    });
+
+    if (!best || bestScore < 4) return null;
+    return best;
+}
+
+function takeFallbackSemesterHint(yearIndex, grade, credit, hintPool = []) {
+    const targetYear = Number(yearIndex);
+    const targetGrade = normalizeImportedGrade(grade);
+    const targetCredit = normalizeImportedCredit(credit, { allowZero: false, fallback: 0.5 });
+
+    const pickIndex = (predicate) => {
+        for (let i = 0; i < hintPool.length; i += 1) {
+            const hint = hintPool[i];
+            if (Number(hint?.yearIndex) !== targetYear) continue;
+            if (predicate(hint)) return i;
+        }
+        return -1;
+    };
+
+    let idx = pickIndex(hint =>
+        normalizeImportedGrade(hint?.grade) === targetGrade &&
+        Math.abs(normalizeImportedCredit(hint?.credit, { allowZero: false, fallback: 0.5 }) - targetCredit) < 0.001
+    );
+    if (idx < 0) idx = pickIndex(hint => normalizeImportedGrade(hint?.grade) === targetGrade);
+    if (idx < 0) idx = pickIndex(hint =>
+        Math.abs(normalizeImportedCredit(hint?.credit, { allowZero: false, fallback: 0.5 }) - targetCredit) < 0.001
+    );
+    if (idx < 0) return null;
+
+    const [hint] = hintPool.splice(idx, 1);
+    return hint?.semester || null;
+}
+
+function normalizeSingleSemesterCoursePlacement(imported, hints = []) {
+    const hintPool = Array.isArray(hints) ? hints.map(h => ({ ...h })) : [];
+    return (imported || []).map((year, yIdx) => ({
+        ...year,
+        courses: (year.courses || []).map(rawCourse => {
+            const course = { ...rawCourse };
+            const isPECourse = !!course.pe || isPECourseName(`${course.name || ''} ${course.s2name || ''}`);
+            if (isPECourse) return course;
+
+            const s1Name = normalizeImportedCourseName(course.name);
+            const s2Name = normalizeImportedCourseName(course.s2name);
+            const s1Grade = normalizeImportedGrade(course.s1grade);
+            const s2Grade = normalizeImportedGrade(course.s2grade);
+            const oneGradeOnly = (s1Grade === '—') !== (s2Grade === '—');
+            if (!oneGradeOnly) return course;
+
+            const s1Credits = normalizeImportedCredit(course.credits, { allowZero: true, fallback: 0 });
+            const s2Credits = normalizeImportedCredit(course.s2credits, { allowZero: true, fallback: 0 });
+            const hasDualCreditStructure = s1Credits > 0 && s2Credits > 0;
+            const hasDualNames = !!s1Name && !!s2Name;
+            const mirroredNames = hasDualNames && s1Name.toUpperCase() === s2Name.toUpperCase();
+
+            const nonBlankGrade = s1Grade !== '—' ? s1Grade : s2Grade;
+            const candidateNames = [...new Set([s1Name, s2Name].filter(Boolean))];
+            let hintedSemester = null;
+            let bestMatch = null;
+            for (const name of candidateNames) {
+                const candidateCredit = Math.max(s1Credits, s2Credits, 0.5);
+                const match = selectBestSemesterHintForCourse(yIdx, name, nonBlankGrade, candidateCredit, hintPool);
+                if (match && (!bestMatch || match.index < bestMatch.index)) bestMatch = match;
+            }
+            if (bestMatch) {
+                hintedSemester = bestMatch.hint.semester;
+                hintPool.splice(bestMatch.index, 1);
+            }
+            if (!hintedSemester) {
+                hintedSemester = takeFallbackSemesterHint(
+                    yIdx,
+                    nonBlankGrade,
+                    Math.max(s1Credits, s2Credits, 0.5),
+                    hintPool
+                );
+            }
+
+            const currentSemester = s1Grade !== '—' ? 1 : 2;
+            const targetSemester = hintedSemester || currentSemester;
+            const shouldCollapse =
+                !!hintedSemester ||
+                hasDualCreditStructure ||
+                mirroredNames;
+
+            if (!shouldCollapse) return course;
+            const resolvedCredit = Math.max(s1Credits, s2Credits, 0.5);
+
+            if (targetSemester === 2) {
+                const resolvedName = s2Name || s1Name || 'Untitled Course';
+                return {
+                    ...course,
+                    name: '',
+                    s2name: resolvedName,
+                    s1grade: '—',
+                    s2grade: nonBlankGrade,
+                    credits: 0,
+                    s2credits: resolvedCredit,
+                    wt: false,
+                    s2wt: course.s2wt ?? course.wt ?? isWeightedCourseName(resolvedName),
+                    sync: false
+                };
+            }
+
+            const resolvedName = s1Name || s2Name || 'Untitled Course';
+            return {
+                ...course,
+                name: resolvedName,
+                s2name: '',
+                s1grade: nonBlankGrade,
+                s2grade: '—',
+                credits: resolvedCredit,
+                s2credits: 0,
+                wt: course.wt ?? course.s2wt ?? isWeightedCourseName(resolvedName),
+                s2wt: false,
+                sync: false
+            };
+        })
+    }));
+}
+
+function parseTranscriptCourseLine(line) {
+    if (!line) return null;
+    const cleaned = line.replace(/\s+/g, ' ').trim();
+    if (!cleaned) return null;
+    if (/^(Level|S1|S2|Credit)$/i.test(cleaned)) return null;
+    if (/^(Current Year Courses|Course Levels|Grade Scale|Signature|Printed)/i.test(cleaned)) return null;
+    if (/^\d{2}-\d{2}$/.test(cleaned)) return null;
+
+    const tokens = cleaned.split(' ');
+    if (tokens.length < 3) return null;
+
+    const lastToken = tokens[tokens.length - 1];
+    if (!/^\d+(?:\.\d+)?$/.test(lastToken)) return null;
+    const numericCredit = Number(lastToken);
+    if (!Number.isFinite(numericCredit) || numericCredit <= 0 || numericCredit > 1.5) return null;
+    tokens.pop();
+
+    // Collect grade tokens (including '—' placeholders inserted by buildColumnText)
+    const grades = [];
+    while (tokens.length && (isGradeToken(tokens[tokens.length - 1]) || tokens[tokens.length - 1] === '—') && grades.length < 2) {
+        grades.unshift(tokens.pop().toUpperCase());
+    }
+    if (!grades.length) return null;
+    // Must have at least one real grade
+    if (!grades.some(g => g !== '—')) return null;
+
+    let level = '';
+    if (tokens.length && /^(SAS|HON|ADV|BLE)$/i.test(tokens[tokens.length - 1])) {
+        level = tokens.pop().toUpperCase();
+    }
+
+    let courseName = tokens.join(' ').trim();
+    if (!courseName) return null;
+    const hasLevelLabelInName = (name, lvl) => {
+        const upper = String(name || '').toUpperCase();
+        if (lvl === 'HON') return /\bHON(?:ORS?)?\b/.test(upper);
+        if (lvl === 'SAS') return /\bSAS\b/.test(upper);
+        if (lvl === 'ADV') return /\bADV(?:ANCED)?\b/.test(upper);
+        return false;
+    };
+    if (level && !hasLevelLabelInName(courseName, level)) {
+        if (level === 'HON') courseName += ' (Honors)';
+        if (level === 'SAS') courseName += ' (SAS)';
+        if (level === 'ADV') courseName += ' (Advanced)';
+    }
+    courseName = normalizeImportedCourseName(courseName);
+
+    const s1g = grades.length >= 2 ? grades[0] : (grades[0] !== '—' ? grades[0] : '—');
+    const s2g = grades.length >= 2 ? grades[1] : (grades[0] === '—' ? '—' : '—');
+
+    // Two grades: full year course
+    if (grades.length >= 2) {
+        const s1Grade = grades[0];
+        const s2Grade = grades[1];
+        const s1Only = s1Grade !== '—' && s2Grade === '—';
+        const s2Only = s1Grade === '—' && s2Grade !== '—';
+        // For full-year courses (both grades present), split the total credit per semester.
+        // e.g. 1.0 total → 0.5 each; 0.5 total → 0.25 each; single-sem stays as-is.
+        let s1Cr, s2Cr;
+        if (s1Only) {
+            s1Cr = numericCredit; s2Cr = 0;
+        } else if (s2Only) {
+            s1Cr = 0; s2Cr = numericCredit;
+        } else {
+            // Both semesters — split the listed credit value
+            const [split1, split2] = inferFullYearCreditSplit(numericCredit);
+            s1Cr = split1; s2Cr = split2;
+        }
+        return {
+            id: `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+            name: s2Only ? '' : courseName,
+            s2name: s2Only ? courseName : (s1Only ? '' : courseName),
+            s1grade: s1Grade,
+            s2grade: s2Grade,
+            credits: s1Cr,
+            s2credits: s2Cr,
+            wt: false,
+            s2wt: false,
+            sync: false
+        };
+    }
+
+    // Single grade: S1 only
+    return {
+        id: `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        name: courseName,
+        s2name: '',
+        s1grade: grades[0] || '—',
+        s2grade: '—',
+        credits: numericCredit,
+        s2credits: 0,
+        wt: false,
+        s2wt: false,
+        sync: false
+    };
+}
+
+function parseTranscriptLocally(text) {
+    const years = EMPTY_GPA.map(y => ({ name: y.name, courses: [] }));
+    const lines = String(text || '')
+        .split('\n')
+        .map(line => line.trim())
+        .filter(Boolean);
+
+    let currentYearIndex = -1;
+    for (const line of lines) {
+        const yearMatch = line.match(/^Grade\s*(9|10|11|12)\s*Weighted\s*GPA/i);
+        if (yearMatch) {
+            currentYearIndex = Number(yearMatch[1]) - 9;
+            continue;
+        }
+        if (currentYearIndex < 0 || currentYearIndex > 3) continue;
+        const parsedCourse = parseTranscriptCourseLine(line);
+        if (parsedCourse) years[currentYearIndex].courses.push(parsedCourse);
+    }
+    return years;
+}
+
+function isLikelyNetworkFetchError(error) {
+    const msg = String(error?.message || '').toLowerCase();
+    return msg.includes('failed to fetch') || msg.includes('networkerror') || msg.includes('load failed');
+}
+
+function extractTranscriptJSONFromResponse(data) {
+    const content = data?.choices?.[0]?.message?.content;
+    let rawText = '';
+    if (typeof content === 'string') {
+        rawText = content.trim();
+    } else if (Array.isArray(content)) {
+        rawText = content.map(part => (typeof part === 'string' ? part : (part?.text || ''))).join('').trim();
+    }
+
+    if (!rawText) throw new Error('OpenAI returned no content.');
+
+    const unfenced = rawText
+        .replace(/^```json\s*/i, '')
+        .replace(/^```\s*/i, '')
+        .replace(/\s*```$/, '')
+        .trim();
+
+    try {
+        return JSON.parse(unfenced);
+    } catch (error) {
+        const start = unfenced.indexOf('{');
+        const end = unfenced.lastIndexOf('}');
+        if (start >= 0 && end > start) {
+            return JSON.parse(unfenced.slice(start, end + 1));
+        }
+        throw error;
+    }
+}
+
+async function requestTranscriptParse(systemPrompt, userPrompt, preferredModels = ['gpt-4o', 'gpt-4o-mini']) {
+    let lastError = null;
+
+    for (const model of preferredModels) {
+        try {
+            const response = await fetch(PROXY_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model,
+                    temperature: 0,
+                    max_tokens: 4500,
+                    response_format: { type: 'json_object' },
+                    messages: [
+                        { role: 'system', content: systemPrompt },
+                        { role: 'user', content: userPrompt }
+                    ]
+                })
+            });
+
+            if (!response.ok) {
+                let errObj = {};
+                try { errObj = await response.json(); } catch (e) {}
+                const msg = errObj?.error?.message || errObj?.error || ('Proxy error ' + response.status);
+                throw new Error(String(msg));
+            }
+
+            const data = await response.json();
+            const parsedObject = extractTranscriptJSONFromResponse(data);
+            const parsedYears = parsedObject?.years;
+            if (!Array.isArray(parsedYears)) throw new Error('OpenAI did not return a valid years array.');
+
+            // Intentionally avoid logging transcript contents or parse payloads.
+            return parsedYears;
+        } catch (error) {
+            lastError = error;
+            console.warn(`Transcript parse failed with model ${model}:`, error);
+        }
+    }
+
+    throw lastError || new Error('All transcript parser models failed.');
 }
 
 async function importTranscriptPDF(event) {
@@ -1858,9 +3326,10 @@ async function importTranscriptPDF(event) {
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
                 let fullText = '';
+        const semesterHints = [];
 
         function buildColumnText(items) {
-            const sorted = items.sort((a, b) => {
+            const sorted = [...items].sort((a, b) => {
                 if (Math.abs(b.y - a.y) > 2) return b.y - a.y;
                 return a.x - b.x;
             });
@@ -1875,13 +3344,37 @@ async function importTranscriptPDF(event) {
                 }
             }
 
+            // Detect S1/S2 column header X positions
+            let s1X = null, s2X = null;
+            for (const line of lines) {
+                const s1Token = line.parts.find(p => p.text.trim().toUpperCase() === 'S1');
+                const s2Token = line.parts.find(p => p.text.trim().toUpperCase() === 'S2');
+                if (s1Token && s2Token) { s1X = s1Token.x; s2X = s2Token.x; break; }
+            }
+
             return lines
-                .map(line =>
-                    line.parts
-                        .sort((a, b) => a.x - b.x)
-                        .map(part => part.text)
-                        .join(' ')
-                )
+                .map(line => {
+                    const parts = line.parts.sort((a, b) => a.x - b.x);
+                    if (s1X !== null && s2X !== null) {
+                        const gradeTokens = parts.filter(p => isGradeToken(p.text));
+                        const otherTokens = parts.filter(p => !isGradeToken(p.text));
+                        const creditTokens = otherTokens.filter(p => /^\d+(\.\d+)?$/.test(p.text));
+                        const courseTokens = otherTokens.filter(p => !/^\d+(\.\d+)?$/.test(p.text));
+                        // Single-grade course line: use X position to determine which semester
+                        if (gradeTokens.length === 1 && creditTokens.length >= 1 && courseTokens.length >= 1) {
+                            const gradeX = gradeTokens[0].x;
+                            const midX = (s1X + s2X) / 2;
+                            const coursePart = courseTokens.map(p => p.text).join(' ');
+                            const credit = creditTokens[creditTokens.length - 1].text;
+                            if (gradeX > midX) {
+                                // Grade is in S2 column: emit "CourseName — Grade Credit"
+                                return coursePart + ' — ' + gradeTokens[0].text + ' ' + credit;
+                            }
+                            // Grade is in S1 column: fall through to normal join
+                        }
+                    }
+                    return parts.map(p => p.text).join(' ');
+                })
                 .join('\n');
         }
 
@@ -1897,44 +3390,91 @@ async function importTranscriptPDF(event) {
                     text: item.str.trim(),
                     x: item.transform[4],
                     y: item.transform[5]
-                }));
+                }))
+                .filter((item, index, arr) => {
+                    const key = `${Math.round(item.x)}|${Math.round(item.y)}|${item.text}`;
+                    return arr.findIndex(x => `${Math.round(x.x)}|${Math.round(x.y)}|${x.text}` === key) === index;
+                });
 
             const leftItems = items.filter(item => item.x < midX);
             const rightItems = items.filter(item => item.x >= midX);
 
             const leftText = buildColumnText(leftItems);
             const rightText = buildColumnText(rightItems);
+            semesterHints.push(...extractSemesterHintsFromPageItems(items, midX));
 
             fullText += `\n--- PAGE ${i} LEFT COLUMN ---\n${leftText}\n`;
             fullText += `\n--- PAGE ${i} RIGHT COLUMN ---\n${rightText}\n`;
         }
-        console.log('Extracted text:', fullText);
-
-        const sanitizedText = sanitizeTranscriptText(fullText);
-        const focusedText = focusTranscriptText(sanitizedText) || sanitizedText;
-        console.log('Sanitized text:', sanitizedText);
         if (!fullText.trim()) {
             hidePDFImportModal();
             showImportToast('Could not extract text from PDF.', true);
             return;
         }
 
+        const sanitizedText = sanitizeTranscriptText(fullText);
+        const focusedText = focusTranscriptText(sanitizedText) || sanitizedText;
+        const redactedFocusedText = redactSensitiveLines(focusedText);
+        const redactedFullText = redactSensitiveLines(sanitizedText);
+
+        if (!redactedFocusedText.trim() && !redactedFullText.trim()) {
+            hidePDFImportModal();
+            showImportToast('Could not isolate academic transcript rows after redaction.', true);
+            return;
+        }
+
+        if (hasResidualSensitiveMarkers(redactedFocusedText) || hasResidualSensitiveMarkers(redactedFullText)) {
+            throw new Error('PII redaction check failed. Transcript was not sent to AI.');
+        }
+
         showPDFImportModal('parsing');
 
-               const systemPrompt = `You are a transcript parser for Shalhevet High School transcripts.
-The transcript has courses organized by grade year (Grade 9, Grade 10, Grade 11, Grade 12).
-Each course has these columns: Course Name, Level (SAS/HON/ADV or blank), S1 grade, S2 grade, and Credit.
+        const focusedCandidate = redactedFocusedText.trim();
+        const fullCandidate = redactedFullText.trim();
 
-Level meanings:
-- SAS = Shalhevet Advanced Study (weighted)
-- HON = Honors (weighted)
-- ADV = Advanced (NOT weighted per school policy)
-- blank = Regular (not weighted)
+        let transcriptForModel = (focusedCandidate || fullCandidate).slice(0, 95000);
+        let localParsedYears = parseTranscriptLocally(transcriptForModel);
+        let localImported = convertImportedTranscriptToAppShape(localParsedYears);
+        let localQuality = scoreImportedTranscript(localImported);
+        let localCoverage = countImportedYearsWithCourses(localImported);
 
-Grades can be: A+, A, A-, B+, B, B-, C+, C, C-, D+, D, F, P, W, NG
-P/W/NG grades should be stored as — since they don't count toward GPA.
+        if (fullCandidate && fullCandidate !== transcriptForModel) {
+            const fullLimited = fullCandidate.slice(0, 95000);
+            const fullParsedYears = parseTranscriptLocally(fullLimited);
+            const fullImported = convertImportedTranscriptToAppShape(fullParsedYears);
+            const fullQuality = scoreImportedTranscript(fullImported);
+            const fullCoverage = countImportedYearsWithCourses(fullImported);
 
-Return ONLY a valid JSON object of this exact shape:
+            const fullIsBetter = fullCoverage > localCoverage || (fullCoverage === localCoverage && fullQuality.score > localQuality.score);
+            if (fullIsBetter) {
+                transcriptForModel = fullLimited;
+                localParsedYears = fullParsedYears;
+                localImported = fullImported;
+                localQuality = fullQuality;
+                localCoverage = fullCoverage;
+            }
+        }
+
+        // Keep transcript parsing private by avoiding debug logs with transcript metadata/content.
+        const systemPrompt = `You are a deterministic transcript parser for Shalhevet High School.
+
+Hard rules:
+- Return ONLY JSON (no prose, no markdown, no code fences).
+- Output exactly one object with a "years" array of 4 year objects.
+- Year names must be: "9th Grade", "10th Grade", "11th Grade", "12th Grade".
+- Keep semester data in the correct semester columns. Never move S1 to S2 or S2 to S1.
+- Include Physical Education / PE / Phys Ed as non-GPA credit-only courses.
+- Grades allowed: A+, A, A-, B+, B, B-, C+, C, C-, D+, D, F, P, W, NG, —.
+- Credits allowed: 0, 0.25, 0.5, 1.0.
+- Do not invent classes. If a row is unclear, omit it.
+
+CRITICAL — single-semester course placement:
+- If a course was taken in Semester 1 ONLY: set "name" to the course name, "s2name" to "", "s1grade" to the grade, "s2grade" to "—", "credits" to the credit value, "s2credits" to 0.
+- If a course was taken in Semester 2 ONLY: set "name" to "", "s2name" to the course name, "s1grade" to "—", "s2grade" to the grade, "credits" to 0, "s2credits" to the credit value.
+- NEVER place an S2-only grade in the s1grade field. NEVER place an S1-only grade in the s2grade field.
+- Determine which semester a course belongs to from the column (S1 or S2) the grade appears under in the transcript. Do not guess — use the column position.
+
+Return shape:
 {
   "years": [
     { "name": "9th Grade", "courses": [] },
@@ -1944,89 +3484,102 @@ Return ONLY a valid JSON object of this exact shape:
   ]
 }
 
-Each course object:
+Course shape:
 {
   "id": "<unique string>",
-  "name": "<semester 1 course name, or empty string if no semester 1 course>",
-  "s2name": "<semester 2 course name, or empty string if no semester 2 course>",
-  "s1grade": "<semester 1 letter grade or — if missing>",
-  "s2grade": "<semester 2 letter grade or — if missing>",
-  "credits": <semester 1 credits: 0, 0.25, 0.5, or 1.0>,
-  "s2credits": <semester 2 credits: 0, 0.25, 0.5, or 1.0>,
-  "wt": <true if semester 1 is weighted, else false>,
-  "s2wt": <true if semester 2 is weighted, else false>,
-  "sync": <true only if the same class continues in both semesters with same credits and weighting; otherwise false>
-}
+  "name": "<semester 1 course name, or empty string if S2-only>",
+  "s2name": "<semester 2 course name, or empty string if S1-only>",
+  "s1grade": "<semester 1 grade, or — if not taken in S1>",
+  "s2grade": "<semester 2 grade, or — if not taken in S2>",
+  "credits": <S1 credit, 0 if S2-only>,
+  "s2credits": <S2 credit, 0 if S1-only>,
+  "wt": <boolean>,
+  "s2wt": <boolean>,
+  "sync": <boolean>
+}`;
 
-Return ONLY the JSON object. Nothing else.`;
+        const userPrompt = `Parse this Shalhevet transcript with strict semester fidelity.
 
-        const userPrompt = `Parse this Shalhevet High School transcript carefully.
-
-Important parsing instructions:
-- Use the semester columns carefully.
-- Do NOT move semester 1 classes into semester 2.
-- Do NOT move semester 2 classes into semester 1.
-- If a class appears in only one semester, keep it only in that semester.
-- Exclude Physical Education / PE / Phys Ed entirely.
+Rules specific to this school:
 - Most classes are 0.5 credits in a single semester.
 - Some classes are 0.25 credits in a single semester.
 - Only BMT should be 1.0 in a semester.
-- If a class spans both semesters:
-  - if the transcript gives 1.0 total for the full year, return 0.5 for semester 1 and 0.5 for semester 2
-  - if the transcript gives 0.5 total for the full year, return 0.25 for semester 1 and 0.25 for semester 2
-- Do NOT divide credits for classes that are only in one semester.
-- Preserve semester-specific course names when they differ.
-
-Personal information may already be redacted. Ignore any redacted fields.
+- If a row has a grade only in the S1 column: S1-only course → name=course name, s2name="", s1grade=grade, s2grade="—", credits=credit, s2credits=0.
+- If a row has a grade only in the S2 column: S2-only course → name="", s2name=course name, s1grade="—", s2grade=grade, credits=0, s2credits=credit.
+- Do NOT default single-semester courses to S1. Read the actual column the grade appears in.
+- If one class spans both semesters:
+  - 1.0 total across year => 0.5 S1 and 0.5 S2
+  - 0.5 total across year => 0.25 S1 and 0.25 S2
+- Do not split credits for single-semester classes.
+- Preserve semester-specific names when they differ.
+- Personal fields may be redacted; ignore them.
 
 Transcript text:
-${focusedText}`;
-        console.log('Transcript text being sent:', focusedText.slice(0, 4000));
-        const response = await fetch(PROXY_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                model: 'gpt-4o-mini',
-                temperature: 0,
-                max_tokens: 4000,
-                response_format: { type: 'json_object' },
-                messages: [
-                    {
-                        role: 'system',
-                        content: systemPrompt
-                    },
-                    {
-                        role: 'user',
-                        content: userPrompt
-                    }
-                ]
-            })
-        });
+${transcriptForModel}`;
 
-        if (!response.ok) {
-            let errObj = {};
-            try { errObj = await response.json(); } catch (e) {}
-            const msg =
-                errObj?.error?.message ||
-                errObj?.error ||
-                ('Proxy error ' + response.status);
-            throw new Error(String(msg));
+        // Do not log transcript text.
+
+        console.log('Local transcript parse quality:', { ...localQuality, coverage: localCoverage });
+
+        const runningFromFileProtocol = window.location.protocol === 'file:';
+        let imported = localImported;
+        let quality = localQuality;
+        let parseError = null;
+
+        if (!runningFromFileProtocol) {
+            try {
+                const parsedYears = await requestTranscriptParse(systemPrompt, userPrompt);
+                const apiImported = convertImportedTranscriptToAppShape(parsedYears);
+                const apiQuality = scoreImportedTranscript(apiImported);
+                console.log('Primary transcript parse quality:', apiQuality);
+                if (apiQuality.score >= quality.score) {
+                    imported = apiImported;
+                    quality = apiQuality;
+                }
+            } catch (error) {
+                parseError = error;
+                console.warn('Primary transcript parse failed:', error);
+            }
+        } else {
+            console.log('Skipping remote AI parse on file:// origin; using local parser only.');
         }
 
-                        const data = await response.json();
-        console.log('OpenAI raw response:', data);
+        if (!runningFromFileProtocol && (parseError || quality.shouldRetry)) {
+            const recoveryPrompt = `${userPrompt}
 
-        const rawText = data?.choices?.[0]?.message?.content?.trim() || '';
-        if (!rawText) throw new Error('OpenAI returned no content.');
-
-        const parsedObject = JSON.parse(rawText);
-        const parsed = parsedObject?.years;
-
-        if (!Array.isArray(parsed)) {
-            throw new Error('OpenAI did not return a valid years array.');
+Recovery mode:
+- Prioritize accuracy over completeness.
+- If a row is ambiguous, omit it.
+- Do not duplicate rows.
+- Keep S1/S2 strictly separated.`;
+            try {
+                const retryYears = await requestTranscriptParse(systemPrompt, recoveryPrompt);
+                const retryImported = convertImportedTranscriptToAppShape(retryYears);
+                const retryQuality = scoreImportedTranscript(retryImported);
+                console.log('Recovery transcript parse quality:', retryQuality);
+                if (retryQuality.score > quality.score) {
+                    imported = retryImported;
+                    quality = retryQuality;
+                }
+                parseError = null;
+            } catch (retryError) {
+                console.warn('Recovery transcript parse failed:', retryError);
+            }
         }
 
-        const imported = convertImportedTranscriptToAppShape(parsed);
+        if (parseError && isLikelyNetworkFetchError(parseError) && imported.some(y => y.courses.length > 0)) {
+            console.warn('Using local parse because network fetch failed.');
+            parseError = null;
+        }
+
+        if (parseError && !imported.some(y => y.courses.length > 0)) {
+            throw parseError;
+        }
+
+        imported = applySemesterHintsToImported(imported, semesterHints);
+        imported = normalizeSingleSemesterCoursePlacement(imported, semesterHints);
+        imported = autoSyncBlankSemesterTwoYears(imported);
+
         const hasData = imported.some(y => y.courses.length > 0);
         hidePDFImportModal();
         if (!hasData) { showImportToast('No courses found in the transcript.', true); return; }
@@ -2067,7 +3620,7 @@ ${focusedText}`;
             const totalCourses = imported.reduce((n, y) => n + y.courses.length, 0);
             const yearsHTML = imported.map(year => {
                 if (!year.courses.length) return '';
-                return `<div style="margin-bottom:12px;"><div style="font-size:11px;font-weight:800;color:#cc0000;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">${year.name}</div>${year.courses.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f4f4f5;font-size:12px;font-weight:600;"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:12px;">${c.name}</span><span style="color:#71717a;flex-shrink:0;">${c.s1grade || '—'} / ${c.s2grade || '—'}</span></div>`).join('')}</div>`;
+                return `<div style="margin-bottom:12px;"><div style="font-size:11px;font-weight:800;color:#cc0000;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">${year.name}</div>${year.courses.map(c => `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #f4f4f5;font-size:12px;font-weight:600;"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:12px;">${c.name || c.s2name || 'Untitled Course'}</span><span style="color:#71717a;flex-shrink:0;">${c.s1grade || '—'} / ${c.s2grade || '—'}</span></div>`).join('')}</div>`;
             }).join('');
             overlay.innerHTML = `
                 <div style="background:#fff;border-radius:28px;width:100%;max-width:520px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 12px 60px rgba(0,0,0,0.25);">
@@ -2139,9 +3692,9 @@ ${focusedText}`;
         const actCatalog = document.getElementById('activity-catalog');
         SHALHEVET_ACTIVITIES.sort().forEach(item => { const opt = document.createElement('option'); opt.value = item; actCatalog.appendChild(opt); });
 
-        setInterval(updateClock, 1000);
         updateClock();
-        if (localStorage.getItem('darkMode') === 'true') toggleDarkMode();
+        setInterval(updateClock, 30000);
+        renderAll();
         showPage('home');
     </script>
 </body>
