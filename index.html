@@ -633,7 +633,7 @@
             <div class="no-print-gpa w-full max-w-[1120px] mx-auto">
                 <div class="w-full rounded-2xl border border-amber-300/80 dark:border-amber-700/70 bg-amber-50/90 dark:bg-amber-950/20 px-4 md:px-5 py-3 flex items-center justify-center">
                     <p class="text-sm font-semibold text-amber-900 dark:text-amber-200 leading-relaxed text-center">
-                        <span class="font-bold">PDF Import Notice:</span> This feature is actively being refined and is already highly useful. Importing usually saves significant time and is generally accurate, but please do a quick review of courses and grades after each import.
+                        <span class="font-bold">PDF Import Notice:</span> This feature is actively being refined and is already highly useful. Importing usually saves significant time and is accurate, but please do a quick review of courses and grades after each import.
                     </p>
                 </div>
             </div>
@@ -3607,7 +3607,7 @@ Recovery mode:
             const status = document.getElementById('pdf-import-status');
             const sub = document.getElementById('pdf-import-sub');
             if (state === 'reading') { status.textContent = 'Reading PDF…'; sub.textContent = 'Preparing your transcript for analysis.'; }
-            if (state === 'parsing') { status.textContent = 'Analyzing transcript…'; sub.textContent = 'OpenAI is extracting your courses and grades. This may take a few seconds.'; }
+            if (state === 'parsing') { status.textContent = 'Analyzing transcript…'; sub.textContent = 'Extracting your courses and grades. This may take a few seconds.'; }
         }
         function hidePDFImportModal() { const modal = document.getElementById('pdf-import-modal'); if (modal) modal.style.display = 'none'; }
 
