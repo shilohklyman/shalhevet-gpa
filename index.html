@@ -413,6 +413,55 @@
         </div>
     </div>
 
+
+    <!-- Edit College Modal -->
+    <div id="edit-col-modal" class="modal-overlay" onclick="if(event.target===this) closeEditColModal()">
+        <div class="bg-white dark:bg-zinc-900 rounded-[32px] p-6 md:p-8 max-w-[500px] w-[95%] space-y-6 shadow-2xl border border-zinc-200 dark:border-zinc-800">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-bold">Edit Institution</h2>
+                <button onclick="closeEditColModal()" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div class="space-y-4">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Institution Name</label>
+                    <input id="edit-col-name" type="text" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Type</label>
+                        <select id="edit-col-type" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                            <option value="College">College</option>
+                            <option value="Yeshiva">Yeshiva</option>
+                            <option value="Seminary">Seminary</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Ranking</label>
+                        <select id="edit-col-rank" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                            <option value="">—</option>
+                            <option value="REACH">Reach</option>
+                            <option value="TARGET">Target</option>
+                            <option value="SAFETY">Safety</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Status</label>
+                    <select id="edit-col-status" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                        <option value="RESEARCHING">Researching</option>
+                        <option value="APPLYING">Applying</option>
+                        <option value="APPLIED">Applied</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="closeEditColModal()" class="flex-1 h-12 rounded-xl font-bold text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all">Cancel</button>
+                <button onclick="saveEditCol()" class="flex-[2] h-12 bg-shalhevet text-white font-bold rounded-xl shadow-lg shadow-red-900/20 transition-all">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Edit Co-Curricular Modal -->
     <div id="edit-cc-modal" class="modal-overlay" onclick="if(event.target===this) closeEditCCModal()">
         <div class="bg-white dark:bg-zinc-900 rounded-[32px] p-6 md:p-8 max-w-[600px] w-[95%] space-y-6 shadow-2xl border border-zinc-200 dark:border-zinc-800">
@@ -2401,6 +2450,7 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
                                 </div>
                                 <div class="flex items-start gap-2 flex-shrink-0">
                                     <span class="badge text-[10px] font-bold px-3 py-1 rounded-full tracking-wide ${sColor}">${statusBadgeText}</span>
+                                    <button onclick="startEditCol('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors -mt-0.5"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
                                     <button onclick="deleteCollege('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors -mt-0.5 -mr-1"><i data-lucide="x" class="w-4 h-4"></i></button>
                                 </div>
                             </div>
@@ -2545,6 +2595,31 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
         }
         function updateCollege(id, field, val) { const c = window.colleges.find(x => x.id === id); if(c) c[field] = (field === 'status' || field === 'rank') ? val.toUpperCase() : val; if (window.cloudSave) window.cloudSave(); renderCollege(); }
         function deleteCollege(id) { window.colleges = window.colleges.filter(x => x.id !== id); if (window.cloudSave) window.cloudSave(); renderCollege(); }
+
+        let editingColId = null;
+        function startEditCol(id) {
+            const c = window.colleges.find(x => x.id === id);
+            if (!c) return;
+            editingColId = id;
+            document.getElementById('edit-col-name').value = c.name || '';
+            document.getElementById('edit-col-type').value = c.type || 'College';
+            document.getElementById('edit-col-rank').value = c.rank || '';
+            document.getElementById('edit-col-status').value = String(c.status || 'RESEARCHING').toUpperCase();
+            document.getElementById('edit-col-modal').classList.add('open');
+            lucide.createIcons();
+        }
+        function closeEditColModal() { document.getElementById('edit-col-modal').classList.remove('open'); editingColId = null; }
+        function saveEditCol() {
+            const c = window.colleges.find(x => x.id === editingColId);
+            if (!c) return;
+            c.name = document.getElementById('edit-col-name').value;
+            c.type = document.getElementById('edit-col-type').value;
+            c.rank = document.getElementById('edit-col-rank').value;
+            c.status = document.getElementById('edit-col-status').value.toUpperCase();
+            if (window.cloudSave) window.cloudSave();
+            closeEditColModal();
+            renderCollege();
+        }
       // ─────────────────────────────────────────────────────────────
 // SMART TIMELINE (derived deadlines from colleges that are applying)
 // ─────────────────────────────────────────────────────────────
