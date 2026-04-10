@@ -18,6 +18,7 @@
                 'check-square': '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="m9 12 2 2 4-4"/>',
                 'chevron-left': '<path d="m15 18-6-6 6-6"/>',
                 'chevron-right': '<path d="m9 18 6-6-6-6"/>',
+                'circle': '<circle cx="12" cy="12" r="9"/>',
                 'clipboard-list': '<rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 4H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><path d="M9 10h6"/><path d="M9 14h6"/><path d="M9 18h4"/>',
                 'clock': '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
                 'download': '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
@@ -25,9 +26,11 @@
                 'info': '<circle cx="12" cy="12" r="9"/><path d="M12 10v6"/><path d="M12 7h.01"/>',
                 'log-out': '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
                 'moon': '<path d="M12 3a7 7 0 1 0 9 9 9 9 0 1 1-9-9Z"/>',
-                'sun': '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+                'plus': '<path d="M5 12h14"/><path d="M12 5v14"/>',
                 'pencil': '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4Z"/><path d="m15 5 3 3"/>',
                 'rotate-ccw': '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/>',
+                'send': '<path d="M22 2 11 13"/><path d="M22 2 15 22l-3-9-9-3 19-8z"/>',
+                'sun': '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
                 'trash': '<path d="M3 6h18"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/>',
                 'school': '<path d="m2 9 10-5 10 5"/><path d="M4 10v8"/><path d="M20 10v8"/><path d="M8 14v4"/><path d="M12 12v6"/><path d="M16 14v4"/><path d="M2 18h20"/>',
                 'search': '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
@@ -127,12 +130,13 @@
 
         /* ── Official-style print transcript ── */
         .tp-page { font-family: "Plus Jakarta Sans", Arial, sans-serif; font-size: 9pt; color: #000; background: #fff; }
-        .tp-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12pt; border-bottom: 1.5pt solid #000; padding-bottom: 7pt; }
-        .tp-top-left { font-size: 7.5pt; line-height: 1.6; }
-        .tp-title { font-size: 14pt; font-weight: 800; text-align: center; flex: 1; padding: 0 10pt; }
-        .tp-top-right { font-size: 7.5pt; text-align: right; }
-        .tp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16pt; }
-        .tp-year { margin-bottom: 9pt; }
+        .tp-top { text-align: center; margin-bottom: 12pt; border-bottom: 1.5pt solid #000; padding-bottom: 10pt; }
+        .tp-title { font-size: 14pt; font-weight: 800; margin: 0 0 8pt; }
+        .tp-stats-row { display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 6pt 20pt; font-size: 7.5pt; line-height: 1.5; }
+        .tp-stats-row strong { font-weight: 800; }
+        .tp-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12pt 16pt; align-items: stretch; }
+        .tp-year { margin-bottom: 0; display: flex; flex-direction: column; min-height: 0; border: 0.5pt solid #d4d4d8; border-radius: 2pt; padding: 5pt 6pt 6pt; box-sizing: border-box; }
+        .tp-year-rows { flex: 1 1 auto; min-height: 48pt; }
         .tp-year-header { border-bottom: 1pt solid #000; padding-bottom: 2pt; margin-bottom: 1pt; }
         .tp-year-title { font-size: 8pt; font-weight: 800; }
         .tp-col-headers { display: grid; grid-template-columns: 1fr 34pt 17pt 17pt 20pt; font-size: 6.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #555; border-bottom: 0.5pt solid #bbb; padding: 1.5pt 0; }
@@ -143,6 +147,21 @@
         .tp-row span { text-align: center; }
         .tp-row span:first-child { text-align: left; padding-right: 3pt; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .tp-empty { font-size: 7pt; color: #888; padding: 4pt 0; font-style: italic; }
+        /* Add-institution status stepper (matches dashboard dark menu style) */
+        .col-status-bar { -webkit-overflow-scrolling: touch; }
+        .col-status-item { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; padding: 8px 12px; border-radius: 10px; font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, 0.92); cursor: pointer; transition: background 0.15s ease, color 0.15s ease; border: none; background: transparent; font-family: inherit; }
+        .col-status-item:hover { background: rgba(255, 255, 255, 0.06); }
+        .col-status-item.is-active { background: #2563eb; color: #fff; }
+        .col-status-item.is-active:hover { background: #1d4ed8; }
+        .col-status-item.is-done:not(.is-active) { color: rgba(255, 255, 255, 0.88); }
+        .col-status-item.is-upcoming { color: rgba(255, 255, 255, 0.42); }
+        .col-status-item .col-status-check { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; opacity: 0; }
+        .col-status-item.is-done .col-status-check { opacity: 1; }
+        /* Secondary hub: outcome menu (applied → committed) */
+        .col-hub-outcome-item { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; padding: 8px 12px; border-radius: 10px; font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, 0.92); cursor: pointer; transition: background 0.15s ease, color 0.15s ease; border: none; background: transparent; font-family: inherit; }
+        .col-hub-outcome-item:hover { background: #2563eb; color: #fff; }
+        .col-hub-outcome-item.is-active { background: #2563eb; color: #fff; }
+        .col-hub-outcome-item.is-active:hover { background: #1d4ed8; color: #fff; }
         .gpa-reference-card { height: 100%; }
         .gpa-disclaimer { border-top: 1px solid #e4e4e7; padding-top: 18px; }
         .gpa-year-card { border-width: 1px; box-shadow: 0 1px 2px rgba(24, 24, 27, 0.03); }
@@ -242,12 +261,12 @@
                 <button onclick="document.getElementById('privacy-modal').classList.remove('open')" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div class="overflow-y-auto hide-scrollbar space-y-5 text-sm text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed flex-1">
-                <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Last updated: April 9, 2026</p>
+                <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Last updated: April 10, 2026</p>
                 <div class="space-y-1.5">
                     <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Information We Collect</h3>
                     <ul class="space-y-2">
                         <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Account information:</strong> If you sign in with Google, we receive your name, email address, and profile photo from Google solely to identify your account.</span></li>
-                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Academic data:</strong> GPA entries, course names, grades, credits, tasks, college list entries, and co-curriculars that you manually enter. This data is private to your account by default; other students/users cannot view it.</span></li>
+                        <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Academic data:</strong> GPA entries, course names, grades, credits, tasks, college list entries, and co-curricular activities that you manually enter. This data is private to your account by default; other students/users cannot view it.</span></li>
                         <li class="flex gap-2"><span class="text-zinc-400 flex-shrink-0 mt-0.5">•</span><span><strong class="text-zinc-800 dark:text-zinc-200">Transcript data (optional):</strong> If you use the PDF import feature, your transcript is first parsed locally on your device. OpenAI is only contacted if the local result is incomplete. Personal fields are redacted before any transmission. Only course names, grades, and credits are extracted and stored.</span></li>
                     </ul>
                 </div>
@@ -283,7 +302,7 @@
                 </div>
                 <div class="space-y-1.5">
                     <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Contact</h3>
-                    <p>For questions or concerns about this Privacy Policy, please email us at <a href="mailto:contactshalidashboard@gmail.com" class="text-shalhevet hover:underline">contactshalidashboard@gmail.com</a>.</p>
+                    <p>For questions or concerns about this Privacy Policy, please email us at <a href="/cdn-cgi/l/email-protection#30535f5e445153444358515c5954514358525f51425470575d51595c1e535f5d" class="text-shalhevet hover:underline"><span class="__cf_email__" data-cfemail="5d3e3233293c3e292e353c3134393c2e353f323c2f391d3a303c3431733e3230">[email&#160;protected]</span></a>.</p>
                 </div>
             </div>
             <div class="pt-5 flex-shrink-0">
@@ -300,7 +319,7 @@
                 <button onclick="document.getElementById('tos-modal').classList.remove('open')" class="text-zinc-400 hover:text-zinc-600"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div class="overflow-y-auto hide-scrollbar space-y-5 text-sm text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed flex-1">
-                <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Last updated: April 9, 2026</p>
+                <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest">Last updated: April 10, 2026</p>
                 <div class="space-y-1.5">
                     <h3 class="font-bold text-zinc-900 dark:text-white text-sm">About</h3>
                     <p>The Shalhevet Dashboard is an unofficial student tool for personal academic planning. It is intended for use by Shalhevet High School students. By using the Dashboard, you agree to these Terms of Service.</p>
@@ -341,7 +360,7 @@
                 </div>
                 <div class="space-y-1.5">
                     <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Contact</h3>
-                    <p>For questions or concerns regarding these Terms, please email us at <a href="mailto:contactshalidashboard@gmail.com" class="text-shalhevet hover:underline">contactshalidashboard@gmail.com</a>.</p>
+                    <p>For questions or concerns regarding these Terms, please email us at <a href="/cdn-cgi/l/email-protection#3e5d51504a5f5d4a4d565f52575a5f4d565c515f4c5a7e59535f5752105d5153" class="text-shalhevet hover:underline"><span class="__cf_email__" data-cfemail="e1828e8f958082959289808d8885809289838e809385a1868c80888dcf828e8c">[email&#160;protected]</span></a>.</p>
                 </div>
             </div>
             <div class="pt-5 flex-shrink-0">
@@ -653,21 +672,21 @@
                     <div class="text-xs font-bold text-zinc-400">Total Credits</div>
                 </div>
             </div>
+            <div class="flex flex-col sm:flex-row gap-3 no-print max-w-[1120px] mx-auto">
+                <button onclick="exportTranscriptPDF()" class="flex-1 h-12 border-2 border-shalhevet bg-shalhevet hover:bg-red-700 hover:border-red-700 text-white font-bold rounded-full flex items-center justify-center gap-2 transition-all text-sm shadow-lg shadow-red-900/20">
+                    <i data-lucide="download" class="w-4 h-4"></i> Export Unofficial Transcript
+                </button>
+                <button onclick="showPDFPrivacyWarning()" class="flex-1 h-12 border-2 border-shalhevet text-shalhevet bg-transparent hover:bg-red-50 dark:hover:bg-red-950/20 rounded-full font-bold flex items-center justify-center gap-2 transition-all text-sm">
+                    <i data-lucide="download" class="w-4 h-4 rotate-180"></i> Import PDF Transcript
+                </button>
+                <button onclick="resetGPA()" class="flex-1 h-12 bg-zinc-900 dark:bg-white text-red-500 hover:bg-zinc-800 dark:hover:bg-zinc-100 rounded-full font-bold flex items-center justify-center gap-2 transition-all text-sm">
+                    <i data-lucide="trash" class="w-4 h-4"></i> Clear All Data
+                </button>
+            </div>
             <div id="graduation-requirements" class="gpa-reference-card bg-white dark:bg-zinc-900 rounded-[20px] p-4 md:p-5 border border-zinc-200 dark:border-zinc-800 shadow-sm no-print max-w-[1120px] mx-auto"></div>
             <div id="gpa-years-container" class="space-y-6 no-print-gpa"></div>
             <div id="print-transcript" class="print-transcript"></div>
-            <div class="flex flex-col md:flex-row justify-center items-center gap-4 no-print">
-                <button onclick="exportTranscriptPDF()" class="bg-shalhevet hover:bg-red-700 text-white font-bold rounded-xl h-12 px-8 flex items-center justify-center gap-2 shadow-lg shadow-red-900/20 w-full md:w-auto transition-all text-sm">
-                    <i data-lucide="download" class="w-4 h-4"></i> Export Unofficial Transcript
-                </button>
-                <button onclick="showPDFPrivacyWarning()" class="border border-shalhevet text-shalhevet hover:bg-red-950/20 rounded-xl h-12 px-8 font-bold w-full md:w-auto transition-all text-sm flex items-center justify-center gap-2">
-                    <i data-lucide="download" class="w-4 h-4 rotate-180"></i> Import PDF Transcript
-                </button>
-                <input type="file" id="import-transcript-input" accept=".pdf,application/pdf" class="hidden" onchange="importTranscriptPDF(event)">
-                <button onclick="resetGPA()" class="bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 border border-zinc-800 text-red-500 hover:text-red-400 rounded-xl h-12 px-8 font-bold w-full md:w-auto transition-all text-sm">
-                    <i data-lucide="trash" class="w-4 h-4 mr-2 inline"></i> Clear All Data
-                </button>
-            </div>
+            <input type="file" id="import-transcript-input" accept=".pdf,application/pdf" class="hidden" onchange="importTranscriptPDF(event)">
             <div class="grid md:grid-cols-2 gap-5 no-print max-w-[1120px] mx-auto">
                 <div class="gpa-reference-card bg-white dark:bg-zinc-900 rounded-[20px] p-3.5 md:p-4 border border-zinc-200 dark:border-zinc-800 shadow-sm">
                     <div class="space-y-3">
@@ -807,7 +826,7 @@
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
                     <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-wider">ADD INSTITUTION</h3>
                 </div>
-                <div class="p-6">
+                <div class="p-6 space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">INSTITUTION NAME</label>
@@ -816,14 +835,16 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div class="space-y-2">
                                 <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">TYPE</label>
-                                <select id="col-type" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                                <select id="col-type" onchange="togglePortalFields()" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
                                     <option value="College">College</option><option value="Yeshiva">Yeshiva</option><option value="Seminary">Seminary</option><option value="Other">Other</option>
                                 </select>
                             </div>
-                            <div class="space-y-2">
+                            <div class="space-y-2 min-w-0">
                                 <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">STATUS</label>
-                                <select id="col-status" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
-                                    <option>Researching</option><option>Applying</option><option>Applied</option><option>Accepted</option><option>Waitlisted</option><option>Rejected</option><option>Committed</option>
+                                <select id="col-status" onchange="togglePortalFields()" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                                    <option value="RESEARCHING" selected>Researching</option>
+                                    <option value="APPLYING">Applying</option>
+                                    <option value="APPLIED">Applied</option>
                                 </select>
                             </div>
                         </div>
@@ -837,9 +858,68 @@
                             <button onclick="addCollege()" class="bg-shalhevet hover:bg-red-700 text-white font-bold h-11 px-6 rounded-xl transition-all text-sm">ADD</button>
                         </div>
                     </div>
+                    <!-- Portal + application hub: colleges only, once you are past &quot;Researching&quot; -->
+                    <div id="portal-fields" class="hidden border-t border-zinc-100 dark:border-zinc-800 pt-4">
+                        <h4 class="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-3">APPLICATION HUB</h4>
+                                                <div class="space-y-2 mb-4">
+                            <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">OUTCOME</label>
+                            <select id="col-outcome-status" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                                <option value="">— Select outcome —</option>
+                                <option value="AWAITING">Awaiting Decision</option>
+                                <option value="DEFERRED">Deferred</option>
+                                <option value="WAITLISTED">Waitlisted</option>
+                                <option value="ACCEPTED">Admitted</option>
+                                <option value="REJECTED">Denied</option>
+                                <option value="COMMITTED">Committed</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">APPLICATION TYPE</label>
+                                <select id="col-app-type" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                                    <option value="">—</option><option value="RD">RD</option><option value="EA">EA</option><option value="ED">ED</option><option value="ED II">ED II</option><option value="REA">REA</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">PORTAL URL</label>
+                                <input id="col-portal-url" type="url" placeholder="https://..." class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">USERNAME</label>
+                                <input id="col-portal-user" type="text" placeholder="Your portal username" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">PORTAL STATUS</label>
+                                <select id="col-portal-status" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                                    <option value="">—</option><option value="Pending">Pending</option><option value="Action Required">Action Required</option><option value="In Progress">In Progress</option><option value="Submitted">Submitted</option><option value="Decided">Decided</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">APP DEADLINE</label>
+                                <input id="col-app-deadline" type="date" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">DECISION DATE</label>
+                                <input id="col-decision-date" type="date" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="college-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+            <div id="college-smart-timeline" class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+                <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
+                    <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-wider">SMART TIMELINE</h3>
+                </div>
+
+                <div class="p-6 space-y-4">
+                    <div id="timeline-list" class="space-y-3"></div>
+
+                    <div class="text-[11px] font-bold text-zinc-400 leading-relaxed">
+                        Deadlines will also appear in your calendar so you don’t miss anything.
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- CO-CURRICULAR PAGE -->
@@ -863,40 +943,42 @@
                 </div>
             </div>
             <div id="cc-form-container" class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+                <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
+                    <h3 class="text-xs font-bold text-zinc-400">Add Co-Curricular</h3>
+                </div>
                 <div class="p-6 space-y-6">
-                    <h2 class="text-lg font-bold uppercase tracking-wider">Add Co-Curricular</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-zinc-400">Activity Name</label>
-                            <input id="cc-name" list="activity-catalog" type="text" placeholder="e.g. Model UN" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none">
+                            <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">ACTIVITY NAME</label>
+                            <input id="cc-name" list="activity-catalog" type="text" placeholder="e.g. Model UN" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold focus:ring-2 focus:ring-shalhevet outline-none">
                         </div>
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-zinc-400">Role</label>
-                            <input id="cc-role" type="text" placeholder="e.g. Captain, Founder" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none">
+                            <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">ROLE</label>
+                            <input id="cc-role" type="text" placeholder="e.g. Captain, Founder" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold focus:ring-2 focus:ring-shalhevet outline-none">
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 items-end">
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-zinc-400">Category</label>
+                            <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">CATEGORY</label>
                             <select id="cc-category" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
                                 <option>Club</option><option>Sport</option><option>Volunteer</option><option>Job</option><option>Internship</option><option>Project</option>
                             </select>
                         </div>
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-zinc-400">Weekly Hours</label>
-                            <input id="cc-hours" type="number" placeholder="0" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none">
+                            <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">HOURS/WK</label>
+                            <input id="cc-hours" type="number" placeholder="0" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold focus:ring-2 focus:ring-shalhevet outline-none">
                         </div>
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-zinc-400">Grade Levels</label>
-                            <div id="cc-grade-selector" class="flex gap-2">
-                                <button onclick="toggleGradeSelection(this)" class="cc-grade-btn w-9 h-9 rounded-lg border-2 border-zinc-100 dark:border-zinc-800 text-xs font-bold transition-all" data-grade="9">9</button>
-                                <button onclick="toggleGradeSelection(this)" class="cc-grade-btn w-9 h-9 rounded-lg border-2 border-zinc-100 dark:border-zinc-800 text-xs font-bold transition-all" data-grade="10">10</button>
-                                <button onclick="toggleGradeSelection(this)" class="cc-grade-btn w-9 h-9 rounded-lg border-2 border-zinc-100 dark:border-zinc-800 text-xs font-bold transition-all" data-grade="11">11</button>
-                                <button onclick="toggleGradeSelection(this)" class="cc-grade-btn w-9 h-9 rounded-lg border-2 border-zinc-100 dark:border-zinc-800 text-xs font-bold transition-all" data-grade="12">12</button>
+                            <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">GRADES</label>
+                            <div id="cc-grade-selector" class="flex gap-1.5">
+                                <button onclick="toggleGradeSelection(this)" class="cc-grade-btn flex-1 h-11 rounded-xl border-2 border-zinc-100 dark:border-zinc-800 text-xs font-bold transition-all" data-grade="9">9</button>
+                                <button onclick="toggleGradeSelection(this)" class="cc-grade-btn flex-1 h-11 rounded-xl border-2 border-zinc-100 dark:border-zinc-800 text-xs font-bold transition-all" data-grade="10">10</button>
+                                <button onclick="toggleGradeSelection(this)" class="cc-grade-btn flex-1 h-11 rounded-xl border-2 border-zinc-100 dark:border-zinc-800 text-xs font-bold transition-all" data-grade="11">11</button>
+                                <button onclick="toggleGradeSelection(this)" class="cc-grade-btn flex-1 h-11 rounded-xl border-2 border-zinc-100 dark:border-zinc-800 text-xs font-bold transition-all" data-grade="12">12</button>
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <label class="text-xs font-bold text-zinc-400">Status</label>
+                            <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">STATUS</label>
                             <select id="cc-status" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
                                 <option value="IN_PROGRESS">In Progress</option>
                                 <option value="OFF_SEASON">Off-Season</option>
@@ -905,10 +987,10 @@
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <label class="text-xs font-bold text-zinc-400">Description</label>
-                        <textarea id="cc-desc" placeholder="What you actually did..." class="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl p-4 text-sm font-bold outline-none h-24 resize-none"></textarea>
+                        <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">DESCRIPTION</label>
+                        <textarea id="cc-desc" placeholder="What you actually did..." class="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl p-4 text-sm font-bold outline-none h-20 resize-none focus:ring-2 focus:ring-shalhevet"></textarea>
                     </div>
-                    <button onclick="addCoCurr()" class="w-full bg-shalhevet hover:bg-red-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-red-900/20 text-sm">Add Entry</button>
+                    <button onclick="addCoCurr()" class="w-full bg-shalhevet hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-red-900/20 text-sm">Add Co-Curricular</button>
                 </div>
             </div>
             <div id="cocurr-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
@@ -925,7 +1007,10 @@
     <datalist id="activity-catalog"></datalist>
 
     <!-- Fallback definitions so buttons work even before the Firebase module initializes -->
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Track if user explicitly chose guest mode
+        window.guestModeChosen = false;
+
         // These stubs allow buttons to respond immediately on click.
         // The Firebase module script will overwrite these with real implementations once it loads.
         window.signInWithGoogle = function() {
@@ -933,6 +1018,7 @@
             else { console.warn('Auth module not yet ready. Please wait a moment and try again.'); }
         };
         window.enableGuestMode = function() {
+            window.guestModeChosen = true;
             if (window._firebaseGuestMode) { window._firebaseGuestMode(); return; }
             // Fallback if module hasn't loaded yet
             const gate = document.getElementById('auth-gate');
@@ -949,6 +1035,14 @@
         };
         window.toggleProfileDropdown = function() {
             if (window._toggleProfileDropdown) { window._toggleProfileDropdown(); }
+        };
+        window.toggleHamburgerMenu = function() {
+            if (window._toggleHamburgerMenu) { window._toggleHamburgerMenu(); return; }
+            // Fallback before module loads
+            const menu = document.getElementById('hamburger-menu');
+            const btn = document.getElementById('hamburger-btn');
+            if (menu) menu.classList.toggle('hidden');
+            if (btn) btn.classList.toggle('active');
         };
         window.dismissGuestBanner = function() {
             const banner = document.getElementById('guest-banner');
@@ -983,6 +1077,7 @@
         };
         const _doSignOut = async function() { await signOut(auth); location.reload(); };
         const _doGuestMode = function() {
+            window.guestModeChosen = true;
             document.getElementById('auth-gate').classList.remove('visible');
             if (localStorage.getItem('guest_banner_dismissed') !== 'true') document.getElementById('guest-banner').classList.remove('hidden');
             renderAll();
@@ -1014,18 +1109,26 @@
         });
 
         async function loadFromFirestore(uid) {
+            if (!uid) return;
             setSyncStatus('syncing');
             try {
                 const snap = await getDoc(doc(db, 'users', uid));
                 if (snap.exists()) {
-                    const data = snap.data();
-                    if (data.gpaData) window.gpaData = normalizeGPAData(data.gpaData);
-                    if (data.tasks) window.tasks = stripSampleTasks(data.tasks);
+                    const data = snap.data() || {};
+                    if (data.gpaData) window.gpaData = data.gpaData;
+                    if (data.tasks) window.tasks = data.tasks;
                     if (data.colleges) window.colleges = stripSampleColleges(data.colleges);
                     if (data.cocurrs) window.cocurrs = stripSampleCoCurrs(data.cocurrs);
-                } else { await saveToFirestore(uid); }
+                    if (data.deadlineDone) window.deadlineDone = data.deadlineDone || {};
+                    else window.deadlineDone = window.deadlineDone || {};
+                } else {
+                    await saveToFirestore(uid);
+                }
                 setSyncStatus('synced');
-            } catch(e) { console.error('Load failed', e); setSyncStatus(''); }
+            } catch (e) {
+                console.error('Load failed', e);
+                setSyncStatus('');
+            }
             renderAll();
         }
 
@@ -1033,19 +1136,27 @@
             if (!uid) return;
             setSyncStatus('syncing');
             try {
-                await setDoc(doc(db, 'users', uid), { gpaData: window.gpaData, tasks: window.tasks, colleges: window.colleges, cocurrs: window.cocurrs, updatedAt: Date.now() });
+                await setDoc(doc(db, 'users', uid), {
+  gpaData: window.gpaData,
+  tasks: window.tasks,
+  colleges: window.colleges,
+  cocurrs: window.cocurrs,
+  deadlineDone: window.deadlineDone || {},
+  updatedAt: Date.now()
+});
                 setSyncStatus('synced');
             } catch(e) { console.error('Save failed', e); setSyncStatus(''); }
         }
 
         window.cloudSave = function() {
             if (!currentUser) {
-                localStorage.setItem('gpaData', JSON.stringify(window.gpaData));
-                localStorage.setItem('tasks', JSON.stringify(window.tasks));
-                localStorage.setItem('colleges', JSON.stringify(window.colleges));
-                localStorage.setItem('cocurrs', JSON.stringify(window.cocurrs));
-                return;
-            }
+  localStorage.setItem('gpaData', JSON.stringify(window.gpaData));
+  localStorage.setItem('tasks', JSON.stringify(window.tasks));
+  localStorage.setItem('colleges', JSON.stringify(window.colleges));
+  localStorage.setItem('cocurrs', JSON.stringify(window.cocurrs));
+  localStorage.setItem('deadlineDone', JSON.stringify(window.deadlineDone || {}));
+  return;
+}
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => saveToFirestore(currentUser.uid), 1200);
         };
@@ -1067,13 +1178,14 @@
                 menu.style.transform = 'translateX(-50%)';
             }
         }
-        window.toggleHamburgerMenu = function() {
+        window._toggleHamburgerMenu = function() {
             const menu = document.getElementById('hamburger-menu');
             const btn = document.getElementById('hamburger-btn');
             menu.classList.toggle('hidden');
             btn.classList.toggle('active');
             if (!menu.classList.contains('hidden')) alignHamburgerMenu();
         };
+        window.toggleHamburgerMenu = window._toggleHamburgerMenu;
         window.addEventListener('resize', function() {
             const menu = document.getElementById('hamburger-menu');
             if (menu && !menu.classList.contains('hidden')) alignHamburgerMenu();
@@ -1135,26 +1247,15 @@
                 await loadFromFirestore(user.uid);
             } else {
                 currentUser = null;
-                gate.classList.add('visible');
+                // Only show auth gate if user hasn't explicitly chosen guest mode
+                if (!window.guestModeChosen) {
+                    gate.classList.add('visible');
+                }
             }
         });
     </script>
 
     <script>
-function corsHeaders(request) {
-  const origin = request.headers.get('Origin') || '';
-  const allowed = [
-    'https://shalhevetgpa.com',
-    'http://localhost:3000',
-    'http://127.0.0.1:5500'
-  ];
-
-  return {
-    'Access-Control-Allow-Origin': allowed.includes(origin) ? origin : 'https://shalhevetgpa.com',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type'
-  };
-}
         const PROXY_URL = 'https://shali-proxy.adamjsandler09.workers.dev';
 
         const SHALHEVET_COURSES = ["English Composition","English Composition (Honors)","American Literature","American Literature (Honors)","Banned Books","Banned Books (Honors)","British Literature (SAS)","Journalism","Journalism (Honors)","Creative Writing","Film, Literature & Composition","Film, Literature & Composition (Honors)","Free Will and Time Travel (SAS)","World History","U.S. History","U.S. History (Honors)","Civil War & Reconstruction (SAS)","Civics (SAS)","Comparative Government (Honors)","Economics (SAS)","Medieval Jewish History (SAS)","Positive Psychology","Psychology (SAS)","Topics in U.S. History (SAS)","U.S. Government & Economics","WW II (SAS)","Biology","Engineering","Chemistry","Chemistry (Honors)","Chemistry (SAS)","Intro to Computer Science (Honors)","Computer Science (SAS)","Computer Science 2 (SAS)","Anatomy and Physiology (Honors)","Biochemistry (SAS)","Biology (SAS)","Environmental Science","Physics","Physics (SAS)","Algebra 1","Geometry","Geometry (Advanced)","Geometry (Honors)","Algebra 2","Algebra 2 (Advanced)","Algebra 2 (Honors)","Precalculus","Precalculus (Advanced)","Precalculus (Honors)","Calculus","Calculus (SAS)","Multivariable Calculus (SAS)","Statistics (Honors)","Visual Art","Tech Theater & Drama","Art Composition & Design","Art History (Honors)","Photography","Studio Art (SAS)","Hebrew 100","Hebrew 101","Hebrew 102","Hebrew 103","Hebrew 110","Hebrew 111","Hebrew 112","Hebrew 113 (Honors)","Hebrew 120","Hebrew 121","Hebrew 122","Israeli Culture & Conversation","Hebrew Film & Literature (SAS)","Tanach 1","Tanach 1 (Advanced)","Tanach 2","Tanach 2 (Advanced)","Tanach 3","Tanach 3 (Advanced)","Tanach 4","Tanach 4 (Advanced)","Talmud 1","Talmud 1 (Advanced)","Talmud 2","Talmud 2 (Advanced)","Talmud 3","Talmud 3 (Advanced)","Talmud 4","Talmud 4 (Advanced)","Honors Gemara Shiur","Beit Midrash Track (BMT)","Halacha 1","Halacha 2","Israel Education","Israel Education (SAS)","Jewish Philosophy","Jewish Philosophy (Advanced)","Jewish Philosophy (Honors)","Physical Education 9","Physical Education 10","Physical Education 11","Physical Education 12"];
@@ -1536,11 +1637,7 @@ function transcriptRowsForCourse(course) {
             const cumWtGPA = cumCredits ? (cumWtPoints / cumCredits).toFixed(2) : '—';
             const cumUnwtGPA = cumCredits ? (cumUnwtPoints / cumCredits).toFixed(2) : '—';
 
-            // Graduation year: assume 12th grade = current or next school year
             const now = new Date();
-            const calYear = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;
-            const gradYear = calYear + 1; // 12th grade ends in spring of calYear+1
-
             const printedDate = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
 
             function renderYearBlock(year) {
@@ -1564,26 +1661,24 @@ function transcriptRowsForCourse(course) {
                         <span>Course</span><span>Level</span><span>S1</span><span>S2</span><span>Credit</span>
                     </div>
                     <div class="tp-academic-year">${acYear}</div>
-                    ${rowsHTML}
+                    <div class="tp-year-rows">${rowsHTML}</div>
                 </div>`;
             }
 
             const [y9, y10, y11, y12] = allYears;
             container.innerHTML = `<div class="tp-page">
                 <div class="tp-top">
-                    <div class="tp-top-left">
-                        <strong>Cumulative Weighted GPA: ${cumWtGPA}*</strong>
-                        <strong>Cumulative Unweighted GPA: ${cumUnwtGPA}*</strong>
-                        <strong>Credits Earned: ${cumTotalCredits.toFixed(2)}</strong>
-                    </div>
                     <div class="tp-title">Unofficial Transcript</div>
-                    <div class="tp-top-right">Expected Graduation: June ${gradYear}</div>
+                    <div class="tp-stats-row">
+                        <span><strong>Cumulative Weighted GPA: ${cumWtGPA}*</strong></span>
+                        <span><strong>Cumulative Unweighted GPA: ${cumUnwtGPA}*</strong></span>
+                        <span><strong>Credits Earned: ${cumTotalCredits.toFixed(2)}</strong></span>
+                    </div>
                 </div>
                 <div class="tp-grid">
-                    <div>${renderYearBlock(y9)}${renderYearBlock(y11)}</div>
-                    <div>${renderYearBlock(y10)}${renderYearBlock(y12)}</div>
+                    ${renderYearBlock(y9)}${renderYearBlock(y10)}${renderYearBlock(y11)}${renderYearBlock(y12)}
                 </div>
-                <div style="margin-top:10pt;border-top:0.5pt solid #ccc;padding-top:5pt;font-size:6.5pt;color:#555;">
+                <div style="margin-top:10pt;border-top:0.5pt solid #ccc;padding-top:5pt;font-size:6.5pt;color:#555;text-align:center;">
                     * Grades of Pass (P), Withdraw (W), or No Grade (NG) are not factored into GPA. &nbsp;·&nbsp; Printed ${printedDate}
                 </div>
             </div>`;
@@ -1627,53 +1722,131 @@ function transcriptRowsForCourse(course) {
                 showImportToast('No transcript data available to export.', true);
                 return;
             }
-
-            let mount = null;
+            showImportToast('Preparing PDF…');
             try {
-                showImportToast('Preparing one-page PDF export...');
-                await ensureOnePagePDFLibraries();
-                renderTranscriptPrint();
-
-                const printContainer = document.getElementById('print-transcript');
-                mount = document.createElement('div');
-                mount.style.cssText = 'position:fixed;left:-100000px;top:0;width:1060px;padding:18px;background:#ffffff;z-index:-1;';
-                mount.innerHTML = printContainer ? printContainer.innerHTML : '';
-                document.body.appendChild(mount);
-
-                const canvas = await window.html2canvas(mount, {
-                    backgroundColor: '#ffffff',
-                    scale: 2,
-                    useCORS: true,
-                    logging: false
-                });
-
+                if (!(window.jspdf && window.jspdf.jsPDF)) {
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement('script');
+                        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+                        script.onload = resolve; script.onerror = reject;
+                        document.head.appendChild(script);
+                    });
+                }
                 const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF({
-                    orientation: 'portrait',
-                    unit: 'pt',
-                    format: 'letter',
-                    compress: true
+                const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
+                const PW = pdf.internal.pageSize.getWidth();
+                const PH = pdf.internal.pageSize.getHeight();
+                const ML = 36, MR = 36, MT = 36;
+                const usableW = PW - ML - MR;
+                const colGap = 18;
+                const colW = (usableW - colGap) / 2;
+                const RED    = [204, 0, 0];
+                const BLACK  = [0, 0, 0];
+                const GRAY   = [100, 100, 100];
+                const LGRAY  = [200, 200, 200];
+                const VLGRAY = [235, 235, 235];
+                function setFont(style, size) { pdf.setFont('helvetica', style || 'normal'); pdf.setFontSize(size || 9); }
+                function setColor(rgb) { pdf.setTextColor(...rgb); }
+                function setDraw(rgb, w) { pdf.setDrawColor(...rgb); pdf.setLineWidth(w || 0.5); }
+                // Cumulative stats
+                let cumWtPts = 0, cumUnwtPts = 0, cumGpaCr = 0, cumTotalCr = 0;
+                window.gpaData.forEach(year => {
+                    year.courses.forEach(course => {
+                        ['s1grade','s2grade'].forEach((gk, idx) => {
+                            const pts = GRADE_SCALE[course[gk]];
+                            const isPass = course[gk] === 'P';
+                            const cr = getSemesterCourseCredits(course, idx);
+                            if (pts !== null && pts !== undefined) {
+                                cumWtPts   += (pts + (getSemesterCourseWeight(course, idx) ? 1 : 0)) * cr;
+                                cumUnwtPts += pts * cr;
+                                cumGpaCr   += cr;
+                            }
+                            if ((pts !== null && pts !== undefined) || isPass) cumTotalCr += cr;
+                        });
+                    });
                 });
-
-                const pageWidth = pdf.internal.pageSize.getWidth();
-                const pageHeight = pdf.internal.pageSize.getHeight();
-                const margin = 24;
-                const maxWidth = pageWidth - margin * 2;
-                const maxHeight = pageHeight - margin * 2;
-                const scale = Math.min(maxWidth / canvas.width, maxHeight / canvas.height);
-                const drawWidth = canvas.width * scale;
-                const drawHeight = canvas.height * scale;
-                const x = (pageWidth - drawWidth) / 2;
-                const y = (pageHeight - drawHeight) / 2;
-
-                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', x, y, drawWidth, drawHeight, undefined, 'FAST');
+                const cumWtGPA   = cumGpaCr ? (cumWtPts   / cumGpaCr).toFixed(2) : '—';
+                const cumUnwtGPA = cumGpaCr ? (cumUnwtPts / cumGpaCr).toFixed(2) : '—';
+                const now = new Date();
+                const printedDate = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+                // Header (centered)
+                let y = MT;
+                setFont('bold', 16); setColor(BLACK);
+                pdf.text('Unofficial Transcript', PW / 2, y, { align: 'center' });
+                y += 18;
+                setFont('bold', 8); setColor(BLACK);
+                const statsLine1 = 'Cumulative Weighted GPA: ' + cumWtGPA + '*  ·  Cumulative Unweighted GPA: ' + cumUnwtGPA + '*';
+                pdf.text(statsLine1, PW / 2, y, { align: 'center' });
+                y += 11;
+                pdf.text('Credits Earned: ' + cumTotalCr.toFixed(2), PW / 2, y, { align: 'center' });
+                y += 16;
+                setDraw(BLACK, 1); pdf.line(ML, y, PW - MR, y);
+                y += 14;
+                const LEFT_X  = ML;
+                const RIGHT_X = ML + colW + colGap;
+                function renderYear(year, startX, startY, maxW) {
+                    let cy = startY;
+                    const wtGPA = transcriptWeightedGPA(year);
+                    setFont('bold', 9); setColor(BLACK);
+                    pdf.text(year.name + '   Weighted GPA: ' + wtGPA, startX, cy);
+                    cy += 4; setDraw(BLACK, 0.75); pdf.line(startX, cy, startX + maxW, cy); cy += 9;
+                    if (!year.courses.length) {
+                        setFont('italic', 7.5); setColor(GRAY);
+                        pdf.text('No courses recorded.', startX, cy);
+                        return cy + 16;
+                    }
+                    const courseW = maxW - 34 - 17 - 17 - 20;
+                    const levelX  = startX + courseW;
+                    const s1X     = levelX + 34;
+                    const s2X     = s1X + 17;
+                    const creditX = s2X + 17;
+                    setFont('bold', 6.5); setColor(GRAY);
+                    pdf.text('COURSE', startX, cy);
+                    pdf.text('LEVEL', levelX, cy);
+                    pdf.text('S1', s1X + 8, cy, { align: 'center' });
+                    pdf.text('S2', s2X + 8, cy, { align: 'center' });
+                    pdf.text('CREDIT', creditX + 10, cy, { align: 'center' });
+                    cy += 2.5; setDraw(LGRAY, 0.4); pdf.line(startX, cy, startX + maxW, cy); cy += 7;
+                    setFont('bold', 7); setColor(RED);
+                    pdf.text(inferAcademicYear(year.name), startX, cy);
+                    cy += 8;
+                    const rows = year.courses.flatMap(c => transcriptRowsForCourse(c));
+                    rows.forEach((row, i) => {
+                        if (cy > PH - 50) return;
+                        setFont('normal', 7.5); setColor(BLACK);
+                        let name = row.name || '';
+                        const nameMax = courseW - 4;
+                        if (pdf.getTextWidth(name) > nameMax) {
+                            while (pdf.getTextWidth(name + '…') > nameMax && name.length) name = name.slice(0, -1);
+                            name += '…';
+                        }
+                        pdf.text(name, startX, cy);
+                        if (row.level)   pdf.text(row.level,   levelX, cy);
+                        if (row.s1grade) pdf.text(row.s1grade, s1X + 8,    cy, { align: 'center' });
+                        if (row.s2grade) pdf.text(row.s2grade, s2X + 8,    cy, { align: 'center' });
+                        if (row.credit)  pdf.text(row.credit,  creditX + 10, cy, { align: 'center' });
+                        cy += 1.5;
+                        if (i < rows.length - 1) { setDraw(VLGRAY, 0.2); pdf.line(startX, cy, startX + maxW, cy); }
+                        cy += 7.5;
+                    });
+                    return cy + 5;
+                }
+                const [y9, y10, y11, y12] = window.gpaData;
+                const row1Start = y;
+                const afterRow1Left = renderYear(y9, LEFT_X, row1Start, colW);
+                const afterRow1Right = renderYear(y10, RIGHT_X, row1Start, colW);
+                const row2Start = Math.max(afterRow1Left, afterRow1Right) + 10;
+                const afterRow2Left = renderYear(y11, LEFT_X, row2Start, colW);
+                const afterRow2Right = renderYear(y12, RIGHT_X, row2Start, colW);
+                const footY = Math.min(Math.max(afterRow2Left, afterRow2Right) + 14, PH - 26);
+                setDraw(LGRAY, 0.4); pdf.line(ML, footY, PW - MR, footY);
+                setFont('normal', 6.5); setColor(GRAY);
+                pdf.text('* Grades of Pass (P), Withdraw (W), or No Grade (NG) are not factored into GPA.  ·  Printed ' + printedDate, PW / 2, footY + 9, { align: 'center' });
                 pdf.save(transcriptExportFilename());
-                showImportToast('One-page transcript PDF downloaded.');
+                showImportToast('Transcript PDF downloaded.');
             } catch (error) {
-                console.error('One-page PDF export failed:', error);
-                showImportToast('Could not generate PDF export. Please try again.', true);
-            } finally {
-                if (mount) mount.remove();
+                console.error('PDF export failed:', error);
+                showImportToast('Could not generate PDF. Please try again.', true);
             }
         }
 
@@ -1722,7 +1895,8 @@ function transcriptRowsForCourse(course) {
             }
         })();
 
-        let editingCCId = null, editingTaskId = null;
+        let editingCCId = null;
+        let editingTaskId = null;
         let currentCalendarDate = new Date();
         let selectedDate = new Date().toLocaleDateString('en-CA');
 
@@ -1765,6 +1939,7 @@ function transcriptRowsForCourse(course) {
             }
             window.scrollTo(0,0);
             renderAll();
+            if (id === 'college' && typeof renderSmartTimeline === 'function') renderSmartTimeline(true);
             lucide.createIcons();
         }
 
@@ -1964,11 +2139,17 @@ function transcriptRowsForCourse(course) {
             list.innerHTML = '';
 
             const matchSearch = t => t.title.toLowerCase().includes(searchVal) || t.category.toLowerCase().includes(searchVal);
-            const selectedTasks = window.tasks.filter(t => t.date === selectedDate && matchSearch(t));
-            const overdueTasks = window.tasks.filter(t => t.date && t.date < todayStr && t.date !== selectedDate && !t.completed && matchSearch(t));
-            const upcomingTasks = window.tasks.filter(t => t.date && t.date > selectedDate && matchSearch(t));
-            const undatedTasks = window.tasks.filter(t => !t.date && matchSearch(t));
-            const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...undatedTasks];
+            const derivedTasks = (typeof getDerivedDeadlineTasksFromColleges === 'function')
+  ? getDerivedDeadlineTasksFromColleges()
+  : [];
+
+const allTasks = [...(window.tasks || []), ...derivedTasks];
+
+const selectedTasks = allTasks.filter(t => t.date === selectedDate && matchSearch(t));
+const overdueTasks = allTasks.filter(t => t.date && t.date < todayStr && t.date !== selectedDate && !t.completed && matchSearch(t));
+const upcomingTasks = allTasks.filter(t => t.date && t.date > selectedDate && matchSearch(t));
+const undatedTasks = allTasks.filter(t => !t.date && matchSearch(t));
+const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...undatedTasks];
 
             if (!allVisible.length) {
                 list.innerHTML = `<div class="text-center py-12 md:py-16 bg-zinc-50/50 dark:bg-zinc-900/30 rounded-[24px] md:rounded-[32px] border-2 border-dashed border-zinc-100 dark:border-zinc-800/50"><div class="w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-zinc-800 rounded-xl md:rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm text-emerald-500"><i data-lucide="check-circle-2"></i></div><h3 class="text-zinc-900 dark:text-white font-bold text-xs">No activities found</h3><p class="text-zinc-400 font-bold text-[11px] mt-1 mb-4">Try a different search or date.</p></div>`;
@@ -1995,10 +2176,13 @@ function transcriptRowsForCourse(course) {
                                 </div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-0.5 md:gap-1 flex-shrink-0">
-                            <button onclick="startEditTask('${t.id}')" class="text-zinc-300 hover:text-shalhevet p-1.5 md:p-2 transition-colors"><i data-lucide="pencil" class="w-3 h-3 md:w-3.5 md:h-3.5"></i></button>
-                            <button onclick="deleteTask('${t.id}')" class="text-zinc-300 hover:text-shalhevet p-1.5 md:p-2 transition-colors"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
-                        </div>`;
+                        ${t.derived
+                            ? ``
+                            : `<div class="flex items-center gap-0.5 md:gap-1 flex-shrink-0">
+                                 <button onclick="startEditTask('${t.id}')" class="text-zinc-300 hover:text-shalhevet p-1.5 md:p-2 transition-colors"><i data-lucide="pencil" class="w-3 h-3 md:w-3.5 md:h-3.5"></i></button>
+                                 <button onclick="deleteTask('${t.id}')" class="text-zinc-300 hover:text-shalhevet p-1.5 md:p-2 transition-colors"><i data-lucide="x" class="w-3.5 h-3.5"></i></button>
+                               </div>`
+                        }`;
                     list.appendChild(card);
                 }
 
@@ -2020,9 +2204,27 @@ function transcriptRowsForCourse(course) {
         }
 
         function toggleTask(id) {
-            const idx = window.tasks.findIndex(t => t.id === id);
-            if (idx !== -1) { window.tasks[idx].completed = !window.tasks[idx].completed; if (window.cloudSave) window.cloudSave(); renderActivities(); }
-        }
+    // Derived Smart Timeline deadlines (read-only in calendar: only toggle done)
+    if (String(id).startsWith('dl-')) {
+        window.deadlineDone = window.deadlineDone || {};
+        window.deadlineDone[id] = !window.deadlineDone[id];
+
+        if (typeof persistDeadlineDone === 'function') persistDeadlineDone();
+
+        // Refresh both views
+        if (typeof renderSmartTimeline === 'function') renderSmartTimeline(false);
+        renderActivities();
+        return;
+    }
+
+    // Normal user-created tasks
+    const idx = window.tasks.findIndex(t => t.id === id);
+    if (idx !== -1) {
+        window.tasks[idx].completed = !window.tasks[idx].completed;
+        if (window.cloudSave) window.cloudSave();
+        renderActivities();
+    }
+}
         function addTask() {
             const title = document.getElementById('task-title').value, date = document.getElementById('task-date').value, cat = document.getElementById('task-category').value, prio = document.getElementById('task-priority').value.toUpperCase(), type = document.getElementById('task-type').value;
             if (!title) return;
@@ -2057,6 +2259,119 @@ function transcriptRowsForCourse(course) {
         function deleteTask(id) { window.tasks = window.tasks.filter(t => t.id !== id); if (window.cloudSave) window.cloudSave(); renderActivities(); }
         function changeMonth(delta) { currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta); renderActivities(); }
 
+        const COLLEGE_APP_HUB_STATUSES = ['APPLYING', 'APPLIED', 'DEFERRED', 'WAITLISTED', 'ACCEPTED', 'REJECTED', 'COMMITTED'];
+        const COLLEGE_STATUS_OPTIONS = [
+            { value: 'RESEARCHING', label: 'Researching' },
+            { value: 'APPLYING', label: 'Applying' },
+            { value: 'APPLIED', label: 'Applied' },
+            { value: 'DEFERRED', label: 'Deferred' },
+            { value: 'WAITLISTED', label: 'Waitlisted' },
+            { value: 'ACCEPTED', label: 'Admitted' },
+            { value: 'REJECTED', label: 'Denied' },
+            { value: 'COMMITTED', label: 'Committed' }
+        ];
+        /** Shown in APPLICATION HUB only — post-submission outcomes */
+        const COLLEGE_HUB_OUTCOME_OPTIONS = [
+            { value: 'APPLIED', label: 'Applied' },
+            { value: 'DEFERRED', label: 'Deferred' },
+            { value: 'WAITLISTED', label: 'Waitlisted' },
+            { value: 'ACCEPTED', label: 'Admitted' },
+            { value: 'REJECTED', label: 'Denied' },
+            { value: 'COMMITTED', label: 'Committed' }
+        ];
+        function collegeStatusLabel(s) {
+            const u = String(s || '').toUpperCase();
+            const row = COLLEGE_STATUS_OPTIONS.find(o => o.value === u);
+            return row ? row.label : s;
+        }
+        function collegeStatusBadgeClass(status) {
+            const u = String(status || '').toUpperCase();
+            if (u === 'ACCEPTED' || u === 'COMMITTED') return 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-400';
+            if (u === 'REJECTED') return 'bg-red-50 text-red-600 dark:bg-red-950/20 dark:text-red-400';
+            if (u === 'WAITLISTED') return 'bg-amber-50 text-amber-700 dark:bg-amber-950/25 dark:text-amber-400';
+            if (u === 'DEFERRED') return 'bg-violet-50 text-violet-700 dark:bg-violet-950/25 dark:text-violet-300';
+            if (u === 'RESEARCHING') return 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300';
+            return 'bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400';
+        }
+        function renderCollegeStatusOptions(selected) {
+            return COLLEGE_STATUS_OPTIONS.map(o => `<option value="${o.value}" ${String(selected || '').toUpperCase() === o.value ? 'selected' : ''}>${o.label}</option>`).join('');
+        }
+
+        function renderHubOutcomeBarHtml(collegeId, currentStatus) {
+            const cur = String(currentStatus || '').toUpperCase();
+            return COLLEGE_HUB_OUTCOME_OPTIONS.map(o => {
+                const active = cur === o.value;
+                const cls = active ? 'col-hub-outcome-item is-active' : 'col-hub-outcome-item';
+                const check = active
+                    ? '<i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>'
+                    : '<span class="w-[18px] h-[18px] shrink-0 inline-block"></span>';
+                return `<button type="button" class="${cls}" data-status="${o.value}" onclick="setCollegeHubOutcome('${collegeId}','${o.value}')">${check}<span class="truncate">${o.label}</span></button>`;
+            }).join('');
+        }
+
+        function setCollegeHubOutcome(id, value) {
+            updateCollege(String(id), 'status', String(value || '').toUpperCase());
+        }
+
+        function renderColHubOutcomeBar() {
+            const bar = document.getElementById('col-hub-outcome-bar');
+            const sel = document.getElementById('col-status');
+            const portal = document.getElementById('portal-fields');
+            if (!bar || !sel) return;
+            if (portal && portal.classList.contains('hidden')) {
+                bar.innerHTML = '';
+                return;
+            }
+            const cur = String(sel.value || '').toUpperCase();
+            bar.innerHTML = COLLEGE_HUB_OUTCOME_OPTIONS.map(o => {
+                const active = cur === o.value;
+                const cls = active ? 'col-hub-outcome-item is-active' : 'col-hub-outcome-item';
+                const check = active
+                    ? '<i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>'
+                    : '<span class="w-[18px] h-[18px] shrink-0 inline-block"></span>';
+                return `<button type="button" class="${cls}" data-status="${o.value}">${check}<span class="truncate">${o.label}</span></button>`;
+            }).join('');
+            bar.querySelectorAll('.col-hub-outcome-item').forEach(btn => {
+                btn.addEventListener('click', () => setColAddStatus(btn.getAttribute('data-status')));
+            });
+            if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+        }
+
+        function setColAddStatus(value) {
+            const sel = document.getElementById('col-status');
+            if (!sel) return;
+            const u = String(value || '').toUpperCase();
+            sel.value = COLLEGE_STATUS_OPTIONS.some(o => o.value === u) ? u : 'RESEARCHING';
+            renderColAddStatusBar();
+            togglePortalFields();
+        }
+        function renderColAddStatusBar() {
+            const bar = document.getElementById('col-status-bar');
+            const sel = document.getElementById('col-status');
+            if (!bar || !sel) return;
+            let selectedIdx = COLLEGE_STATUS_OPTIONS.findIndex(o => o.value === String(sel.value || '').toUpperCase());
+            if (selectedIdx < 0) selectedIdx = 0;
+            bar.innerHTML = COLLEGE_STATUS_OPTIONS.map((o, i) => {
+                const done = i < selectedIdx;
+                const active = i === selectedIdx;
+                const cls = ['col-status-item'];
+                if (active) cls.push('is-active');
+                if (done) cls.push('is-done');
+                if (!active && !done) cls.push('is-upcoming');
+                const checkHtml = done
+                    ? '<i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>'
+                    : '';
+                return `<button type="button" class="${cls.join(' ')}" data-status="${o.value}" role="option" aria-selected="${active}"${active ? ' id="col-status-bar-active"' : ''}>
+                    <span class="col-status-check">${checkHtml}</span>
+                    <span class="truncate">${o.label}</span>
+                </button>`;
+            }).join('');
+            bar.querySelectorAll('.col-status-item').forEach(btn => {
+                btn.addEventListener('click', () => setColAddStatus(btn.getAttribute('data-status')));
+            });
+            if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+        }
+
         function renderCollege() {
             const grid = document.getElementById('college-grid');
             if (!grid) return;
@@ -2070,51 +2385,295 @@ function transcriptRowsForCourse(course) {
                 window.colleges.forEach(c => {
                     const card = document.createElement('div');
                     card.className = "bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm flex flex-col";
-                    const sColor = c.status === 'ACCEPTED' ? 'bg-emerald-50 text-emerald-600' : c.status === 'REJECTED' ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600';
+                    const sColor = collegeStatusBadgeClass(c.status);
                     let rColor = 'bg-zinc-100 text-zinc-600';
                     if (c.rank === 'REACH') rColor = 'bg-red-50 text-red-600';
                     else if (c.rank === 'TARGET') rColor = 'bg-amber-50 text-amber-600';
                     else if (c.rank === 'SAFETY') rColor = 'bg-emerald-50 text-emerald-600';
+                    const isCollegeAppHub = c.type === 'College' && COLLEGE_APP_HUB_STATUSES.includes(String(c.status || '').toUpperCase());
+                    const statusBadgeText = collegeStatusLabel(c.status);
                     card.innerHTML = `
                         <div class="p-5 border-b border-zinc-100 dark:border-zinc-800 space-y-4">
                             <div class="flex items-start justify-between gap-4">
                                 <div class="flex-1 min-w-0">
                                     <h3 class="inst-name font-bold text-base leading-tight break-words">${c.name}</h3>
-                                    <p class="text-xs font-bold text-zinc-400 mt-1 uppercase tracking-wider">${c.type} Plan ${c.rank ? '• '+c.rank : ''}</p>
+                                    <p class="text-xs font-bold text-zinc-400 mt-1 uppercase tracking-wider">${c.type}${c.appType ? ' • '+c.appType : ''}${c.rank ? ' • '+c.rank : ''}</p>
                                 </div>
                                 <div class="flex items-start gap-2 flex-shrink-0">
-                                    <span class="badge text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider ${sColor}">${c.status}</span>
+                                    <span class="badge text-[10px] font-bold px-3 py-1 rounded-full tracking-wide ${sColor}">${statusBadgeText}</span>
                                     <button onclick="deleteCollege('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors -mt-0.5 -mr-1"><i data-lucide="x" class="w-4 h-4"></i></button>
                                 </div>
                             </div>
                             <div class="flex flex-wrap gap-2">
                                 <span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-500 uppercase tracking-wider">${c.type.toUpperCase()}</span>
                                 ${c.rank ? `<span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 uppercase tracking-wider ${rColor}">${c.rank}</span>` : ''}
+                                ${c.appType ? `<span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 bg-shalhevet/10 text-shalhevet uppercase tracking-wider">${c.appType}</span>` : ''}
                             </div>
+                            ${c.type === 'College' && c.portalStatus ? `
+                            <div class="flex items-center gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+                                <div class="w-2 h-2 rounded-full ${c.portalStatus === 'Action Required' ? 'bg-red-500' : c.portalStatus === 'Decided' ? 'bg-emerald-500' : 'bg-amber-500'}"></div>
+                                <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Portal: ${c.portalStatus}</span>
+                                ${c.portalUrl ? `<a href="${c.portalUrl}" target="_blank" class="text-[10px] font-bold text-shalhevet hover:underline">Open Portal →</a>` : ''}
+                            </div>
+                            ` : ''}
+                            ${isCollegeAppHub ? `
+                            <div class="pt-3 border-t border-zinc-100 dark:border-zinc-800 space-y-3">
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">OUTCOME</label>
+                                    <select onchange="updateCollege('${c.id}','status',this.value)" class="w-full h-10 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-[12px] font-bold outline-none">
+                                        <option value="APPLIED" ${String(c.status||''). toUpperCase()==='APPLIED'?'selected':''}>&#8212; Awaiting Decision &#8212;</option>
+                                        <option value="DEFERRED" ${String(c.status||''). toUpperCase()==='DEFERRED'?'selected':''}>Deferred</option>
+                                        <option value="WAITLISTED" ${String(c.status||'').toUpperCase()==='WAITLISTED'?'selected':''}>Waitlisted</option>
+                                        <option value="ACCEPTED" ${String(c.status||'').toUpperCase()==='ACCEPTED'?'selected':''}>Admitted</option>
+                                        <option value="REJECTED" ${String(c.status||'').toUpperCase()==='REJECTED'?'selected':''}>Denied</option>
+                                        <option value="COMMITTED" ${String(c.status||'').toUpperCase()==='COMMITTED'?'selected':''}>Committed</option>
+                                    </select>
+                                </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div class="space-y-1.5">
+                                        <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Portal URL</label>
+                                        <input value="${c.portalUrl || ''}" onchange="updateCollege('${c.id}','portalUrl',this.value)" placeholder="https://..." class="w-full h-10 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-[12px] font-bold outline-none focus:ring-2 focus:ring-shalhevet">
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Username</label>
+                                        <input value="${c.portalUser || ''}" onchange="updateCollege('${c.id}','portalUser',this.value)" placeholder="Portal username" class="w-full h-10 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-[12px] font-bold outline-none focus:ring-2 focus:ring-shalhevet">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div class="space-y-1.5">
+                                        <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Application type</label>
+                                        <select onchange="updateCollege('${c.id}','appType',this.value)" class="w-full h-10 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-[12px] font-bold outline-none">
+                                            ${['','RD','EA','ED','ED II','REA'].map(v => `<option value="${v}" ${String(c.appType||'')===v?'selected':''}>${v || '—'}</option>`).join('')}
+                                        </select>
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Portal status</label>
+                                        <select onchange="updateCollege('${c.id}','portalStatus',this.value)" class="w-full h-10 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-[12px] font-bold outline-none">
+                                            ${['','Pending','Action Required','In Progress','Submitted','Decided'].map(v => `<option value="${v}" ${String(c.portalStatus||'')===v?'selected':''}>${v || '—'}</option>`).join('')}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div class="space-y-1.5">
+                                        <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">App deadline</label>
+                                        <input type="date" value="${c.applicationDueDate || ''}" onchange="updateCollege('${c.id}','applicationDueDate',this.value)" class="w-full h-10 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-[12px] font-bold outline-none focus:ring-2 focus:ring-shalhevet">
+                                    </div>
+                                    <div class="space-y-1.5">
+                                        <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Decision date</label>
+                                        <input type="date" value="${c.decisionDate || ''}" onchange="updateCollege('${c.id}','decisionDate',this.value)" class="w-full h-10 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-[12px] font-bold outline-none focus:ring-2 focus:ring-shalhevet">
+                                    </div>
+                                </div>
+                                <div class="text-[11px] font-bold text-zinc-400 leading-relaxed">
+                                    Deadlines will feed into Smart Timeline + your calendar.
+                                </div>
+                            </div>
+                            ` : ''}
                         </div>
                         <div class="p-5 flex-1 space-y-2">
                             <label class="text-xs font-bold text-zinc-400">Notes</label>
                             <textarea onchange="updateCollege('${c.id}', 'notes', this.value)" class="user-content w-full bg-zinc-50/50 dark:bg-zinc-800/50 border-none rounded-xl p-3 text-sm font-bold outline-none h-24 resize-none">${c.notes || ''}</textarea>
                         </div>
                         <div class="p-5 pt-0">
-                            <select onchange="updateCollege('${c.id}', 'status', this.value)" class="h-9 rounded-xl bg-zinc-50 dark:bg-zinc-800 border-none px-3 text-xs font-bold outline-none w-full uppercase tracking-wider">
-                                ${['RESEARCHING','APPLYING','APPLIED','ACCEPTED','WAITLISTED','REJECTED','COMMITTED'].map(s => `<option ${c.status === s ? 'selected' : ''}>${s}</option>`).join('')}
-                            </select>
+                            ${c.type === 'College' && isCollegeAppHub ? '' : `<label class="text-xs font-bold text-zinc-400 block mb-1.5">Status</label><select onchange="updateCollege('${c.id}', 'status', this.value)" class="h-9 rounded-xl bg-zinc-50 dark:bg-zinc-800 border-none px-3 text-xs font-bold outline-none w-full">${renderCollegeStatusOptions(c.status)}</select>`}
                         </div>`;
                     grid.appendChild(card);
                 });
             }
             lucide.createIcons();
+
+            // If Smart Timeline is visible, refresh it after any college changes
+            const timelineEl = document.getElementById('college-smart-timeline');
+            if (timelineEl && !timelineEl.classList.contains('hidden') && typeof renderSmartTimeline === 'function') {
+                renderSmartTimeline(true);
+            }
         }
+
+        function togglePortalFields() {
+            const typeEl = document.getElementById('col-type');
+            const statusEl = document.getElementById('col-status');
+            const portalFields = document.getElementById('portal-fields');
+            if (!typeEl || !statusEl || !portalFields) return;
+
+            const type = typeEl.value;
+            const status = String(statusEl.value || '').toUpperCase();
+            const shouldShow = type === 'College' && (status === 'APPLYING' || status === 'APPLIED');
+
+            if (shouldShow) portalFields.classList.remove('hidden');
+            else portalFields.classList.add('hidden');
+            // hub outcome is now a native select — no bar to render
+        }
+
         function addCollege() {
             const name = document.getElementById('col-name').value;
             if (!name) return;
-            window.colleges.push({ id: Date.now().toString(), name, type: document.getElementById('col-type').value, rank: document.getElementById('col-rank').value.toUpperCase(), status: document.getElementById('col-status').value.toUpperCase(), notes: '' });
+            const type = document.getElementById('col-type').value;
+            const status = document.getElementById('col-status').value;
+            const college = {
+                id: Date.now().toString(),
+                name,
+                type,
+                rank: document.getElementById('col-rank').value.toUpperCase(),
+                status: String(status || '').toUpperCase(),
+                notes: ''
+            };
+            // Add portal fields for colleges
+            if (type === 'College' && (String(status || '').toUpperCase() === 'APPLYING' || String(status || '').toUpperCase() === 'APPLIED')) {
+                college.portalUrl = document.getElementById('col-portal-url').value;
+                college.portalUser = document.getElementById('col-portal-user').value;
+                college.portalStatus = document.getElementById('col-portal-status').value;
+                college.appType = document.getElementById('col-app-type')?.value || '';
+                college.applicationDueDate = document.getElementById('col-app-deadline')?.value || '';
+                college.decisionDate = document.getElementById('col-decision-date')?.value || '';
+            }
+            // Apply outcome override if selected
+            const _outcomeEl = document.getElementById('col-outcome-status');
+            if (_outcomeEl && _outcomeEl.value) college.status = _outcomeEl.value;
+            window.colleges.push(college);
             if (window.cloudSave) window.cloudSave();
-            document.getElementById('col-name').value = ''; renderCollege();
+            document.getElementById('col-name').value = '';
+            document.getElementById('col-portal-url').value = '';
+            document.getElementById('col-portal-user').value = '';
+            document.getElementById('col-portal-status').value = '';
+            document.getElementById('col-app-type').value = '';
+            document.getElementById('col-app-deadline').value = '';
+            document.getElementById('col-decision-date').value = '';
+            document.getElementById('col-status').value = 'RESEARCHING';
+            if (_outcomeEl) _outcomeEl.value = '';
+            togglePortalFields();
+            renderCollege();
         }
         function updateCollege(id, field, val) { const c = window.colleges.find(x => x.id === id); if(c) c[field] = (field === 'status' || field === 'rank') ? val.toUpperCase() : val; if (window.cloudSave) window.cloudSave(); renderCollege(); }
         function deleteCollege(id) { window.colleges = window.colleges.filter(x => x.id !== id); if (window.cloudSave) window.cloudSave(); renderCollege(); }
+      // ─────────────────────────────────────────────────────────────
+// SMART TIMELINE (derived deadlines from colleges that are applying)
+// ─────────────────────────────────────────────────────────────
+
+// Guest/local storage for "done" toggles (cloud sync will be added later)
+window.deadlineDone = window.deadlineDone || (() => {
+    try { return JSON.parse(localStorage.getItem('deadlineDone') || '{}'); } catch { return {}; }
+})();
+
+function persistDeadlineDone() {
+    try { localStorage.setItem('deadlineDone', JSON.stringify(window.deadlineDone || {})); } catch {}
+}
+
+function daysUntil(dateStr) {
+    if (!dateStr) return 9999;
+    const d = new Date(dateStr + 'T12:00:00');
+    const now = new Date();
+    const nowNoon = new Date(now.toISOString().slice(0, 10) + 'T12:00:00');
+    return Math.round((d - nowNoon) / (1000 * 60 * 60 * 24));
+}
+
+function urgencyMeta(days) {
+    if (days < 0) return { label: 'Overdue', cls: 'bg-red-600 text-white' };
+    if (days <= 10) return { label: 'Due soon', cls: 'bg-amber-500 text-white' };
+    return { label: 'On track', cls: 'bg-emerald-500 text-white' };
+}
+
+function getDerivedDeadlineTasksFromColleges() {
+    const applying = (window.colleges || []).filter(c =>
+  c.type === 'College' &&
+  (c.status === 'APPLYING' || c.status === 'APPLIED')
+);
+
+    const tasks = [];
+
+    applying.forEach(college => {
+        const appId = `dl-${college.id}-app`;
+        if (college.applicationDueDate) {
+            tasks.push({
+                id: appId,
+                derived: true,
+                title: `Application Due: ${college.name}`,
+                category: 'College Deadlines',
+                type: 'Application',
+                priority: 'HIGH',
+                date: college.applicationDueDate,
+                completed: !!(window.deadlineDone && window.deadlineDone[appId])
+            });
+        }
+
+        const decisionId = `dl-${college.id}-decision`;
+        if (college.decisionDate) {
+            tasks.push({
+                id: decisionId,
+                derived: true,
+                title: `Decision Released: ${college.name}`,
+                category: 'College Deadlines',
+                type: 'Decision',
+                priority: 'MEDIUM',
+                date: college.decisionDate,
+                completed: !!(window.deadlineDone && window.deadlineDone[decisionId])
+            });
+        }
+    });
+
+    return tasks;
+}
+
+window.toggleDeadlineDerived = function(id) {
+    window.deadlineDone = window.deadlineDone || {};
+    window.deadlineDone[id] = !window.deadlineDone[id];
+    persistDeadlineDone();
+
+    renderSmartTimeline(false);
+};
+
+function renderSmartTimeline(force = false) {
+    const listEl = document.getElementById('timeline-list');
+    if (!listEl) return;
+
+    const derived = getDerivedDeadlineTasksFromColleges();
+    derived.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+
+    if (!derived.length) {
+        listEl.innerHTML = `
+            <div class="py-10 text-center bg-zinc-50/50 dark:bg-zinc-900/30 rounded-[24px] border-2 border-dashed border-zinc-100 dark:border-zinc-800/50">
+                <p class="text-zinc-900 dark:text-white font-bold text-xs">No deadlines yet</p>
+                <p class="text-zinc-400 font-bold text-[11px] mt-1">Add colleges with APP DEADLINE / DECISION DATE to build your smart timeline.</p>
+            </div>`;
+        return;
+    }
+
+    listEl.innerHTML = derived.map(t => {
+        const d = daysUntil(t.date);
+        const meta = urgencyMeta(d);
+        const completedCls = t.completed ? 'opacity-60 line-through text-zinc-400' : '';
+
+        return `
+          <div class="bg-white dark:bg-zinc-900 rounded-[20px] border border-zinc-100 dark:border-zinc-800 p-4 flex items-center justify-between gap-4">
+            <div class="min-w-0">
+              <div class="font-bold text-zinc-900 dark:text-zinc-100 truncate ${completedCls}">
+                ${t.title}
+              </div>
+              <div class="text-[11px] font-bold text-zinc-400 uppercase tracking-widest mt-1">
+                ${t.category}
+              </div>
+              <div class="text-sm font-bold ${completedCls} mt-2">
+                Due: ${t.date}
+              </div>
+            </div>
+
+            <div class="flex items-end gap-3">
+              <span class="text-[11px] font-black px-3 py-1 rounded-full ${meta.cls}">
+                ${meta.label}
+              </span>
+
+              <button
+                onclick="toggleDeadlineDerived('${t.id}')"
+                class="px-4 py-2 rounded-xl font-bold text-sm
+                  ${t.completed
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all'}">
+                ${t.completed ? 'Done' : 'Mark Done'}
+              </button>
+            </div>
+          </div>
+        `;
+    }).join('');
+}
 
         function normalizeCoCurrStatus(item) {
             const explicit = String(item?.status || '').toUpperCase();
@@ -2194,6 +2753,39 @@ function transcriptRowsForCourse(course) {
             closeEditCCModal();
             renderCoCurr();
         }
+
+        function toggleGradeSelection(btn) {
+            btn.classList.toggle('bg-shalhevet');
+            btn.classList.toggle('text-white');
+            btn.classList.toggle('border-shalhevet');
+        }
+
+        function getSelectedGrades(selectorId) {
+            const container = document.getElementById(selectorId);
+            if (!container) return [];
+            const buttons = container.querySelectorAll('.cc-grade-btn');
+            const selected = [];
+            buttons.forEach(btn => {
+                if (btn.classList.contains('bg-shalhevet')) {
+                    selected.push(btn.dataset.grade);
+                }
+            });
+            return selected;
+        }
+
+        function setSelectedGrades(selectorId, grades) {
+            const container = document.getElementById(selectorId);
+            if (!container) return;
+            const buttons = container.querySelectorAll('.cc-grade-btn');
+            buttons.forEach(btn => {
+                if (grades.includes(btn.dataset.grade)) {
+                    btn.classList.add('bg-shalhevet', 'text-white', 'border-shalhevet');
+                } else {
+                    btn.classList.remove('bg-shalhevet', 'text-white', 'border-shalhevet');
+                }
+            });
+        }
+
         function resetCCForm() { document.getElementById('cc-name').value = ''; document.getElementById('cc-role').value = ''; document.getElementById('cc-desc').value = ''; document.getElementById('cc-hours').value = ''; document.getElementById('cc-status').value = 'IN_PROGRESS'; setSelectedGrades('cc-grade-selector', []); }
         function deleteCoCurr(id) { window.cocurrs = window.cocurrs.filter(x => x.id !== id); if (window.cloudSave) window.cloudSave(); renderCoCurr(); }
 
@@ -3685,17 +4277,22 @@ Recovery mode:
             document.getElementById('nav-clock').innerText = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()} · ${h}:${m} ${ampm}`;
         }
 
-        const courseCatalog = document.getElementById('course-catalog');
-        SHALHEVET_COURSES.sort().forEach(item => { const opt = document.createElement('option'); opt.value = item; courseCatalog.appendChild(opt); });
-        const catalog = document.getElementById('combined-catalog');
-        [...SHALHEVET_COURSES, ...SHALHEVET_ACTIVITIES].sort().forEach(item => { const opt = document.createElement('option'); opt.value = item; catalog.appendChild(opt); });
-        const actCatalog = document.getElementById('activity-catalog');
-        SHALHEVET_ACTIVITIES.sort().forEach(item => { const opt = document.createElement('option'); opt.value = item; actCatalog.appendChild(opt); });
+        document.addEventListener('DOMContentLoaded', function() {
+            const courseCatalog = document.getElementById('course-catalog');
+            SHALHEVET_COURSES.sort().forEach(item => { const opt = document.createElement('option'); opt.value = item; courseCatalog.appendChild(opt); });
+            const catalog = document.getElementById('combined-catalog');
+            [...SHALHEVET_COURSES, ...SHALHEVET_ACTIVITIES].sort().forEach(item => { const opt = document.createElement('option'); opt.value = item; catalog.appendChild(opt); });
+            const actCatalog = document.getElementById('activity-catalog');
+            SHALHEVET_ACTIVITIES.sort().forEach(item => { const opt = document.createElement('option'); opt.value = item; actCatalog.appendChild(opt); });
 
-        updateClock();
-        setInterval(updateClock, 30000);
-        renderAll();
-        showPage('home');
+            updateClock();
+            setInterval(updateClock, 30000);
+            // Ensure application hub fields reflect default dropdown values on first load
+            // Status bar replaced with native select — no init needed
+            try { togglePortalFields(); } catch {}
+            renderAll();
+            showPage('home');
+        });
     </script>
 </body>
 </html>
