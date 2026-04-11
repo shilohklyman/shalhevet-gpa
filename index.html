@@ -13,6 +13,8 @@
             const ICONS = {
                 'arrow-right': '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
                 'bar-chart-3': '<path d="M3 3v18h18"/><path d="M8 14v-5"/><path d="M12 14V8"/><path d="M16 14V5"/>',
+                'book-open': '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+                'target': '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
                 'check': '<path d="M20 6 9 17l-5-5"/>',
                 'check-circle-2': '<circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/>',
                 'check-square': '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="m9 12 2 2 4-4"/>',
@@ -35,6 +37,7 @@
                 'school': '<path d="m2 9 10-5 10 5"/><path d="M4 10v8"/><path d="M20 10v8"/><path d="M8 14v4"/><path d="M12 12v6"/><path d="M16 14v4"/><path d="M2 18h20"/>',
                 'search': '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
                 'tag': '<path d="M20 10 10 20l-7-7V4h9l8 8Z"/><path d="M7 7h.01"/>',
+                'star': '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
                 'trophy': '<path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M5 6H3a2 2 0 0 0 2 5h2"/><path d="M19 6h2a2 2 0 0 1-2 5h-2"/>',
                 'user': '<path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="8" r="4"/>',
                 'users': '<path d="M16 21a6 6 0 0 0-8 0"/><circle cx="9" cy="8" r="3"/><path d="M22 21a6 6 0 0 0-5-5.5"/><path d="M16 3.5a3 3 0 0 1 0 9"/>',
@@ -113,40 +116,40 @@
         #hamburger-btn.active { background-color: #cc0000; color: white; border-color: #cc0000; }
         select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem center; padding-right: 2rem !important; }
         .print-transcript { display: none; }
-        .transcript-sheet { display: flex; flex-direction: column; gap: 14px; }
+        .transcript-sheet { display: flex; flex-direction: column; gap: 20px; }
         .transcript-print-header { border: 1px solid #e4e4e7; border-radius: 16px; padding: 14px 18px; background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%); }
         .transcript-print-brand { font-size: 17px; font-weight: 800; color: #18181b; letter-spacing: 0.01em; }
         .transcript-print-sub { margin-top: 2px; font-size: 11px; font-weight: 700; color: #71717a; letter-spacing: 0.02em; }
         .transcript-year { background: white; border: 1px solid #e4e4e7; border-radius: 16px; overflow: hidden; }
-        .transcript-year-header { padding: 13px 18px; border-bottom: 1px solid #d4d4d8; background: #fcfcfc; }
+        .transcript-year-header { padding: 16px 20px; border-bottom: 1px solid #d4d4d8; background: #fcfcfc; }
         .transcript-year-title { font-size: 14px; font-weight: 800; color: #18181b; letter-spacing: 0.04em; text-transform: uppercase; }
         .transcript-table { width: 100%; border-collapse: collapse; }
-        .transcript-table th { padding: 8px 12px; font-size: 10px; font-weight: 800; color: #71717a; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 1px solid #d4d4d8; }
-        .transcript-table td { padding: 8px 12px; font-size: 12px; font-weight: 600; color: #27272a; border-bottom: 1px solid #ececf0; }
+        .transcript-table th { padding: 11px 16px; font-size: 10px; font-weight: 800; color: #71717a; text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 1px solid #d4d4d8; }
+        .transcript-table td { padding: 12px 16px; font-size: 12px; font-weight: 600; color: #27272a; border-bottom: 1px solid #ececf0; }
         .transcript-table tbody tr:last-child td { border-bottom: none; }
         .transcript-table .course-col { width: 58%; }
         .transcript-table .level-col, .transcript-table .grade-col, .transcript-table .credit-col { width: 10.5%; text-align: center; }
-        .transcript-empty { padding: 32px 22px; color: #71717a; font-size: 13px; font-weight: 700; }
+        .transcript-empty { padding: 36px 24px; color: #71717a; font-size: 13px; font-weight: 700; }
 
         /* ── Official-style print transcript ── */
         .tp-page { font-family: "Plus Jakarta Sans", Arial, sans-serif; font-size: 9pt; color: #000; background: #fff; }
-        .tp-top { text-align: center; margin-bottom: 12pt; border-bottom: 1.5pt solid #000; padding-bottom: 10pt; }
+        .tp-top { text-align: center; margin-bottom: 14pt; border-bottom: 1.5pt solid #000; padding-bottom: 12pt; }
         .tp-title { font-size: 14pt; font-weight: 800; margin: 0 0 8pt; }
         .tp-stats-row { display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 6pt 20pt; font-size: 7.5pt; line-height: 1.5; }
         .tp-stats-row strong { font-weight: 800; }
-        .tp-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 12pt 16pt; align-items: stretch; }
-        .tp-year { margin-bottom: 0; display: flex; flex-direction: column; min-height: 0; border: 0.5pt solid #d4d4d8; border-radius: 2pt; padding: 5pt 6pt 6pt; box-sizing: border-box; }
+        .tp-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 18pt 20pt; align-items: stretch; }
+        .tp-year { margin-bottom: 0; display: flex; flex-direction: column; min-height: 0; border: 0.5pt solid #d4d4d8; border-radius: 3pt; padding: 8pt 10pt 10pt; box-sizing: border-box; }
         .tp-year-rows { flex: 1 1 auto; min-height: 48pt; }
-        .tp-year-header { border-bottom: 1pt solid #000; padding-bottom: 2pt; margin-bottom: 1pt; }
-        .tp-year-title { font-size: 8pt; font-weight: 800; }
-        .tp-col-headers { display: grid; grid-template-columns: 1fr 34pt 17pt 17pt 20pt; font-size: 6.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #555; border-bottom: 0.5pt solid #bbb; padding: 1.5pt 0; }
+        .tp-year-header { border-bottom: 1pt solid #000; padding-bottom: 4pt; margin-bottom: 3pt; }
+        .tp-year-title { font-size: 8.5pt; font-weight: 800; }
+        .tp-col-headers { display: grid; grid-template-columns: 1fr 34pt 17pt 17pt 20pt; font-size: 6.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #555; border-bottom: 0.5pt solid #bbb; padding: 3pt 0 2pt; }
         .tp-col-headers span { text-align: center; }
         .tp-col-headers span:first-child { text-align: left; }
-        .tp-academic-year { font-size: 7pt; font-weight: 800; padding: 2pt 0 1pt; }
-        .tp-row { display: grid; grid-template-columns: 1fr 34pt 17pt 17pt 20pt; font-size: 7.5pt; padding: 1.5pt 0; border-bottom: 0.25pt solid #e0e0e0; }
+        .tp-academic-year { font-size: 7pt; font-weight: 800; padding: 3pt 0 2pt; }
+        .tp-row { display: grid; grid-template-columns: 1fr 34pt 17pt 17pt 20pt; font-size: 7.5pt; padding: 3pt 0; border-bottom: 0.25pt solid #e0e0e0; }
         .tp-row span { text-align: center; }
         .tp-row span:first-child { text-align: left; padding-right: 3pt; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .tp-empty { font-size: 7pt; color: #888; padding: 4pt 0; font-style: italic; }
+        .tp-empty { font-size: 7pt; color: #888; padding: 6pt 0; font-style: italic; }
         /* Add-institution status stepper (matches dashboard dark menu style) */
         .col-status-bar { -webkit-overflow-scrolling: touch; }
         .col-status-item { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; padding: 8px 12px; border-radius: 10px; font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, 0.92); cursor: pointer; transition: background 0.15s ease, color 0.15s ease; border: none; background: transparent; font-family: inherit; }
@@ -385,7 +388,7 @@
                     <div class="space-y-1.5">
                         <label class="text-xs font-bold text-zinc-400">Type</label>
                         <select id="edit-task-type" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
-                            <option>Homework</option><option>Test</option><option>Quiz</option><option>Project</option><option>Event</option><option>Meeting</option>
+                            <option>Homework</option><option>Test</option><option>Quiz</option><option>Project</option><option>Essay</option><option>Event</option><option>Meeting</option>
                         </select>
                     </div>
                 </div>
@@ -574,6 +577,12 @@
                 <button onclick="showPage('cocurr')" data-page="cocurr" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all">
                     <span class="hidden lg:inline">Co-Curricular Log</span><span class="lg:hidden">Activities</span>
                 </button>
+                <button onclick="showPage('goals')" data-page="goals" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all">
+                    <span class="hidden lg:inline">Goals</span><span class="lg:hidden">Goals</span>
+                </button>
+                <button onclick="showPage('resources')" data-page="resources" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all">
+                    <span class="hidden lg:inline">Student Resources</span><span class="lg:hidden">Resources</span>
+                </button>
             </div>
             <div class="flex items-center gap-1.5">
                 <div id="nav-btn-group" class="flex items-center gap-1.5">
@@ -689,6 +698,34 @@
                         <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"></i>
                     </div>
                 </button>
+                <button onclick="showPage('goals')" class="group w-full flex items-start justify-between gap-4 p-4 md:p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[24px] transition-all duration-300 hover:border-shalhevet hover:shadow-lg hover:shadow-red-900/5 hover:-translate-y-0.5">
+                    <div class="flex items-start gap-4 md:gap-5">
+                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+                            <i data-lucide="circle" class="text-shalhevet w-5 h-5 md:w-6 md:h-6"></i>
+                        </div>
+                        <div class="text-left space-y-1">
+                            <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">Goals</h3>
+                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Pin your academic, personal, and college goals as sticky notes so you always know what you're working toward.</p>
+                        </div>
+                    </div>
+                    <div class="w-7 h-7 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-shalhevet group-hover:text-white mt-1">
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"></i>
+                    </div>
+                </button>
+                <button onclick="showPage('resources')" class="group w-full flex items-start justify-between gap-4 p-4 md:p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[24px] transition-all duration-300 hover:border-shalhevet hover:shadow-lg hover:shadow-red-900/5 hover:-translate-y-0.5">
+                    <div class="flex items-start gap-4 md:gap-5">
+                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+                            <i data-lucide="book-open" class="text-shalhevet w-5 h-5 md:w-6 md:h-6"></i>
+                        </div>
+                        <div class="text-left space-y-1">
+                            <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">Student Resources</h3>
+                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Quick access to the apps, portals, and tools every Shalhevet student needs — from college apps to AI tutors.</p>
+                        </div>
+                    </div>
+                    <div class="w-7 h-7 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-shalhevet group-hover:text-white mt-1">
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"></i>
+                    </div>
+                </button>
             </div>
         </div>
 
@@ -708,17 +745,17 @@
             <div class="bg-white dark:bg-zinc-900 rounded-[24px] p-6 md:p-8 flex flex-col md:flex-row justify-around items-center gap-6 md:gap-8 shadow-xl border border-zinc-200 dark:border-zinc-800 no-print-gpa">
                 <div class="text-center space-y-1 flex-1">
                     <div id="total-uw" class="text-3xl md:text-4xl font-bold text-shalhevet leading-none">0.00</div>
-                    <div class="text-xs font-bold text-zinc-400">Cumulative Unweighted</div>
+                    <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Cumulative Unweighted</div>
                 </div>
                 <div class="hidden md:block w-[2px] h-12 bg-zinc-100 dark:bg-zinc-800"></div>
                 <div class="text-center space-y-1 flex-1">
                     <div id="total-wt" class="text-3xl md:text-4xl font-bold text-shalhevet leading-none">0.00</div>
-                    <div class="text-xs font-bold text-zinc-400">Cumulative Weighted</div>
+                    <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Cumulative Weighted</div>
                 </div>
                 <div class="hidden md:block w-[2px] h-12 bg-zinc-100 dark:bg-zinc-800"></div>
                 <div class="text-center space-y-1 flex-1">
                     <div id="total-credits" class="text-3xl md:text-4xl font-bold text-shalhevet leading-none">0.0</div>
-                    <div class="text-xs font-bold text-zinc-400">Total Credits</div>
+                    <div class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Total Credits</div>
                 </div>
             </div>
             <div class="flex flex-col sm:flex-row gap-3 no-print max-w-[1120px] mx-auto">
@@ -788,7 +825,7 @@
             </div>
             <div id="task-form-container" class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
-                    <h3 class="text-xs font-bold text-zinc-400">Add Activity</h3>
+                    <h3 class="text-xs font-bold text-shalhevet uppercase tracking-wider">ADD ACTIVITY</h3>
                 </div>
                 <div class="p-6 space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-[1.5fr_1.5fr_1fr_1fr_1fr] gap-4 items-end">
@@ -803,7 +840,7 @@
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">TYPE</label>
                             <select id="task-type" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
-                                <option>Homework</option><option>Test</option><option>Quiz</option><option>Project</option><option>Event</option><option>Meeting</option>
+                                <option>Homework</option><option>Test</option><option>Quiz</option><option>Project</option><option>Essay</option><option>Event</option><option>Meeting</option>
                             </select>
                         </div>
                         <div class="space-y-2">
@@ -855,25 +892,25 @@
         <div id="page-college" class="page-content hidden space-y-8">
             <div class="text-left space-y-3">
                 <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">Upperclassmen <span class="text-shalhevet">Resources</span></h1>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Build and manage your full college list, including colleges, yeshivot, and seminaries. Track each school by status (from researching to committed), classify reach/target/safety balance, and save notes so your final decisions and application planning stay organized.</p>
+                <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Build and manage your full college list, including colleges, yeshivot, and seminaries. Track each school by status (from researching to committed), classify reach/target/safety balance, and save notes so your decisions stay organized. Add application deadlines and decision dates to any school and they'll automatically appear in your calendar as high-priority events — and surface in the Smart Timeline below so every key date is always in view.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="bg-white dark:bg-zinc-900 rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-zinc-100 dark:border-zinc-800">
                     <div class="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-950/20 flex items-center justify-center text-shalhevet"><i data-lucide="school" class="w-5 h-5"></i></div>
-                    <div><div id="col-stat-total" class="text-2xl font-bold leading-none">0</div><div class="text-xs font-bold text-zinc-400 mt-1">Institutions</div></div>
+                    <div><div id="col-stat-total" class="text-2xl font-bold leading-none">0</div><div class="text-xs font-bold text-zinc-400 mt-1 uppercase tracking-wider">Institutions</div></div>
                 </div>
                 <div class="bg-white dark:bg-zinc-900 rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-zinc-100 dark:border-zinc-800">
                     <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/20 flex items-center justify-center text-blue-600"><i data-lucide="check-circle-2" class="w-5 h-5"></i></div>
-                    <div><div id="col-stat-applying" class="text-2xl font-bold leading-none">0</div><div class="text-xs font-bold text-zinc-400 mt-1">Applying / Applied</div></div>
+                    <div><div id="col-stat-applying" class="text-2xl font-bold leading-none">0</div><div class="text-xs font-bold text-zinc-400 mt-1 uppercase tracking-wider">Applying / Applied</div></div>
                 </div>
                 <div class="bg-white dark:bg-zinc-900 rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-zinc-100 dark:border-zinc-800">
                     <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/20 flex items-center justify-center text-amber-600"><i data-lucide="search" class="w-5 h-5"></i></div>
-                    <div><div id="col-stat-researching" class="text-2xl font-bold leading-none">0</div><div class="text-xs font-bold text-zinc-400 mt-1">Researching</div></div>
+                    <div><div id="col-stat-researching" class="text-2xl font-bold leading-none">0</div><div class="text-xs font-bold text-zinc-400 mt-1 uppercase tracking-wider">Researching</div></div>
                 </div>
             </div>
             <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
-                    <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-wider">ADD INSTITUTION</h3>
+                    <h3 class="text-xs font-bold text-shalhevet uppercase tracking-wider">ADD INSTITUTION</h3>
                 </div>
                 <div class="p-6 space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
@@ -904,7 +941,7 @@
                                     <option value="">—</option><option>Reach</option><option>Target</option><option>Safety</option>
                                 </select>
                             </div>
-                            <button onclick="addCollege()" class="bg-shalhevet hover:bg-red-700 text-white font-bold h-11 px-6 rounded-xl transition-all text-sm">ADD</button>
+                            <button onclick="addCollege()" class="bg-shalhevet hover:bg-red-700 text-white font-bold h-11 px-6 rounded-xl transition-all text-sm">Add</button>
                         </div>
                     </div>
                     <!-- Portal + application hub: colleges only, once you are past &quot;Researching&quot; -->
@@ -958,7 +995,7 @@
             <div id="college-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
             <div id="college-smart-timeline" class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
-                    <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-wider">SMART TIMELINE</h3>
+                    <h3 class="text-xs font-bold text-shalhevet uppercase tracking-wider">SMART TIMELINE</h3>
                 </div>
 
                 <div class="p-6 space-y-4">
@@ -980,20 +1017,20 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="bg-white dark:bg-zinc-900 rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-zinc-100 dark:border-zinc-800">
                     <div class="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-950/20 flex items-center justify-center text-shalhevet"><i data-lucide="trophy" class="w-5 h-5"></i></div>
-                    <div><div id="cc-stat-total" class="text-2xl font-bold leading-none">0</div><div class="text-xs font-bold text-zinc-400 mt-1">Activities</div></div>
+                    <div><div id="cc-stat-total" class="text-2xl font-bold leading-none">0</div><div class="text-xs font-bold text-zinc-400 mt-1 uppercase tracking-wider">Activities</div></div>
                 </div>
                 <div class="bg-white dark:bg-zinc-900 rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-zinc-100 dark:border-zinc-800">
                     <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/20 flex items-center justify-center text-blue-600"><i data-lucide="users" class="w-5 h-5"></i></div>
-                    <div><div id="cc-stat-leadership" class="text-2xl font-bold leading-none">0</div><div class="text-xs font-bold text-zinc-400 mt-1">Leadership</div></div>
+                    <div><div id="cc-stat-leadership" class="text-2xl font-bold leading-none">0</div><div class="text-xs font-bold text-zinc-400 mt-1 uppercase tracking-wider">Leadership</div></div>
                 </div>
                 <div class="bg-white dark:bg-zinc-900 rounded-[20px] p-4 flex items-center gap-4 shadow-sm border border-zinc-100 dark:border-zinc-800">
                     <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 flex items-center justify-center text-emerald-600"><i data-lucide="clock" class="w-5 h-5"></i></div>
-                    <div><div id="cc-stat-hours" class="text-2xl font-bold leading-none">0h</div><div class="text-xs font-bold text-zinc-400 mt-1">Weekly Hours</div></div>
+                    <div><div id="cc-stat-hours" class="text-2xl font-bold leading-none">0h</div><div class="text-xs font-bold text-zinc-400 mt-1 uppercase tracking-wider">Weekly Hours</div></div>
                 </div>
             </div>
             <div id="cc-form-container" class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
-                    <h3 class="text-xs font-bold text-zinc-400">Add Co-Curricular</h3>
+                    <h3 class="text-xs font-bold text-shalhevet uppercase tracking-wider">ADD CO-CURRICULAR</h3>
                 </div>
                 <div class="p-6 space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1046,6 +1083,203 @@
         </div>
 
     </main>
+
+    <!-- GOALS PAGE -->
+    <div id="page-goals" class="page-content hidden max-w-[1400px] mx-auto px-4 md:px-8 py-6 md:py-10 space-y-8">
+        <div class="text-left space-y-3">
+            <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">My <span class="text-shalhevet">Goals</span></h1>
+            <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Pin your academic, personal, and college goals as sticky notes. Jot down what you're working toward and check them off when you get there.</p>
+        </div>
+        <!-- Add Goal Form -->
+        <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+            <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
+                <h3 class="text-xs font-bold text-shalhevet uppercase tracking-wider">ADD GOAL</h3>
+            </div>
+            <div class="p-6 flex flex-col md:flex-row gap-4 items-end">
+                <div class="flex-1 space-y-2">
+                    <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">GOAL</label>
+                    <input id="goal-text" type="text" placeholder="e.g. Raise my math GPA this semester" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold focus:ring-2 focus:ring-shalhevet outline-none">
+                </div>
+                <div class="w-full md:w-44 space-y-2">
+                    <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">CATEGORY</label>
+                    <select id="goal-category" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                        <option value="academic">Academic</option>
+                        <option value="college">College</option>
+                        <option value="personal">Personal</option>
+                        <option value="spiritual">Spiritual</option>
+                        <option value="social">Social</option>
+                    </select>
+                </div>
+                <button onclick="addGoal()" class="w-full md:w-auto h-11 px-8 bg-shalhevet hover:bg-red-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-red-900/20 text-sm flex-shrink-0">Add</button>
+            </div>
+        </div>
+        <!-- Sticky Notes Grid -->
+        <div id="goals-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"></div>
+    </div>
+
+    <!-- RESOURCES PAGE -->
+    <div id="page-resources" class="page-content hidden max-w-[1400px] mx-auto px-4 md:px-8 py-6 md:py-10 space-y-8">
+        <div class="text-left space-y-3">
+            <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">Student <span class="text-shalhevet">Resources</span></h1>
+            <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Quick access to every tool, portal, and platform you need as a Shalhevet student — from submitting college applications to finding your Jewish community on campus.</p>
+        </div>
+        <div class="space-y-6 max-w-[860px]">
+
+            <!-- Section 1 -->
+            <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+                <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="send" class="text-shalhevet w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-shalhevet uppercase tracking-wider">APPLICATION &amp; STRATEGY DESK</h3>
+                        <p class="text-[11px] font-medium text-zinc-400 mt-0.5">Portals for submitting your work and tracking official status</p>
+                    </div>
+                </div>
+                <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <a href="https://www.commonapp.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Common App</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Primary mailbox for most college applications</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.universityofcalifornia.edu/apply" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">UC App</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Required for all University of California campuses</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.scoir.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Scoir</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Key research tool for being able to find the college and place for you</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://studentaid.gov/h/apply-for-aid/fafsa" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">FAFSA</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Mandatory gateway for all federal student loans and grants</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+                <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-violet-50 dark:bg-violet-950/30 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="rotate-ccw" class="text-violet-600 w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-violet-600 uppercase tracking-wider">AI TOOLS</h3>
+                        <p class="text-[11px] font-medium text-zinc-400 mt-0.5">High-speed tools for brainstorming, research, writing, and studying</p>
+                    </div>
+                </div>
+                <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <a href="https://claude.ai" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Claude</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Thinking partner for outlining essays, explaining hard concepts, and research</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://chatgpt.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">ChatGPT</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Brainstorming, drafting, and explaining difficult topics</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://gemini.google.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Gemini</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Google's AI assistant — great for research and summarizing</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://notebooklm.google.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">NotebookLM</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Upload your PDFs or notes to create a personalized AI tutor using only your facts</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+                <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="graduation-cap" class="text-blue-600 w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-blue-600 uppercase tracking-wider">ACADEMIC SUPPORT &amp; TUTORIALS</h3>
+                        <p class="text-[11px] font-medium text-zinc-400 mt-0.5">Your "second teachers" when you don't understand a concept from class</p>
+                    </div>
+                </div>
+                <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <a href="https://www.khanacademy.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Khan Academy</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Short, world-class video lessons for math, science, and SAT prep</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://study.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Study.com</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Comprehensive lessons and prep for AP exams and college-level courses</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://app.schoology.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Schoology</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Shalhevet's official portal for daily assignments and class resources</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://powerschool.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">PowerSchool</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Official grade tracking and school records portal</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                       <a href="https://www.desmos.com/calculator" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Desmos</p><p class="text-xs font-medium text-zinc-400 mt-0.5">The definitive tool for graphing and visualizing math and science data</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Section 4 -->
+            <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+                <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="pencil" class="text-emerald-600 w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-wider">WRITING &amp; INTEGRITY SUITE</h3>
+                        <p class="text-[11px] font-medium text-zinc-400 mt-0.5">Ensure your work meets college-level standards for formatting and citations</p>
+                    </div>
+                </div>
+                <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <a href="https://www.bibcitation.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">BibCitation</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Fast, ad-free bibliography generator — create citations in seconds</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://owl.purdue.edu" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Purdue OWL</p><p class="text-xs font-medium text-zinc-400 mt-0.5">The final authority on MLA, APA, and Chicago citation formats</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Section 5 -->
+            <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+                <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950/30 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="star" class="text-amber-600 w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-amber-600 uppercase tracking-wider">JEWISH LIFE &amp; GAP YEAR</h3>
+                        <p class="text-[11px] font-medium text-zinc-400 mt-0.5">Plan your time in Israel or find your community on a college campus</p>
+                    </div>
+                </div>
+                <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <a href="https://www.masaisrael.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Masa Israel</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Definitive search engine for Gap Year, Yeshiva, and Seminary programs</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.jlic.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">JLIC</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Torah community and religious guidance on college campuses</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.hillel.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Hillel</p><p class="text-xs font-medium text-zinc-400 mt-0.5">On-campus home for Jewish community, Shabbat, and kosher food</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.chabad.org/on-campus" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Chabad on Campus</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Welcoming Jewish hub present at hundreds of universities worldwide</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                      <a href="https://www.oucollegeguide.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">OU College Guide</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Specialized guide for Jewish life and academic fit on secular campuses</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <footer class="pt-4 pb-6 md:pt-6 md:pb-8 no-print text-center">
         <p class="text-[11px] font-bold text-zinc-400 dark:text-zinc-600">MANAGED AND DEVELOPED BY ADAM SANDLER '27</p>
@@ -1168,6 +1402,7 @@
                     if (data.tasks) window.tasks = data.tasks;
                     if (data.colleges) window.colleges = stripSampleColleges(data.colleges);
                     if (data.cocurrs) window.cocurrs = stripSampleCoCurrs(data.cocurrs);
+                    if (data.goals) window.goals = data.goals;
                     if (data.deadlineDone) window.deadlineDone = data.deadlineDone || {};
                     else window.deadlineDone = window.deadlineDone || {};
                 } else {
@@ -1190,6 +1425,7 @@
   tasks: window.tasks,
   colleges: window.colleges,
   cocurrs: window.cocurrs,
+  goals: window.goals || [],
   deadlineDone: window.deadlineDone || {},
   updatedAt: Date.now()
 });
@@ -1203,6 +1439,7 @@
   localStorage.setItem('tasks', JSON.stringify(window.tasks));
   localStorage.setItem('colleges', JSON.stringify(window.colleges));
   localStorage.setItem('cocurrs', JSON.stringify(window.cocurrs));
+  localStorage.setItem('goals', JSON.stringify(window.goals || []));
   localStorage.setItem('deadlineDone', JSON.stringify(window.deadlineDone || {}));
   return;
 }
@@ -1704,7 +1941,7 @@ function transcriptRowsForCourse(course) {
                 return `
                 <div class="tp-year">
                     <div class="tp-year-header">
-                        <div class="tp-year-title">${year.name} Weighted GPA: ${wtGPA}</div>
+                        <div class="tp-year-title">${year.name.toUpperCase()} Weighted GPA: ${wtGPA}</div>
                     </div>
                     <div class="tp-col-headers">
                         <span>Course</span><span>Level</span><span>S1</span><span>S2</span><span>Credit</span>
@@ -1903,6 +2140,7 @@ function transcriptRowsForCourse(course) {
         window.tasks = stripSampleTasks(JSON.parse(localStorage.getItem('tasks')));
         window.colleges = stripSampleColleges(JSON.parse(localStorage.getItem('colleges')));
         window.cocurrs = stripSampleCoCurrs(JSON.parse(localStorage.getItem('cocurrs')));
+        window.goals = JSON.parse(localStorage.getItem('goals')) || [];
         localStorage.setItem('tasks', JSON.stringify(window.tasks));
         localStorage.setItem('colleges', JSON.stringify(window.colleges));
         localStorage.setItem('cocurrs', JSON.stringify(window.cocurrs));
@@ -2008,7 +2246,7 @@ function transcriptRowsForCourse(course) {
                 const card = document.createElement('div');
                 card.className = "gpa-year-card bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm";
                 let yearUW = 0, yearWT = 0, yearCr = 0;
-                let html = `<div class="gpa-year-header px-6 md:px-8 py-4 md:py-5 border-b border-zinc-200 dark:border-zinc-800"><h2 class="font-bold text-[1rem] md:text-[1.1rem] leading-none">${year.name}</h2></div><div class="p-0">`;
+                let html = `<div class="gpa-year-header px-6 md:px-8 py-4 md:py-5 border-b border-zinc-200 dark:border-zinc-800"><h2 class="font-bold text-[1rem] md:text-[1.1rem] leading-none uppercase tracking-wide">${year.name}</h2></div><div class="p-0">`;
                 if (year.courses.length === 0) {
                     html += `<div class="px-6 md:px-8 py-10 text-center"><p class="text-xs font-bold text-zinc-300 dark:text-zinc-600 uppercase tracking-wider">No courses added for this year</p></div>`;
                 } else {
@@ -2208,7 +2446,7 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
                     const isUndated = !t.date;
                     const isOverdue = !isUndated && !t.completed && t.date < todayStr;
                     card.className = `bg-white dark:bg-zinc-900 p-4 rounded-[20px] border border-zinc-100 dark:border-zinc-800 flex items-center justify-between group hover:shadow-md transition-all gap-3 ${t.completed ? 'opacity-60' : ''} ${isOverdue ? 'ring-1 ring-red-200 dark:ring-red-900/40' : ''}`;
-                    const pColor = t.priority === 'HIGH' ? 'bg-amber-50 text-amber-700' : t.priority === 'MEDIUM' ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300' : 'bg-blue-50 text-blue-600';
+                    const pColor = t.priority === 'HIGH' ? 'bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-400' : t.priority === 'MEDIUM' ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400';
                     const tagColor = isOverdue ? 'text-red-500' : 'text-zinc-400';
                     card.innerHTML = `
                         <div class="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
@@ -2339,7 +2577,7 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
             if (u === 'REJECTED') return 'bg-red-50 text-red-600 dark:bg-red-950/20 dark:text-red-400';
             if (u === 'WAITLISTED') return 'bg-amber-50 text-amber-700 dark:bg-amber-950/25 dark:text-amber-400';
             if (u === 'DEFERRED') return 'bg-violet-50 text-violet-700 dark:bg-violet-950/25 dark:text-violet-300';
-            if (u === 'RESEARCHING') return 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300';
+            if (u === 'RESEARCHING') return 'bg-amber-50 text-amber-700 dark:bg-amber-950/25 dark:text-amber-400';
             return 'bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400';
         }
         function renderCollegeStatusOptions(selected) {
@@ -2439,24 +2677,28 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
                     if (c.rank === 'REACH') rColor = 'bg-red-50 text-red-600';
                     else if (c.rank === 'TARGET') rColor = 'bg-amber-50 text-amber-600';
                     else if (c.rank === 'SAFETY') rColor = 'bg-emerald-50 text-emerald-600';
+                    let tColor = 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500';
+                    if (c.type === 'College') tColor = 'text-white' + ' ' + 'bg-[#1a5c3a]';
+                    else if (c.type === 'Yeshiva') tColor = 'text-white' + ' ' + 'bg-[#2645c7]';
+                    else if (c.type === 'Seminary') tColor = 'text-white' + ' ' + 'bg-[#7c3aed]';
+                    else if (c.type === 'Other') tColor = 'text-white' + ' ' + 'bg-[#1e3a5f]';
                     const isCollegeAppHub = c.type === 'College' && COLLEGE_APP_HUB_STATUSES.includes(String(c.status || '').toUpperCase());
-                    const statusBadgeText = collegeStatusLabel(c.status);
+                    const statusBadgeText = collegeStatusLabel(c.status).toUpperCase();
                     card.innerHTML = `
                         <div class="p-5 border-b border-zinc-100 dark:border-zinc-800 space-y-4">
                             <div class="flex items-start justify-between gap-4">
                                 <div class="flex-1 min-w-0">
                                     <h3 class="inst-name font-bold text-base leading-tight break-words">${c.name}</h3>
-                                    <p class="text-xs font-bold text-zinc-400 mt-1 uppercase tracking-wider">${c.type}${c.appType ? ' • '+c.appType : ''}${c.rank ? ' • '+c.rank : ''}</p>
                                 </div>
                                 <div class="flex items-start gap-2 flex-shrink-0">
-                                    <span class="badge text-[10px] font-bold px-3 py-1 rounded-full tracking-wide ${sColor}">${statusBadgeText}</span>
+                                    <span class="badge text-[10px] font-bold px-3 py-1 rounded-full tracking-wide uppercase ${sColor}">${statusBadgeText}</span>
                                     <button onclick="startEditCol('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors -mt-0.5"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
                                     <button onclick="deleteCollege('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors -mt-0.5 -mr-1"><i data-lucide="x" class="w-4 h-4"></i></button>
                                 </div>
                             </div>
                             <div class="flex flex-wrap gap-2">
-                                <span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 bg-zinc-100 dark:bg-zinc-800 text-zinc-500 uppercase tracking-wider">${c.type.toUpperCase()}</span>
-                                ${c.rank ? `<span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 uppercase tracking-wider ${rColor}">${c.rank}</span>` : ''}
+                                <span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 uppercase tracking-wider ${tColor}">${c.type.toUpperCase()}</span>
+                                ${c.rank ? `<span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 uppercase tracking-wider ${rColor}">${String(c.rank).toUpperCase()}</span>` : ''}
                                 ${c.appType ? `<span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 bg-shalhevet/10 text-shalhevet uppercase tracking-wider">${c.appType}</span>` : ''}
                             </div>
                             ${c.type === 'College' && c.portalStatus ? `
@@ -2524,9 +2766,7 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
                             <label class="text-xs font-bold text-zinc-400">Notes</label>
                             <textarea onchange="updateCollege('${c.id}', 'notes', this.value)" class="user-content w-full bg-zinc-50/50 dark:bg-zinc-800/50 border-none rounded-xl p-3 text-sm font-bold outline-none h-24 resize-none">${c.notes || ''}</textarea>
                         </div>
-                        <div class="p-5 pt-0">
-                            ${c.type === 'College' && isCollegeAppHub ? '' : `<label class="text-xs font-bold text-zinc-400 block mb-1.5">Status</label><select onchange="updateCollege('${c.id}', 'status', this.value)" class="h-9 rounded-xl bg-zinc-50 dark:bg-zinc-800 border-none px-3 text-xs font-bold outline-none w-full">${renderCollegeStatusOptions(c.status)}</select>`}
-                        </div>`;
+                        `;
                     grid.appendChild(card);
                 });
             }
@@ -2648,14 +2888,13 @@ function urgencyMeta(days) {
 }
 
 function getDerivedDeadlineTasksFromColleges() {
-    const applying = (window.colleges || []).filter(c =>
-  c.type === 'College' &&
-  (c.status === 'APPLYING' || c.status === 'APPLIED')
+    const withDates = (window.colleges || []).filter(c =>
+  c.type === 'College' && (c.applicationDueDate || c.decisionDate)
 );
 
     const tasks = [];
 
-    applying.forEach(college => {
+    withDates.forEach(college => {
         const appId = `dl-${college.id}-app`;
         if (college.applicationDueDate) {
             tasks.push({
@@ -2678,7 +2917,7 @@ function getDerivedDeadlineTasksFromColleges() {
                 title: `Decision Released: ${college.name}`,
                 category: 'College Deadlines',
                 type: 'Decision',
-                priority: 'MEDIUM',
+                priority: 'HIGH',
                 date: college.decisionDate,
                 completed: !!(window.deadlineDone && window.deadlineDone[decisionId])
             });
@@ -2766,7 +3005,7 @@ function renderSmartTimeline(force = false) {
             document.getElementById('cc-stat-leadership').innerText = normalizedItems.filter(c => ['Captain','Founder','President','Lead','Head'].some(k => c.role.toLowerCase().includes(k.toLowerCase()))).length;
             document.getElementById('cc-stat-hours').innerText = normalizedItems.reduce((acc, c) => acc + (c.status === 'IN_PROGRESS' ? parseInt(c.hours || 0, 10) : 0), 0) + 'h';
             if (normalizedItems.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-16 bg-zinc-50/50 dark:bg-zinc-900/30 rounded-[32px] border-2 border-dashed border-zinc-100 dark:border-zinc-800/50"><div class="w-12 h-12 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm text-zinc-300"><i data-lucide="clipboard-list"></i></div><h3 class="text-zinc-900 dark:text-white font-bold text-xs">No activities added</h3><p class="text-zinc-400 font-bold text-[11px] mt-1 mb-4">Log your first co-curricular activity.</p></div>`;
+                grid.innerHTML = `<div class="col-span-full text-center py-16 bg-zinc-50/50 dark:bg-zinc-900/30 rounded-[32px] border-2 border-dashed border-zinc-100 dark:border-zinc-800/50"><div class="w-12 h-12 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm text-zinc-300"><i data-lucide="clipboard-list"></i></div><h3 class="text-zinc-900 dark:text-white font-bold text-xs">No activities added</h3><p class="text-zinc-400 font-bold text-[11px] mt-1 mb-4">Log your first co-curricular.</p></div>`;
             } else {
                 normalizedItems.forEach(c => {
                     const statusMeta = {
@@ -2863,6 +3102,75 @@ function renderSmartTimeline(force = false) {
 
         function resetCCForm() { document.getElementById('cc-name').value = ''; document.getElementById('cc-role').value = ''; document.getElementById('cc-desc').value = ''; document.getElementById('cc-hours').value = ''; document.getElementById('cc-status').value = 'IN_PROGRESS'; setSelectedGrades('cc-grade-selector', []); }
         function deleteCoCurr(id) { window.cocurrs = window.cocurrs.filter(x => x.id !== id); if (window.cloudSave) window.cloudSave(); renderCoCurr(); }
+
+        // ── GOALS ──────────────────────────────────────────────
+        const GOAL_COLORS = {
+            academic:  { bg: '#fef9c3', border: '#fde047', label: '#854d0e', dot: '#eab308' },
+            college:   { bg: '#dbeafe', border: '#93c5fd', label: '#1e40af', dot: '#3b82f6' },
+            personal:  { bg: '#fce7f3', border: '#f9a8d4', label: '#9d174d', dot: '#ec4899' },
+            spiritual: { bg: '#f0fdf4', border: '#86efac', label: '#166534', dot: '#22c55e' },
+            social:    { bg: '#fdf4ff', border: '#d8b4fe', label: '#6b21a8', dot: '#a855f7' },
+        };
+
+        function addGoal() {
+            const text = document.getElementById('goal-text').value.trim();
+            if (!text) return;
+            const category = document.getElementById('goal-category').value;
+            window.goals.push({ id: Date.now().toString(), text, category, done: false });
+            document.getElementById('goal-text').value = '';
+            saveGoals();
+            renderGoals();
+        }
+
+        function toggleGoalDone(id) {
+            const g = window.goals.find(x => x.id === id);
+            if (g) { g.done = !g.done; saveGoals(); renderGoals(); }
+        }
+
+        function deleteGoal(id) {
+            window.goals = window.goals.filter(x => x.id !== id);
+            saveGoals();
+            renderGoals();
+        }
+
+        function saveGoals() {
+            localStorage.setItem('goals', JSON.stringify(window.goals));
+            if (window.cloudSave) window.cloudSave();
+        }
+
+        function renderGoals() {
+            const grid = document.getElementById('goals-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            if (!window.goals.length) {
+                grid.innerHTML = `<div class="col-span-full text-center py-16 bg-zinc-50/50 dark:bg-zinc-900/30 rounded-[32px] border-2 border-dashed border-zinc-100 dark:border-zinc-800/50"><div class="w-12 h-12 bg-white dark:bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm text-zinc-300"><i data-lucide="target" class="w-6 h-6"></i></div><h3 class="text-zinc-900 dark:text-white font-bold text-xs">No goals yet</h3><p class="text-zinc-400 font-bold text-[11px] mt-1">Add your first goal above.</p></div>`;
+                lucide.createIcons();
+                return;
+            }
+            window.goals.forEach(g => {
+                const c = GOAL_COLORS[g.category] || GOAL_COLORS.academic;
+                const note = document.createElement('div');
+                note.style.cssText = `background:${c.bg};border:1.5px solid ${c.border};border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:2px 3px 12px rgba(0,0,0,0.07);transition:transform 0.15s,box-shadow 0.15s;position:relative;`;
+                note.onmouseenter = () => { note.style.transform = 'translateY(-2px)'; note.style.boxShadow = '2px 6px 20px rgba(0,0,0,0.12)'; };
+                note.onmouseleave = () => { note.style.transform = ''; note.style.boxShadow = '2px 3px 12px rgba(0,0,0,0.07)'; };
+                note.innerHTML = `
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                        <span style="font-size:10px;font-weight:800;color:${c.label};text-transform:uppercase;letter-spacing:0.1em;display:flex;align-items:center;gap:5px;">
+                            <span style="width:7px;height:7px;border-radius:50%;background:${c.dot};flex-shrink:0;"></span>
+                            ${g.category}
+                        </span>
+                        <button onclick="deleteGoal('${g.id}')" style="color:#a1a1aa;background:none;border:none;cursor:pointer;padding:2px;line-height:0;" onmouseenter="this.style.color='#cc0000'" onmouseleave="this.style.color='#a1a1aa'">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                        </button>
+                    </div>
+                    <p style="font-size:14px;font-weight:700;color:#18181b;line-height:1.5;flex:1;${g.done ? 'text-decoration:line-through;opacity:0.45;' : ''}">${g.text}</p>
+                    <button onclick="toggleGoalDone('${g.id}')" style="display:flex;align-items:center;gap:7px;background:${g.done ? c.dot : 'rgba(255,255,255,0.7)'};border:1.5px solid ${c.border};border-radius:10px;padding:7px 12px;font-size:11px;font-weight:800;color:${g.done ? '#fff' : c.label};cursor:pointer;transition:all 0.15s;width:fit-content;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                        ${g.done ? 'Done!' : 'Mark done'}
+                    </button>`;
+                grid.appendChild(note);
+            });
+        }
 
         function showPDFPrivacyWarning() {
             let overlay = document.getElementById('pdf-privacy-warning');
@@ -4339,6 +4647,7 @@ Recovery mode:
             safeRender('Activities', renderActivities);
             safeRender('College', renderCollege);
             safeRender('Co-curricular', renderCoCurr);
+            safeRender('Goals', renderGoals);
             safeRender('Icons', () => lucide.createIcons());
         }
 
