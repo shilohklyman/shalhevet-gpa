@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="apple-touch-icon" href="logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         (() => {
@@ -169,8 +170,14 @@
         .gpa-disclaimer { border-top: 1px solid #e4e4e7; padding-top: 18px; }
         .gpa-year-card { border-width: 1px; box-shadow: 0 1px 2px rgba(24, 24, 27, 0.03); }
         .gpa-year-header, .gpa-semester-block, .gpa-year-footer { position: relative; }
-        .gpa-year-header { background: transparent; }
-        .gpa-year-footer { border-top: 1px solid #e4e4e7; }
+        .gpa-year-header { background: transparent; cursor: pointer; user-select: none; }
+        .gpa-year-header:hover { background: rgba(0,0,0,0.015); }
+        .dark .gpa-year-header:hover { background: rgba(255,255,255,0.03); }
+        .gpa-sem-header { cursor: pointer; user-select: none; border-radius: 8px; margin: -4px -4px 0; padding: 4px; transition: background 0.15s; }
+        .gpa-sem-header:hover { background: rgba(0,0,0,0.04); }
+        .dark .gpa-sem-header:hover { background: rgba(255,255,255,0.05); }
+        .gpa-collapse-chevron { transition: transform 0.2s ease; }
+        .gpa-collapse-chevron.collapsed { transform: rotate(-90deg); }
         .gpa-course-row { padding-bottom: 12px; border-bottom: 1px solid #e4e4e7; }
         .gpa-course-row:last-child { padding-bottom: 0; border-bottom: none; }
         .gpa-scale-table th, .gpa-scale-table td { transition: border-color 0.2s ease, color 0.2s ease; }
@@ -305,7 +312,7 @@
                 </div>
                 <div class="space-y-1.5">
                     <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Contact</h3>
-                    <p>For questions or concerns about this Privacy Policy, please email us at <a href="/cdn-cgi/l/email-protection#30535f5e445153444358515c5954514358525f51425470575d51595c1e535f5d" class="text-shalhevet hover:underline"><span class="__cf_email__" data-cfemail="5d3e3233293c3e292e353c3134393c2e353f323c2f391d3a303c3431733e3230">[email&#160;protected]</span></a>.</p>
+                    <p>For questions or concerns about this Privacy Policy, please email us at <a href="mailto:contactshalidashboard@gmail.com" class="text-shalhevet hover:underline">contactshalidashboard@gmail.com</a>.</p>
                 </div>
             </div>
             <div class="pt-5 flex-shrink-0">
@@ -363,7 +370,7 @@
                 </div>
                 <div class="space-y-1.5">
                     <h3 class="font-bold text-zinc-900 dark:text-white text-sm">Contact</h3>
-                    <p>For questions or concerns regarding these Terms, please email us at <a href="/cdn-cgi/l/email-protection#3e5d51504a5f5d4a4d565f52575a5f4d565c515f4c5a7e59535f5752105d5153" class="text-shalhevet hover:underline"><span class="__cf_email__" data-cfemail="e1828e8f958082959289808d8885809289838e809385a1868c80888dcf828e8c">[email&#160;protected]</span></a>.</p>
+                    <p>For questions or concerns regarding these Terms, please email us at <a href="mailto:contactshalidashboard@gmail.com" class="text-shalhevet hover:underline">contactshalidashboard@gmail.com</a>.</p>
                 </div>
             </div>
             <div class="pt-5 flex-shrink-0">
@@ -547,70 +554,85 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="bg-[#121212] dark:bg-[#050505] h-[56px] md:h-[60px] sticky top-0 z-[999] shadow-xl flex items-center justify-between px-3 md:px-8">
-        <div class="flex items-center gap-3 md:gap-6">
-            <div class="flex items-center gap-2 md:gap-3 cursor-pointer group" onclick="showPage('home')">
-                <div class="w-[44px] h-[44px] md:w-[52px] md:h-[52px] bg-[#121212] dark:bg-[#050505] flex items-center justify-center flex-shrink-0">
-                    <img src="logo.png" alt="Logo" class="w-[86%] h-[86%] object-contain" />
-                </div>
-                <div class="flex items-center leading-none">
-                    <span class="nav-logo-text inline-flex items-baseline gap-1.5 md:gap-2.5 whitespace-nowrap">
-                        <span class="text-[0.65rem] sm:text-[0.8rem] md:text-[0.9rem] font-bold text-white">SHALHEVET</span>
-                        <span class="text-[0.65rem] sm:text-[0.8rem] md:text-[0.9rem] font-bold text-shalhevet">DASHBOARD</span>
-                    </span>
-                </div>
+    <nav class="bg-[#121212] dark:bg-[#050505] h-[56px] md:h-[60px] sticky top-0 z-[999] shadow-xl flex items-center px-3 md:px-8">
+        <!-- Left: Logo -->
+        <div class="flex-none flex items-center gap-2 md:gap-3 cursor-pointer group" onclick="showPage('home')">
+            <div class="w-[44px] h-[44px] md:w-[52px] md:h-[52px] bg-[#121212] dark:bg-[#050505] flex items-center justify-center flex-shrink-0">
+                <img src="logo.png" alt="Logo" class="w-[86%] h-[86%] object-contain" />
             </div>
-            <div id="nav-clock" class="hidden lg:block text-[12px] text-white/40 font-bold whitespace-nowrap"></div>
+            <div class="flex items-center leading-none">
+                <span class="nav-logo-text inline-flex items-baseline gap-1.5 md:gap-2.5 whitespace-nowrap">
+                    <span class="text-[0.65rem] sm:text-[0.8rem] md:text-[0.9rem] font-bold text-white">SHALHEVET</span>
+                    <span class="text-[0.65rem] sm:text-[0.8rem] md:text-[0.9rem] font-bold text-shalhevet">DASHBOARD</span>
+                </span>
+            </div>
         </div>
 
-        <div class="flex items-center gap-1.5 md:gap-4">
-            <div class="hidden md:flex items-center gap-0.5">
-                <button onclick="showPage('gpa')" data-page="gpa" class="nav-link px-2 py-1.5 rounded-2xl text-[11px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
+        <!-- Center: Nav links -->
+        <div class="flex-1 flex items-center justify-center">
+            <div class="hidden md:flex items-center gap-1">
+                <button onclick="showPage('home')" data-page="home" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
+                    Home
+                </button>
+                <button onclick="showPage('gpa')" data-page="gpa" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
                     GPA Tracker
                 </button>
-                <button onclick="showPage('activities')" data-page="activities" class="nav-link px-2 py-1.5 rounded-2xl text-[11px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
+                <button onclick="showPage('activities')" data-page="activities" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
                     Tasks &amp; Activities
                 </button>
-                <button onclick="showPage('college')" data-page="college" class="nav-link px-2 py-1.5 rounded-2xl text-[11px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
+                <button onclick="showPage('college')" data-page="college" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
                     Upperclassmen Resources
                 </button>
-                <button onclick="showPage('cocurr')" data-page="cocurr" class="nav-link px-2 py-1.5 rounded-2xl text-[11px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
+                <button onclick="showPage('cocurr')" data-page="cocurr" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
                     Co-Curricular Log
                 </button>
-                <button onclick="showPage('goals')" data-page="goals" class="nav-link px-2 py-1.5 rounded-2xl text-[11px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
+                <button onclick="showPage('goals')" data-page="goals" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
                     Goals
                 </button>
-                <button onclick="showPage('resources')" data-page="resources" class="nav-link px-2 py-1.5 rounded-2xl text-[11px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
+                <button onclick="showPage('resources')" data-page="resources" class="nav-link px-3 py-1.5 rounded-2xl text-[13px] font-bold text-white/60 hover:bg-white/10 hover:text-white transition-all whitespace-nowrap">
                     Other Tools
                 </button>
             </div>
-            <div class="flex items-center gap-1.5">
-                <div id="nav-btn-group" class="flex items-center gap-1.5">
-                <div id="auth-nav-area">
-                    <button onclick="signInWithGoogle()" class="w-8 h-8 md:w-auto md:h-9 md:px-4 md:rounded-xl rounded-full bg-[#222] border border-[#333] text-white/75 hover:border-shalhevet hover:text-white font-bold text-[10px] md:text-xs flex items-center justify-center md:gap-1.5 transition-all">
-                        <i data-lucide="user" class="w-3.5 h-3.5"></i>
-                        <span class="hidden md:inline">Sign In</span>
-                    </button>
-                </div>
-                <button onclick="toggleHamburgerMenu()" id="hamburger-btn" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-full border border-shalhevet text-shalhevet hover:bg-shalhevet/10 transition-all">
-                    <svg class="w-3.5 h-3.5 md:w-4 md:h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                        <line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/>
-                    </svg>
+        </div>
+
+        <!-- Right: Controls -->
+        <div class="flex-none flex items-center gap-1.5">
+            <div id="nav-btn-group" class="flex items-center gap-1.5">
+            <div id="auth-nav-area">
+                <button onclick="signInWithGoogle()" class="w-8 h-8 md:w-auto md:h-9 md:px-4 md:rounded-xl rounded-full bg-[#222] border border-[#333] text-white/75 hover:border-shalhevet hover:text-white font-bold text-[10px] md:text-xs flex items-center justify-center md:gap-1.5 transition-all">
+                    <i data-lucide="user" class="w-3.5 h-3.5"></i>
+                    <span class="hidden md:inline">Sign In</span>
                 </button>
-                <button onclick="toggleDarkMode()" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-full border border-[#333] text-white hover:border-[#555] transition-all">
-                    <i data-lucide="moon" id="dark-icon-svg" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
-                </button>
-                </div>
+            </div>
+            <button onclick="toggleHamburgerMenu()" id="hamburger-btn" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-full border border-shalhevet text-shalhevet hover:bg-shalhevet/10 transition-all">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/>
+                </svg>
+            </button>
+            <button onclick="toggleDarkMode()" class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-full border border-[#333] text-white hover:border-[#555] transition-all">
+                <i data-lucide="moon" id="dark-icon-svg" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
+            </button>
             </div>
         </div>
     </nav>
 
     <!-- Hamburger Dropdown -->
-    <div id="hamburger-menu" class="hidden fixed top-[56px] md:top-[60px] left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-[4px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl z-[1000] overflow-hidden w-[200px]">
+    <div id="hamburger-menu" class="hidden fixed top-[56px] md:top-[60px] left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-[4px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-xl z-[1000] overflow-hidden w-[240px]">
         <div class="py-2">
-            <button onclick="document.getElementById('tos-modal').classList.add('open'); lucide.createIcons(); toggleHamburgerMenu();" class="w-full px-5 py-3 text-center text-[13px] font-bold text-shalhevet hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">Terms of Service</button>
-            <button onclick="document.getElementById('privacy-modal').classList.add('open'); lucide.createIcons(); toggleHamburgerMenu();" class="w-full px-5 py-3 text-center text-[13px] font-bold text-shalhevet hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">Privacy Policy</button>
-            <button onclick="document.getElementById('contact-modal').classList.add('open'); lucide.createIcons(); toggleHamburgerMenu();" class="w-full px-5 py-3 text-center text-[13px] font-bold text-shalhevet hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">Contact</button>
+            <div class="px-5 pt-2 pb-1">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Tools</p>
+            </div>
+            <button onclick="showPage('home'); toggleHamburgerMenu();" class="w-full px-5 py-2.5 text-left text-[13px] font-bold text-zinc-800 dark:text-zinc-200 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-shalhevet transition-colors">Home</button>
+            <button onclick="showPage('gpa'); toggleHamburgerMenu();" class="w-full px-5 py-2.5 text-left text-[13px] font-bold text-zinc-800 dark:text-zinc-200 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-shalhevet transition-colors">GPA Tracker</button>
+            <button onclick="showPage('activities'); toggleHamburgerMenu();" class="w-full px-5 py-2.5 text-left text-[13px] font-bold text-zinc-800 dark:text-zinc-200 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-shalhevet transition-colors">Tasks & Activities</button>
+            <button onclick="showPage('college'); toggleHamburgerMenu();" class="w-full px-5 py-2.5 text-left text-[13px] font-bold text-zinc-800 dark:text-zinc-200 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-shalhevet transition-colors">Upperclassmen Resources</button>
+            <button onclick="showPage('cocurr'); toggleHamburgerMenu();" class="w-full px-5 py-2.5 text-left text-[13px] font-bold text-zinc-800 dark:text-zinc-200 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-shalhevet transition-colors">Co-Curricular Log</button>
+            <button onclick="showPage('goals'); toggleHamburgerMenu();" class="w-full px-5 py-2.5 text-left text-[13px] font-bold text-zinc-800 dark:text-zinc-200 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-shalhevet transition-colors">Goals</button>
+            <button onclick="showPage('resources'); toggleHamburgerMenu();" class="w-full px-5 py-2.5 text-left text-[13px] font-bold text-zinc-800 dark:text-zinc-200 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-shalhevet transition-colors">Other Resources</button>
+            <div class="mx-4 my-2 border-t border-zinc-100 dark:border-zinc-800"></div>
+            <button onclick="document.getElementById('tos-modal').classList.add('open'); lucide.createIcons(); toggleHamburgerMenu();" class="w-full px-5 py-2.5 text-left text-[13px] font-bold text-zinc-800 dark:text-zinc-200 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-shalhevet transition-colors">Terms of Service</button>
+            <button onclick="document.getElementById('privacy-modal').classList.add('open'); lucide.createIcons(); toggleHamburgerMenu();" class="w-full px-5 py-2.5 text-left text-[13px] font-bold text-zinc-800 dark:text-zinc-200 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-shalhevet transition-colors">Privacy Policy</button>
+            <button onclick="document.getElementById('contact-modal').classList.add('open'); lucide.createIcons(); toggleHamburgerMenu();" class="w-full px-5 py-2.5 text-left text-[13px] font-bold text-zinc-800 dark:text-zinc-200 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-shalhevet transition-colors">Contact</button>
         </div>
     </div>
 
@@ -632,100 +654,189 @@
     <main class="max-w-[1400px] mx-auto p-4 md:p-8">
 
         <!-- HOME PAGE -->
-        <div id="page-home" class="page-content space-y-8 md:space-y-10 py-6 md:py-10 max-w-[980px] mx-auto">
-            <div class="text-center space-y-3 md:space-y-4 pt-2">
-                <h1 class="text-3xl md:text-5xl font-bold leading-[1.1] text-zinc-900 dark:text-white">
-                    Your student<br /><span class="text-shalhevet">dashboard.</span>
-                </h1>
-                <p class="text-zinc-500 dark:text-zinc-400 text-sm md:text-base font-medium max-w-[450px] mx-auto leading-relaxed">
-                    Everything you need to manage your academic life, activities, and future plans in one place.
-                </p>
-            </div>
-            <div class="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
-                <button onclick="showPage('gpa')" class="group w-full flex items-start justify-between gap-4 p-4 md:p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[24px] transition-all duration-300 hover:border-shalhevet hover:shadow-lg hover:shadow-red-900/5 hover:-translate-y-0.5">
-                    <div class="flex items-start gap-4 md:gap-5">
-                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
-                            <i data-lucide="bar-chart-3" class="text-shalhevet w-5 h-5 md:w-6 md:h-6"></i>
+        <div id="page-home" class="page-content py-6 md:py-8 max-w-[1100px] mx-auto">
+            <div class="grid md:grid-cols-2 gap-0 rounded-[28px] overflow-hidden border border-zinc-200 dark:border-zinc-800">
+
+                <!-- LEFT: greeting + tool list -->
+                <div class="p-6 md:p-8 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800">
+                    <div class="mb-6">
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-zinc-900 dark:text-white leading-tight">Your <span class="text-shalhevet" id="home-greeting-name">student dashboard.</span></h1>
+                    </div>
+
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3">Your tools</p>
+
+                    <!-- GPA featured -->
+                    <button onclick="showPage('gpa')" class="group w-full flex items-center gap-3 p-4 bg-shalhevet hover:bg-red-700 rounded-2xl mb-2 transition-all duration-200 text-left">
+                        <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="bar-chart-3" class="text-white w-4 h-4"></i>
                         </div>
-                        <div class="text-left space-y-1">
-                            <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">GPA Tracker</h3>
-                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Calculate your weighted and unweighted GPA across all four years.</p>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-bold text-white leading-tight">GPA Tracker</div>
+                            <div class="text-xs text-white/70 mt-0.5">Weighted & unweighted for all four years</div>
+                        </div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-white/60 flex-shrink-0 transition-transform group-hover:translate-x-0.5"></i>
+                    </button>
+
+                    <!-- Other tools -->
+                    <button onclick="showPage('activities')" class="group w-full flex items-center gap-3 p-3.5 bg-zinc-50 dark:bg-zinc-800 hover:border-shalhevet border border-zinc-100 dark:border-zinc-700 rounded-2xl mb-2 transition-all duration-200 text-left hover:bg-red-50 dark:hover:bg-red-950/20">
+                        <div class="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="check-square" class="text-shalhevet w-4 h-4"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-shalhevet transition-colors">Tasks & Activities</div>
+                            <div class="text-xs text-zinc-400 mt-0.5">Due dates, priorities, and assignments</div>
+                        </div>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-zinc-300 flex-shrink-0 group-hover:text-shalhevet transition-colors"></i>
+                    </button>
+
+                    <button onclick="showPage('college')" class="group w-full flex items-center gap-3 p-3.5 bg-zinc-50 dark:bg-zinc-800 hover:border-shalhevet border border-zinc-100 dark:border-zinc-700 rounded-2xl mb-2 transition-all duration-200 text-left hover:bg-red-50 dark:hover:bg-red-950/20">
+                        <div class="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="graduation-cap" class="text-shalhevet w-4 h-4"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-shalhevet transition-colors">Upperclassmen Resources</div>
+                            <div class="text-xs text-zinc-400 mt-0.5">College, yeshiva & seminary planner</div>
+                        </div>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-zinc-300 flex-shrink-0 group-hover:text-shalhevet transition-colors"></i>
+                    </button>
+
+                    <button onclick="showPage('cocurr')" class="group w-full flex items-center gap-3 p-3.5 bg-zinc-50 dark:bg-zinc-800 hover:border-shalhevet border border-zinc-100 dark:border-zinc-700 rounded-2xl transition-all duration-200 text-left hover:bg-red-50 dark:hover:bg-red-950/20">
+                        <div class="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="clipboard-list" class="text-shalhevet w-4 h-4"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-shalhevet transition-colors">Co-Curricular Log</div>
+                            <div class="text-xs text-zinc-400 mt-0.5">Roles, hours & impact notes</div>
+                        </div>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-zinc-300 flex-shrink-0 group-hover:text-shalhevet transition-colors"></i>
+                    </button>
+
+                    <button onclick="showPage('goals')" class="group w-full flex items-center gap-3 p-3.5 bg-zinc-50 dark:bg-zinc-800 hover:border-shalhevet border border-zinc-100 dark:border-zinc-700 rounded-2xl mt-2 transition-all duration-200 text-left hover:bg-red-50 dark:hover:bg-red-950/20">
+                        <div class="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="target" class="text-shalhevet w-4 h-4"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-shalhevet transition-colors">Goals</div>
+                            <div class="text-xs text-zinc-400 mt-0.5">Sticky notes, always visible</div>
+                        </div>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-zinc-300 flex-shrink-0 group-hover:text-shalhevet transition-colors"></i>
+                    </button>
+
+                    <button onclick="showPage('resources')" class="group w-full flex items-center gap-3 p-3.5 bg-zinc-50 dark:bg-zinc-800 hover:border-shalhevet border border-zinc-100 dark:border-zinc-700 rounded-2xl mt-2 transition-all duration-200 text-left hover:bg-red-50 dark:hover:bg-red-950/20">
+                        <div class="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="book-open" class="text-shalhevet w-4 h-4"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-shalhevet transition-colors">Other Resources</div>
+                            <div class="text-xs text-zinc-400 mt-0.5">Portals, AI tools & Judaics</div>
+                        </div>
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-zinc-300 flex-shrink-0 group-hover:text-shalhevet transition-colors"></i>
+                    </button>
+                </div>
+
+                <!-- RIGHT: today's tasks + GPA chart -->
+                <div class="p-6 md:p-8 bg-zinc-50 dark:bg-zinc-900/60 flex flex-col gap-5">
+
+                    <!-- Today's assignments -->
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Today's Activities and Events</p>
+                            <button onclick="showPage('activities')" class="text-[10px] font-bold text-shalhevet hover:underline">View all →</button>
+                        </div>
+                        <div id="home-today-tasks" class="space-y-2">
+                            <p class="text-xs text-zinc-400 italic">Loading...</p>
                         </div>
                     </div>
-                    <div class="w-7 h-7 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-shalhevet group-hover:text-white mt-1">
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"></i>
-                    </div>
-                </button>
-                <button onclick="showPage('activities')" class="group w-full flex items-start justify-between gap-4 p-4 md:p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[24px] transition-all duration-300 hover:border-shalhevet hover:shadow-lg hover:shadow-red-900/5 hover:-translate-y-0.5">
-                    <div class="flex items-start gap-4 md:gap-5">
-                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
-                            <i data-lucide="check-square" class="text-shalhevet w-5 h-5 md:w-6 md:h-6"></i>
+
+                    <!-- GPA by year - redesigned to match screenshot -->
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">GPA by year</p>
+                            <button onclick="showPage('gpa')" class="text-[10px] font-bold text-shalhevet hover:underline">Full tracker →</button>
                         </div>
-                        <div class="text-left space-y-1">
-                            <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">Tasks and Activities</h3>
-                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Track assignments, tests, meetings, and events by date and priority with a built-in calendar view.</p>
+                        <div class="bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-2xl overflow-hidden">
+                            <div class="grid grid-cols-2">
+                                <!-- Left: table -->
+	                                <div class="border-r border-zinc-100 dark:border-zinc-700">
+	                                    <table class="w-full text-[11px] table-fixed">
+	                                        <thead>
+	                                            <tr class="border-b border-zinc-100 dark:border-zinc-700">
+	                                                <th class="text-left px-2 py-2.5 font-bold text-zinc-400 uppercase tracking-wider text-[9px] w-[32%]">Year</th>
+	                                                <th class="text-center px-1 py-2.5 font-bold text-zinc-400 uppercase tracking-wider text-[9px] w-[22%]">UW</th>
+	                                                <th class="text-center px-1 py-2.5 font-bold text-zinc-400 uppercase tracking-wider text-[9px] w-[22%]">W</th>
+	                                                <th class="text-center px-1 py-2.5 font-bold text-zinc-400 uppercase tracking-wider text-[9px] w-[24%]">CR</th>
+	                                            </tr>
+	                                        </thead>
+	                                        <tbody id="home-gpa-table-body">
+	                                            <tr class="border-b border-zinc-50 dark:border-zinc-700/50"><td class="px-2 py-2.5 font-bold text-zinc-900 dark:text-white">9th</td><td class="text-center px-1 py-2.5 text-zinc-400">—</td><td class="text-center px-1 py-2.5 text-zinc-400">—</td><td class="text-center px-1 py-2.5 text-zinc-400">—</td></tr>
+	                                            <tr class="border-b border-zinc-50 dark:border-zinc-700/50"><td class="px-2 py-2.5 font-bold text-zinc-900 dark:text-white">10th</td><td class="text-center px-1 py-2.5 text-zinc-400">—</td><td class="text-center px-1 py-2.5 text-zinc-400">—</td><td class="text-center px-1 py-2.5 text-zinc-400">—</td></tr>
+	                                            <tr class="border-b border-zinc-50 dark:border-zinc-700/50"><td class="px-2 py-2.5 font-bold text-zinc-900 dark:text-white">11th</td><td class="text-center px-1 py-2.5 text-zinc-400">—</td><td class="text-center px-1 py-2.5 text-zinc-400">—</td><td class="text-center px-1 py-2.5 text-zinc-400">—</td></tr>
+	                                            <tr class="border-b border-zinc-50 dark:border-zinc-700/50"><td class="px-2 py-2.5 font-bold text-zinc-900 dark:text-white">12th</td><td class="text-center px-1 py-2.5 text-zinc-400">—</td><td class="text-center px-1 py-2.5 text-zinc-400">—</td><td class="text-center px-1 py-2.5 text-zinc-400">—</td></tr>
+	                                            <tr><td class="px-2 py-2.5 font-bold text-zinc-400 uppercase text-[9px] tracking-wider">Cumul.</td><td class="text-center px-1 py-2.5 text-zinc-400" id="home-gpa-cumul-uw">—</td><td class="text-center px-1 py-2.5 text-zinc-400" id="home-gpa-cumul-w">—</td><td class="text-center px-1 py-2.5 text-zinc-400" id="home-gpa-cumul-cr">—</td></tr>
+	                                        </tbody>
+	                                    </table>
+	                                </div>
+                                <!-- Right: grouped bar chart -->
+                                <div class="p-3 flex flex-col bg-white dark:bg-[#1f1f1f]">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-sm bg-[#f3e8e4] border border-[#e6d8d2]"></div><span class="text-[9px] font-bold text-zinc-500">Unweighted</span></div>
+                                        <div class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 rounded-sm bg-[#d60000]"></div><span class="text-[9px] font-bold text-zinc-500">Weighted</span></div>
+                                    </div>
+                                    <div class="flex-1" style="min-height:160px;position:relative;">
+                                        <canvas id="home-gpa-chart"></canvas>
+                                    </div>
+                                </div>
+	                    </div>
+	                </div>
+	            </div>
+
+	                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-2 items-start">
+	                        <div class="w-full min-w-0 space-y-1.5">
+	                            <div class="flex items-center justify-between gap-3">
+	                                <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">My colleges</p>
+	                                <button onclick="showPage('college')" class="text-[10px] font-bold text-shalhevet hover:underline shrink-0">Open →</button>
+	                            </div>
+	                            <div id="home-college-preview" class="bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-[28px] p-3 md:p-3.5 shadow-sm">
+	                                <p class="text-[11px] text-zinc-400 dark:text-zinc-500 italic">No colleges added yet.</p>
+	                            </div>
+	                        </div>
+	                        <div class="w-full min-w-0 space-y-1.5">
+	                            <div class="flex items-center justify-between gap-3">
+	                                <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Co-curriculars</p>
+	                                <button onclick="showPage('cocurr')" class="text-[10px] font-bold text-shalhevet hover:underline shrink-0">Open →</button>
+	                            </div>
+	                            <div id="home-cocurr-preview" class="bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-[28px] p-4 md:p-5 shadow-sm">
+	                                <p class="text-xs text-zinc-400 dark:text-zinc-500 italic">No active activities logged yet.</p>
+	                            </div>
+	                        </div>
+	                    </div>
+
+	                    <!-- My Goals -->
+	                    <div>
+	                        <div class="flex items-center justify-between mb-2">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">My goals</p>
+                            <button onclick="showPage('goals')" class="text-[10px] font-bold text-shalhevet hover:underline">Manage →</button>
+                        </div>
+                        <div id="home-goals-preview" class="space-y-1.5">
+                            <div class="bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-2xl p-4"><p class="text-xs text-zinc-400 dark:text-zinc-500 italic">No goals yet.</p></div>
                         </div>
                     </div>
-                    <div class="w-7 h-7 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-shalhevet group-hover:text-white mt-1">
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"></i>
-                    </div>
-                </button>
-                <button onclick="showPage('college')" class="group w-full flex items-start justify-between gap-4 p-4 md:p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[24px] transition-all duration-300 hover:border-shalhevet hover:shadow-lg hover:shadow-red-900/5 hover:-translate-y-0.5">
-                    <div class="flex items-start gap-4 md:gap-5">
-                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
-                            <i data-lucide="graduation-cap" class="text-shalhevet w-5 h-5 md:w-6 md:h-6"></i>
+
+                    <!-- Quick links -->
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Quick links</p>
+                            <button onclick="showPage('resources')" class="text-[10px] font-bold text-shalhevet hover:underline">More tools →</button>
                         </div>
-                        <div class="text-left space-y-1">
-                            <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">Upperclassmen Resources</h3>
-                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Build your college, yeshiva, and seminary list, track statuses, and save decision notes in one place.</p>
-                        </div>
-                    </div>
-                    <div class="w-7 h-7 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-shalhevet group-hover:text-white mt-1">
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"></i>
-                    </div>
-                </button>
-                <button onclick="showPage('cocurr')" class="group w-full flex items-start justify-between gap-4 p-4 md:p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[24px] transition-all duration-300 hover:border-shalhevet hover:shadow-lg hover:shadow-red-900/5 hover:-translate-y-0.5">
-                    <div class="flex items-start gap-4 md:gap-5">
-                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
-                            <i data-lucide="clipboard-list" class="text-shalhevet w-5 h-5 md:w-6 md:h-6"></i>
-                        </div>
-                        <div class="text-left space-y-1">
-                            <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">Co-Curricular Log</h3>
-                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Document roles, hours, grade levels, and impact notes for activities, resumes, and applications.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="https://app.schoology.com" target="_blank" class="text-xs font-bold px-3 py-1.5 rounded-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-shalhevet hover:text-shalhevet transition-colors">Schoology</a>
+                            <a href="https://powerschool.com" target="_blank" class="text-xs font-bold px-3 py-1.5 rounded-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-shalhevet hover:text-shalhevet transition-colors">PowerSchool</a>
+                            <a href="https://www.commonapp.org" target="_blank" class="text-xs font-bold px-3 py-1.5 rounded-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-shalhevet hover:text-shalhevet transition-colors">Common App</a>
+                            <a href="https://www.sefaria.org" target="_blank" class="text-xs font-bold px-3 py-1.5 rounded-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-shalhevet hover:text-shalhevet transition-colors">Sefaria</a>
+                            <a href="https://claude.ai" target="_blank" class="text-xs font-bold px-3 py-1.5 rounded-full bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-shalhevet hover:text-shalhevet transition-colors">Claude</a>               
                         </div>
                     </div>
-                    <div class="w-7 h-7 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-shalhevet group-hover:text-white mt-1">
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"></i>
-                    </div>
-                </button>
-                <button onclick="showPage('goals')" class="group w-full flex items-start justify-between gap-4 p-4 md:p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[24px] transition-all duration-300 hover:border-shalhevet hover:shadow-lg hover:shadow-red-900/5 hover:-translate-y-0.5">
-                    <div class="flex items-start gap-4 md:gap-5">
-                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
-                            <i data-lucide="target" class="text-shalhevet w-5 h-5 md:w-6 md:h-6"></i>
-                        </div>
-                        <div class="text-left space-y-1">
-                            <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">Goals</h3>
-                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Pin your academic, personal, and other goals as sticky notes so you always know what you're working toward.</p>
-                        </div>
-                    </div>
-                    <div class="w-7 h-7 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-shalhevet group-hover:text-white mt-1">
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"></i>
-                    </div>
-                </button>
-                <button onclick="showPage('resources')" class="group w-full flex items-start justify-between gap-4 p-4 md:p-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-[24px] transition-all duration-300 hover:border-shalhevet hover:shadow-lg hover:shadow-red-900/5 hover:-translate-y-0.5">
-                    <div class="flex items-start gap-4 md:gap-5">
-                        <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
-                            <i data-lucide="book-open" class="text-shalhevet w-5 h-5 md:w-6 md:h-6"></i>
-                        </div>
-                        <div class="text-left space-y-1">
-                            <h3 class="font-bold text-sm md:text-base text-zinc-900 dark:text-white leading-tight">Student Resources</h3>
-                            <p class="hidden md:block text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium">Quick access to the apps, portals, and tools every Shalhevet student needs — from college apps to AI tutors.</p>
-                        </div>
-                    </div>
-                    <div class="w-7 h-7 rounded-full bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 transition-colors group-hover:bg-shalhevet group-hover:text-white mt-1">
-                        <i data-lucide="arrow-right" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"></i>
-                    </div>
-                </button>
+                </div>
             </div>
         </div>
 
@@ -1121,11 +1232,11 @@
     <div id="page-resources" class="page-content hidden max-w-[1400px] mx-auto px-4 md:px-8 py-6 md:py-10 space-y-8">
         <div class="text-left space-y-3">
             <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">Student <span class="text-shalhevet">Resources</span></h1>
-            <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Quick access to every tool, portal, and platform you need as a Shalhevet student — from submitting college applications to finding your Jewish community on campus.</p>
+            <p class="text-zinc-500 dark:text-zinc-400 text-sm font-medium max-w-[800px] leading-relaxed">Quick access to every tool, portal, and platform you need as a student — from writing essays, to studying for tests, to finding the college, yeshiva, or seminary for you.</p>
         </div>
-        <div class="space-y-6 max-w-[860px] mx-auto">
+        <div class="space-y-6">
 
-            <!-- Section 1 -->
+            <!-- Application & Strategy Desk -->
             <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0">
@@ -1145,22 +1256,124 @@
                         <div><p class="text-sm font-bold text-zinc-900 dark:text-white">UC App</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Required for all University of California campuses</p></div>
                         <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
                     </a>
-                    <a href="https://www.scoir.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
-                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Scoir</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Key research tool for being able to find the college and place for you</p></div>
+                    <a href="https://www.yu.edu/admissions/apply" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Yeshiva University (YU) Application</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Apply directly to YU — popular destination for Shalhevet graduates</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.calstate.edu/apply" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Cal State (CSU) Apply</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Single portal for all 23 California State University campuses</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://apply.smc.edu" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Santa Monica College Application</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Apply to SMC — a top local community college with strong transfer pathways</p></div>
                         <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
                     </a>
                     <a href="https://studentaid.gov/h/apply-for-aid/fafsa" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
                         <div><p class="text-sm font-bold text-zinc-900 dark:text-white">FAFSA</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Mandatory gateway for all federal student loans and grants</p></div>
                         <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
                     </a>
+                    <a href="https://cssprofile.collegeboard.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">CSS Profile</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Required by many private colleges for institutional financial aid</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.goingmerry.com/college-application-timeline" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">GoMerry Application Timeline</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Step-by-step college application timeline to keep you on track</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.ldonline.org/article/college-planning-guide-for-students-with-learning-disabilities" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Applying with a Learning Disability</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Guidance on navigating the college process with a learning difference</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
                 </div>
             </div>
 
-            <!-- Section 2 -->
+            <!-- Scholarships & Financial Aid -->
+            <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+                <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-yellow-50 dark:bg-yellow-950/30 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="6" x2="12" y2="18"/><path d="M15 8.5H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-yellow-600 uppercase tracking-wider">SCHOLARSHIPS &amp; FINANCIAL AID</h3>
+                        <p class="text-[11px] font-medium text-zinc-400 mt-0.5">Find and apply for scholarships to fund your education</p>
+                    </div>
+                </div>
+                <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <a href="https://www.fastweb.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Fastweb</p><p class="text-xs font-medium text-zinc-400 mt-0.5">College scholarship search engine — matches you to awards based on your profile</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.goingmerry.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Going Merry</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Scholarship search engine — apply to multiple scholarships from one place</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.scholarships.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Scholarships.com</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Scholarship calendar and database — track deadlines and discover new awards</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://studentaid.gov/understand-aid/types/scholarships" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Federal Student Aid — Scholarships</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Official government resource for finding scholarships and grants</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- College Research & Tours -->
+            <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+                <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-950/30 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="search" class="text-teal-600 w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-teal-600 uppercase tracking-wider">COLLEGE RESEARCH &amp; TOURS</h3>
+                        <p class="text-[11px] font-medium text-zinc-400 mt-0.5">Explore campuses, ask the right questions, and find your fit</p>
+                    </div>
+                </div>
+                <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <a href="https://www.youvisit.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Virtual College Tours (YouVisit)</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Immersive 360° campus tours from anywhere — explore before you visit</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.youniversitytv.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">YouNiversity TV</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Video campus tours — watch real student-guided walkthroughs of colleges</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.scoir.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Scoir</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Key research tool for finding the college and place that's right for you</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://bigfuture.collegeboard.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">College Board</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Comprehensive college search tool with profiles, majors, and SAT/AP resources</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.unigo.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Unigo</p><p class="text-xs font-medium text-zinc-400 mt-0.5">College profiles and authentic student reviews to help you find your fit</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.collegeprowler.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">College Prowler</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Student-written college guides and reviews covering campus life and academics</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.cappex.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Cappex</p><p class="text-xs font-medium text-zinc-400 mt-0.5">College profiles, student reviews, and admission chance estimator</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.ucan-network.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">UCAN Network</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Transparent data and profiles for private colleges — tuition, aid, and outcomes</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://www.collegeportraits.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">College Portraits</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Official statistics and outcome data for public colleges and universities</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- AI Tools -->
             <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-violet-50 dark:bg-violet-950/30 flex items-center justify-center flex-shrink-0">
-                        <i data-lucide="rotate-ccw" class="text-violet-600 w-4 h-4"></i>
+                        <svg class="w-4 h-4 text-violet-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>
                     </div>
                     <div>
                         <h3 class="text-xs font-bold text-violet-600 uppercase tracking-wider">AI TOOLS</h3>
@@ -1184,10 +1397,61 @@
                         <div><p class="text-sm font-bold text-zinc-900 dark:text-white">NotebookLM</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Upload your PDFs or notes to create a personalized AI tutor using only your facts</p></div>
                         <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
                     </a>
+                    <a href="https://copilot.microsoft.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Microsoft Copilot</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Microsoft's AI assistant — integrated with search and great for quick answers</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
                 </div>
             </div>
 
-            <!-- Section 3 -->
+            <!-- Coding & Development -->
+            <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+                <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-orange-50 dark:bg-orange-950/30 flex items-center justify-center flex-shrink-0">
+                        <i data-lucide="bar-chart-3" class="text-orange-500 w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-orange-500 uppercase tracking-wider">CODING &amp; DEVELOPMENT</h3>
+                        <p class="text-[11px] font-medium text-zinc-400 mt-0.5">Build, deploy, and collaborate — from first project to full-stack app</p>
+                    </div>
+                </div>
+                <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <a href="https://dyad.sh" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Dyad</p><p class="text-xs font-medium text-zinc-400 mt-0.5">AI-powered app builder that writes and runs code locally on your machine</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://replit.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Replit</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Browser-based IDE — code, run, and share projects in any language instantly</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://platform.openai.com/codex" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Codex</p><p class="text-xs font-medium text-zinc-400 mt-0.5">OpenAI's AI coding agent — turns natural language instructions into working code</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://cursor.sh" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Cursor</p><p class="text-xs font-medium text-zinc-400 mt-0.5">AI-first code editor built on VS Code — autocomplete, chat, and edits in context</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">GitHub</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Host, version, and collaborate on code — the standard platform for every developer</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://codeium.com/windsurf" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Windsurf</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Agentic AI code editor by Codeium — writes, runs, and debugs code autonomously</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://base44.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Base44</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Build full-stack apps in plain English — no setup, no boilerplate, just describe and ship</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                    <a href="https://vercel.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Vercel</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Deploy and host web apps instantly — the go-to platform for frontend projects</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Academic Support & Tutorials -->
             <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center flex-shrink-0">
@@ -1214,14 +1478,15 @@
                     <a href="https://powerschool.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
                         <div><p class="text-sm font-bold text-zinc-900 dark:text-white">PowerSchool</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Official grade tracking and school records portal</p></div>
                         <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
-                       <a href="https://www.desmos.com/calculator" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                    </a>
+                    <a href="https://www.desmos.com/calculator" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
                         <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Desmos</p><p class="text-xs font-medium text-zinc-400 mt-0.5">The definitive tool for graphing and visualizing math and science data</p></div>
                         <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
                     </a>
                 </div>
             </div>
 
-            <!-- Section 4 -->
+            <!-- Writing & Integrity Suite -->
             <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center flex-shrink-0">
@@ -1233,6 +1498,10 @@
                     </div>
                 </div>
                 <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <a href="https://www.grammarly.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Grammarly</p><p class="text-xs font-medium text-zinc-400 mt-0.5">AI writing assistant — checks grammar, clarity, tone, and style in real time</p></div>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
+                    </a>
                     <a href="https://www.bibcitation.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
                         <div><p class="text-sm font-bold text-zinc-900 dark:text-white">BibCitation</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Fast, ad-free bibliography generator — create citations in seconds</p></div>
                         <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
@@ -1244,7 +1513,7 @@
                 </div>
             </div>
 
-            <!-- Section 5 -->
+            <!-- Jewish Life & Gap Year -->
             <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950/30 flex items-center justify-center flex-shrink-0">
@@ -1274,18 +1543,19 @@
                     <a href="https://www.chabad.org/on-campus" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
                         <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Chabad on Campus</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Welcoming Jewish hub present at hundreds of universities worldwide</p></div>
                         <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
-                      <a href="https://www.oucollegeguide.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                    </a>
+                    <a href="https://www.oucollegeguide.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
                         <div><p class="text-sm font-bold text-zinc-900 dark:text-white">OU College Guide</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Specialized guide for Jewish life and academic fit on secular campuses</p></div>
                         <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
                     </a>
                 </div>
             </div>
 
-            <!-- Section: Judaics -->
+            <!-- Judaics & Torah Study -->
             <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
                 <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-3">
                     <div class="w-8 h-8 rounded-lg bg-sky-50 dark:bg-sky-950/30 flex items-center justify-center flex-shrink-0">
-                        <span class="text-sky-600 font-bold" style="font-size:16px;line-height:1">א</span>
+                        <span class="text-sky-600 font-bold select-none" style="font-family:'Arial Hebrew','Noto Sans Hebrew','David',Arial,sans-serif;font-size:17px;line-height:1;direction:rtl">א</span>
                     </div>
                     <div>
                         <h3 class="text-xs font-bold text-sky-600 uppercase tracking-wider">JUDAICS &amp; TORAH STUDY</h3>
@@ -1294,7 +1564,7 @@
                 </div>
                 <div class="divide-y divide-zinc-100 dark:divide-zinc-800">
                     <a href="https://www.mercava.com" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
-                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Mercava</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Interactive digital texts with built-in translation and commentary</p></div>
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Mercava</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Interactive digital Gemara with built-in translation, commentary, and audio</p></div>
                         <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
                     </a>
                     <a href="https://www.sefaria.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
@@ -1305,8 +1575,8 @@
                         <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Al HaTorah</p><p class="text-xs font-medium text-zinc-400 mt-0.5">In-depth Torah analysis, parasha resources, and academic Jewish scholarship</p></div>
                         <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
                     </a>
-                     <a href="https://yutorah.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
-                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">YU Torah Database</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Yeshiva University's massive digital library of free Torah lectures and Jewish texts.</p></div>
+                    <a href="https://www.yutorah.org" target="_blank" class="flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors group">
+                        <div><p class="text-sm font-bold text-zinc-900 dark:text-white">YU Torah Database</p><p class="text-xs font-medium text-zinc-400 mt-0.5">Yeshiva University's massive digital library of free Torah lectures and Jewish texts</p></div>
                         <i data-lucide="arrow-right" class="w-4 h-4 text-zinc-300 group-hover:text-shalhevet transition-colors flex-shrink-0"></i>
                     </a>
                 </div>
@@ -1324,7 +1594,7 @@
     <datalist id="activity-catalog"></datalist>
 
     <!-- Fallback definitions so buttons work even before the Firebase module initializes -->
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         // Track if user explicitly chose guest mode
         window.guestModeChosen = false;
 
@@ -1425,24 +1695,30 @@
             if (btn && dd && !btn.contains(e.target) && !dd.contains(e.target)) dd.classList.remove('open');
         });
 
-        async function loadFromFirestore(uid) {
-            if (!uid) return;
-            setSyncStatus('syncing');
-            try {
-                const snap = await getDoc(doc(db, 'users', uid));
-                if (snap.exists()) {
+	        async function loadFromFirestore(uid) {
+	            if (!uid) return;
+	            setSyncStatus('syncing');
+	            try {
+	                const snap = await getDoc(doc(db, 'users', uid));
+	                if (snap.exists()) {
                     const data = snap.data() || {};
                     if (data.gpaData) window.gpaData = data.gpaData;
                     if (data.tasks) window.tasks = data.tasks;
                     if (data.colleges) window.colleges = stripSampleColleges(data.colleges);
-                    if (data.cocurrs) window.cocurrs = stripSampleCoCurrs(data.cocurrs);
-                    if (data.goals) window.goals = data.goals;
-                    if (data.deadlineDone) window.deadlineDone = data.deadlineDone || {};
-                    else window.deadlineDone = window.deadlineDone || {};
-                } else {
-                    await saveToFirestore(uid);
-                }
-                setSyncStatus('synced');
+	                    if (data.cocurrs) window.cocurrs = stripSampleCoCurrs(data.cocurrs);
+	                    if (data.goals) window.goals = data.goals;
+	                    if (data.deadlineDone) window.deadlineDone = data.deadlineDone || {};
+	                    else window.deadlineDone = window.deadlineDone || {};
+	                    localStorage.setItem('gpaData', JSON.stringify(window.gpaData));
+	                    localStorage.setItem('tasks', JSON.stringify(window.tasks));
+	                    localStorage.setItem('colleges', JSON.stringify(window.colleges));
+	                    localStorage.setItem('cocurrs', JSON.stringify(window.cocurrs));
+	                    localStorage.setItem('goals', JSON.stringify(window.goals || []));
+	                    localStorage.setItem('deadlineDone', JSON.stringify(window.deadlineDone || {}));
+	                } else {
+	                    await saveToFirestore(uid);
+	                }
+	                setSyncStatus('synced');
             } catch (e) {
                 console.error('Load failed', e);
                 setSyncStatus('');
@@ -1465,21 +1741,19 @@
 });
                 setSyncStatus('synced');
             } catch(e) { console.error('Save failed', e); setSyncStatus(''); }
-        }
+	        }
 
-        window.cloudSave = function() {
-            if (!currentUser) {
-  localStorage.setItem('gpaData', JSON.stringify(window.gpaData));
-  localStorage.setItem('tasks', JSON.stringify(window.tasks));
-  localStorage.setItem('colleges', JSON.stringify(window.colleges));
-  localStorage.setItem('cocurrs', JSON.stringify(window.cocurrs));
-  localStorage.setItem('goals', JSON.stringify(window.goals || []));
-  localStorage.setItem('deadlineDone', JSON.stringify(window.deadlineDone || {}));
-  return;
-}
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(() => saveToFirestore(currentUser.uid), 1200);
-        };
+	        window.cloudSave = function() {
+	            localStorage.setItem('gpaData', JSON.stringify(window.gpaData));
+	            localStorage.setItem('tasks', JSON.stringify(window.tasks));
+	            localStorage.setItem('colleges', JSON.stringify(window.colleges));
+	            localStorage.setItem('cocurrs', JSON.stringify(window.cocurrs));
+	            localStorage.setItem('goals', JSON.stringify(window.goals || []));
+	            localStorage.setItem('deadlineDone', JSON.stringify(window.deadlineDone || {}));
+	            if (!currentUser) return;
+	            clearTimeout(saveTimeout);
+	            saveTimeout = setTimeout(() => saveToFirestore(currentUser.uid), 1200);
+	        };
 
         function alignHamburgerMenu() {
             const menu = document.getElementById('hamburger-menu');
@@ -1550,6 +1824,16 @@
                 gate.classList.remove('visible');
                 document.getElementById('guest-banner').classList.add('hidden');
                 const initials = user.displayName ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+                const firstName = user.displayName ? user.displayName.split(' ')[0] : null;
+                const greetingEl = document.getElementById('home-greeting-name');
+                const greetingH1 = greetingEl ? greetingEl.closest('h1') : null;
+                if (greetingH1) {
+                    if (firstName) {
+                        greetingH1.innerHTML = `Welcome back, <span class="text-shalhevet" id="home-greeting-name">${firstName}.</span>`;
+                    } else {
+                        greetingH1.innerHTML = `Your <span class="text-shalhevet" id="home-greeting-name">student dashboard.</span>`;
+                    }
+                }
                 navArea.innerHTML = `
                     <div class="relative">
                         <button id="profile-btn" onclick="toggleProfileDropdown()" class="w-8 h-8 md:w-auto md:h-9 md:px-4 md:rounded-xl rounded-full bg-[#222] border border-[#333] text-white/75 hover:border-shalhevet hover:text-white font-bold text-[10px] md:text-xs flex items-center justify-center md:gap-1.5 transition-all"><span class="w-5 h-5 rounded-full bg-shalhevet text-white flex items-center justify-center text-[8px] font-bold flex-shrink-0">${initials}</span><span class="hidden md:inline">${user.displayName ? user.displayName.split(' ')[0] : initials}</span></button>
@@ -2250,17 +2534,16 @@ function transcriptRowsForCourse(course) {
             window.location.href = mailtoLink;
         }
 
-        function showPage(id) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`page-${id}`).classList.remove('hidden');
-            document.querySelectorAll('.nav-link').forEach(l => { l.classList.remove('bg-shalhevet','text-white','shadow-lg','shadow-red-900/20'); l.classList.add('text-white/60'); });
-            if (id !== 'home') {
-                const activeLink = document.querySelector(`.nav-link[data-page="${id}"]`);
-                if (activeLink) { activeLink.classList.add('bg-shalhevet','text-white','shadow-lg','shadow-red-900/20'); activeLink.classList.remove('text-white/60'); }
-            }
-            window.scrollTo(0,0);
-            renderAll();
-            if (id === 'college' && typeof renderSmartTimeline === 'function') renderSmartTimeline(true);
+	        function showPage(id) {
+	            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+	            document.getElementById(`page-${id}`).classList.remove('hidden');
+	            document.querySelectorAll('.nav-link').forEach(l => { l.classList.remove('bg-shalhevet','text-white','shadow-lg','shadow-red-900/20'); l.classList.add('text-white/60'); });
+	            const activeLink = document.querySelector(`.nav-link[data-page="${id}"]`);
+	            if (activeLink) { activeLink.classList.add('bg-shalhevet','text-white','shadow-lg','shadow-red-900/20'); activeLink.classList.remove('text-white/60'); }
+	            window.scrollTo(0,0);
+	            renderAll();
+	            if (id === 'college' && typeof renderSmartTimeline === 'function') renderSmartTimeline(true);
+            if (id === 'home') renderHomePanels();
             lucide.createIcons();
         }
 
@@ -2271,100 +2554,207 @@ function transcriptRowsForCourse(course) {
             lucide.createIcons();
         }
 
+        // Collapse state: yearCollapsed[yIdx] = bool, semCollapsed[yIdx][sIdx] = bool
+        const yearCollapsed = {};
+        const semCollapsed = {};
+        function toggleYearCollapse(yIdx) {
+            yearCollapsed[yIdx] = !yearCollapsed[yIdx];
+            renderGPA();
+        }
+        function toggleSemCollapse(yIdx, sIdx) {
+            if (!semCollapsed[yIdx]) semCollapsed[yIdx] = {};
+            semCollapsed[yIdx][sIdx] = !semCollapsed[yIdx][sIdx];
+            renderGPA();
+        }
+
         function renderGPA() {
             const container = document.getElementById('gpa-years-container');
             if (!container) return;
+
+            function buildCourseRow(opts) {
+                const courseRowClass = opts.isPECourse
+                    ? 'pe-course-row space-y-2'
+                    : 'space-y-3 ' + (opts.isNonGpaGrade
+                        ? 'rounded-[18px] bg-amber-50/70 dark:bg-amber-900/15 border border-amber-200 dark:border-amber-800 p-3'
+                        : '');
+
+                const courseNameLabel = '<label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label>' +
+                    (opts.isPECourse ? '<span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 uppercase tracking-[0.12em]">PE CREDIT</span>' : '') +
+                    opts.nonGpaBadge;
+
+                let courseHeader = '';
+                if (opts.sIdx === 0) {
+                    const syncToggle = !opts.isPECourse
+                        ? '<label class="flex items-center gap-1.5 cursor-pointer"><label class="switch scale-[0.72] origin-right"><input type="checkbox" ' + (opts.c.sync ? 'checked' : '') + ' onchange="updateCourse(' + opts.yIdx + ',' + opts.cIdx + ',\'sync\',this.checked)"><span class="slider"></span></label><span class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">S2</span></label>'
+                        : '';
+                    const mobileDelete = opts.showDeleteAction ? '<button onclick="deleteCourse(' + opts.yIdx + ',' + opts.cIdx + ')" class="md:hidden text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>' : '';
+                    courseHeader = '<div class="flex items-center justify-between"><div class="flex items-center gap-2">' + courseNameLabel + '</div><div class="flex items-center gap-2">' + syncToggle + mobileDelete + '</div></div>';
+                } else {
+                    const mobileDelete = opts.showDeleteAction ? '<button onclick="deleteCourse(' + opts.yIdx + ',' + opts.cIdx + ')" class="md:hidden text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>' : '';
+                    courseHeader = '<div class="flex items-center justify-between"><div class="flex items-center gap-2">' + courseNameLabel + '</div>' + mobileDelete + '</div>';
+                }
+
+                const nameInputAttrs = (opts.isSynced || opts.isPECourse)
+                    ? 'readonly'
+                    : 'onchange="updateCourse(' + opts.yIdx + ',' + opts.cIdx + ',\'' + opts.nameField + '\',this.value)"';
+
+                const peFields = '<div class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-emerald-700 dark:text-emerald-300 font-bold text-[12px] md:text-xs flex items-center justify-center">' + opts.peGradeDisplay + '</div>' +
+                    '<div class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-emerald-700 dark:text-emerald-300 font-bold text-[13px] md:text-sm flex items-center justify-center">' + String(parseFloat(((opts.courseCredits || 0.5)).toFixed(2))) + '</div>' +
+                    '<div class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-emerald-700 dark:text-emerald-300 font-bold text-[11px] md:text-xs flex items-center justify-center">PE</div>';
+
+                const gradeOptions = Object.keys(GRADE_SCALE).map(function(g) {
+                    return '<option ' + (opts.gradeValue === g ? 'selected' : '') + '>' + g + '</option>';
+                }).join('');
+
+                const regularFields = '<div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">GRADE</label><select onchange="updateCourse(' + opts.yIdx + ',' + opts.cIdx + ',\'' + opts.gradeKey + '\',this.value)" class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none">' + gradeOptions + '</select></div>' +
+                    '<div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">CREDITS</label><select ' + (opts.isSynced ? 'disabled' : 'onchange="updateCourse(' + opts.yIdx + ',' + opts.cIdx + ',\'' + opts.creditsField + '\',this.value)"') + ' class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none"><option value="0.25" ' + (opts.courseCredits == 0.25 ? 'selected' : '') + '>0.25</option><option value="0.5" ' + (opts.courseCredits == 0.5 ? 'selected' : '') + '>0.5</option><option value="1.0" ' + (opts.courseCredits == 1.0 ? 'selected' : '') + '>1.0</option></select></div>' +
+                    '<div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">WEIGHT</label><button ' + ((opts.isSynced || opts.isNonGpaGrade) ? 'disabled' : 'onclick="toggleWeight(' + opts.yIdx + ',' + opts.cIdx + ',' + opts.sIdx + ')"') + ' class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 font-bold text-[11px] md:text-xs transition-all ' + (opts.isNonGpaGrade ? 'bg-amber-50 text-amber-700 dark:bg-amber-900/25 dark:text-amber-300 border-amber-200 dark:border-amber-800' : (opts.weightOn ? 'bg-shalhevet text-white border-shalhevet' : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300')) + '">' + (opts.isNonGpaGrade ? 'NON-GPA' : (opts.weightOn ? 'SAS/HON' : 'REGULAR')) + '</button></div>';
+
+                const courseFields = opts.isPECourse ? peFields : regularFields;
+                const deleteButton = opts.showDeleteAction ? '<button onclick="deleteCourse(' + opts.yIdx + ',' + opts.cIdx + ')" class="h-11 md:h-12 w-8 flex items-center justify-center text-zinc-300 hover:text-shalhevet transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>' : '<div></div>';
+
+                return '<div class="gpa-course-row ' + courseRowClass + '">' +
+                    '<div class="grid grid-cols-1 md:grid-cols-[1fr_108px_98px_116px_28px] gap-3 md:gap-4 items-end">' +
+                    '<div class="space-y-1.5">' +
+                    courseHeader +
+                    '<input type="text" list="course-catalog" value="' + opts.courseName + '" ' + nameInputAttrs + ' placeholder="Type or select a course..." class="course-name w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none focus:ring-1 focus:ring-shalhevet">' +
+                    '</div>' +
+                    '<div class="grid grid-cols-3 gap-2 md:contents">' +
+                    courseFields +
+                    '</div>' +
+                    '<div class="hidden md:flex items-end justify-center h-11 md:h-12">' + deleteButton + '</div>' +
+                    '</div>' +
+                    '</div>';
+            }
+
             container.innerHTML = '';
             let tUW = 0, tWT = 0, tCr = 0, tPECr = 0, tPassCr = 0;
+
             window.gpaData.forEach((year, yIdx) => {
-                const card = document.createElement('div');
-                card.className = "gpa-year-card bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm";
                 let yearUW = 0, yearWT = 0, yearCr = 0;
-                let html = `<div class="gpa-year-header px-6 md:px-8 py-4 md:py-5 border-b border-zinc-200 dark:border-zinc-800"><h2 class="font-bold text-[1rem] md:text-[1.1rem] leading-none uppercase tracking-wide">${year.name}</h2></div><div class="p-0">`;
-                if (year.courses.length === 0) {
-                    html += `<div class="px-6 md:px-8 py-10 text-center"><p class="text-xs font-bold text-zinc-300 dark:text-zinc-600 uppercase tracking-wider">No courses added for this year</p></div>`;
-                } else {
-                        ['SEMESTER 1','SEMESTER 2'].forEach((sem, sIdx) => {
-                            html += `<div class="gpa-semester-block px-3 md:px-8 py-5 ${sIdx === 0 ? 'border-b border-zinc-200 dark:border-zinc-800' : ''}"><div class="space-y-3"><div><div class="text-[11px] font-bold text-shalhevet uppercase tracking-[0.18em]">${sem}</div><div class="mt-2.5 h-px bg-zinc-200 dark:bg-zinc-700"></div></div>`;
+
+                if (year.courses.length > 0) {
+                    ['s1grade', 's2grade'].forEach((gk, sIdx) => {
+                        year.courses.forEach(c => {
+                            const courseName = (getSemesterCourseName(c, sIdx) || '').trim();
+                            const isPECourse = !!c.pe || isPECourseName(courseName || ((c.name || '') + ' ' + (c.s2name || '')));
+                            const gradeValue = normalizeImportedGrade(c[gk]);
+                            const credits = getSemesterCourseCredits(c, sIdx);
+                            const wt = getSemesterCourseWeight(c, sIdx);
+                            const pts = GRADE_SCALE[gradeValue];
+                            if (pts !== null && pts !== undefined && !isPECourse) {
+                                yearUW += pts * credits;
+                                yearWT += (pts + (wt ? 1 : 0)) * credits;
+                                yearCr += credits;
+                            }
+                            if (isPECourse && credits > 0) tPECr += credits;
+                            if (!isPECourse && gradeValue === 'P' && credits > 0) tPassCr += credits;
+                        });
+                    });
+                    tUW += yearUW;
+                    tWT += yearWT;
+                    tCr += yearCr;
+                }
+
+                const isYearCollapsed = !!yearCollapsed[yIdx];
+                const yearStats = isYearCollapsed
+                    ? (yearCr > 0 ? 'UW ' + (yearUW / yearCr).toFixed(2) + ' · WT ' + (yearWT / yearCr).toFixed(2) : '')
+                    : '';
+
+                let html = '<div class="gpa-year-card bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">';
+                html += '<div class="gpa-year-header px-6 md:px-8 py-4 md:py-5 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between" onclick="toggleYearCollapse(' + yIdx + ')">';
+                html += '<h2 class="font-bold text-[1rem] md:text-[1.1rem] leading-none uppercase tracking-wide">' + year.name + '</h2>';
+                html += '<div class="flex items-center gap-3">';
+                html += '<span class="text-xs font-bold text-zinc-400">' + yearStats + '</span>';
+                html += '<svg class="gpa-collapse-chevron ' + (isYearCollapsed ? 'collapsed' : '') + ' w-4 h-4 text-zinc-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+                html += '</div></div>';
+
+                if (!isYearCollapsed) {
+                    html += '<div class="p-0">';
+
+                    if (year.courses.length === 0) {
+                        html += '<div class="px-6 md:px-8 py-10 text-center"><p class="text-xs font-bold text-zinc-300 dark:text-zinc-600 uppercase tracking-wider">No courses added for this year</p></div>';
+                    } else {
+                        ['SEMESTER 1', 'SEMESTER 2'].forEach((sem, sIdx) => {
+                            const isSemCollapsed = !!(semCollapsed[yIdx] && semCollapsed[yIdx][sIdx]);
                             const semesterDisplayOrder = year.courses
-                                .map((course, index) => ({ course, index }))
+                                .map((course, index) => ({ course: course, index: index }))
                                 .sort((a, b) => {
-                                    const aName = getSemesterCourseName(a.course, sIdx) || `${a.course.name || ''} ${a.course.s2name || ''}`;
-                                    const bName = getSemesterCourseName(b.course, sIdx) || `${b.course.name || ''} ${b.course.s2name || ''}`;
+                                    const aName = getSemesterCourseName(a.course, sIdx) || ((a.course.name || '') + ' ' + (a.course.s2name || ''));
+                                    const bName = getSemesterCourseName(b.course, sIdx) || ((b.course.name || '') + ' ' + (b.course.s2name || ''));
                                     const aIsPE = !!a.course.pe || isPECourseName(aName);
                                     const bIsPE = !!b.course.pe || isPECourseName(bName);
                                     if (aIsPE === bIsPE) return a.index - b.index;
                                     return aIsPE ? 1 : -1;
                                 });
-                            semesterDisplayOrder.forEach(({ course: c, index: cIdx }) => {
-                            const gradeKey = sIdx === 0 ? 's1grade' : 's2grade';
-                            const isSynced = sIdx === 1 && c.sync;
-                            const showDeleteAction = sIdx === 0 || (sIdx === 1 && !c.sync);
-                            const nameField = sIdx === 0 ? 'name' : 's2name';
-                            const creditsField = sIdx === 0 ? 'credits' : 's2credits';
-                            const weightOn = getSemesterCourseWeight(c, sIdx);
-                            const courseName = (getSemesterCourseName(c, sIdx) || '').trim();
-                            const courseCredits = getSemesterCourseCredits(c, sIdx);
-                            const isPECourse = !!c.pe || isPECourseName(courseName || `${c.name || ''} ${c.s2name || ''}`);
-                            const gradeValue = normalizeImportedGrade(c[gradeKey]);
-                            const peGradeDisplay = gradeValue && gradeValue !== '—' ? gradeValue : 'P';
-                            const isNonGpaGrade = isNonGPAGrade(gradeValue);
-                            const nonGpaBadge = isNonGpaGrade
-                                ? `<span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/35 dark:text-amber-300 uppercase tracking-[0.12em]">NON-GPA</span>`
-                                : '';
 
-                            const hasSemesterData =
-                                !!courseName ||
-                                (gradeValue && gradeValue !== '—') ||
-                                courseCredits > 0;
+                            html += '<div class="gpa-semester-block px-3 md:px-8 py-5 ' + (sIdx === 0 ? 'border-b border-zinc-200 dark:border-zinc-800' : '') + '"><div class="space-y-3"><div class="gpa-sem-header flex items-center justify-between" onclick="toggleSemCollapse(' + yIdx + ',' + sIdx + ')"><div class="text-[11px] font-bold text-shalhevet uppercase tracking-[0.18em]">' + sem + '</div><svg class="gpa-collapse-chevron ' + (isSemCollapsed ? 'collapsed' : '') + ' w-3.5 h-3.5 text-zinc-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></div>' + (isSemCollapsed ? '' : '<div class="mt-2.5 h-px bg-zinc-200 dark:bg-zinc-700"></div>') + '</div>';
 
-                            if (!hasSemesterData) return;
-                            html += `<div class="gpa-course-row ${isPECourse ? 'pe-course-row space-y-2' : ('space-y-3 ' + (isNonGpaGrade ? 'rounded-[18px] bg-amber-50/70 dark:bg-amber-900/15 border border-amber-200 dark:border-amber-800 p-3' : ''))}">
-                                <div class="grid grid-cols-1 md:grid-cols-[1fr_108px_98px_116px_28px] gap-3 md:gap-4 items-end">
-                                <div class="space-y-1.5">
-                                    ${sIdx === 0
-                                        ? `<div class="flex items-center justify-between"><div class="flex items-center gap-2"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label>${isPECourse ? '<span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 uppercase tracking-[0.12em]">PE CREDIT</span>' : ''}${nonGpaBadge}</div><div class="flex items-center gap-2">${!isPECourse ? `<label class="flex items-center gap-1.5 cursor-pointer"><label class="switch scale-[0.72] origin-right"><input type="checkbox" ${c.sync ? 'checked' : ''} onchange="updateCourse(${yIdx},${cIdx},'sync',this.checked)"><span class="slider"></span></label><span class="text-[9px] font-bold text-zinc-500 uppercase tracking-wider">S2</span></label>` : ''}${showDeleteAction ? `<button onclick="deleteCourse(${yIdx},${cIdx})" class="md:hidden text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>` : ''}</div></div>`
-                                        : `<div class="flex items-center justify-between"><div class="flex items-center gap-2"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">COURSE NAME</label>${isPECourse ? '<span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 uppercase tracking-[0.12em]">PE CREDIT</span>' : ''}${nonGpaBadge}</div>${showDeleteAction ? `<button onclick="deleteCourse(${yIdx},${cIdx})" class="md:hidden text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>` : ''}</div>`}
-                                    <input type="text" list="course-catalog" value="${courseName}" ${(isSynced || isPECourse) ? 'readonly' : `onchange="updateCourse(${yIdx},${cIdx},'${nameField}',this.value)"`} placeholder="Type or select a course..." class="course-name w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none focus:ring-1 focus:ring-shalhevet">
-                                </div>
-                                <div class="grid grid-cols-3 gap-2 md:contents">
-                                ${isPECourse
-                                    ? `<div class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-emerald-700 dark:text-emerald-300 font-bold text-[12px] md:text-xs flex items-center justify-center">${peGradeDisplay}</div>
-                                       <div class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-emerald-700 dark:text-emerald-300 font-bold text-[13px] md:text-sm flex items-center justify-center">${String(parseFloat(((courseCredits || 0.5)).toFixed(2)))}</div>
-                                       <div class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-emerald-700 dark:text-emerald-300 font-bold text-[11px] md:text-xs flex items-center justify-center">PE</div>`
-                                    : `<div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">GRADE</label><select onchange="updateCourse(${yIdx},${cIdx},'${gradeKey}',this.value)" class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none">${Object.keys(GRADE_SCALE).map(g => `<option ${gradeValue === g ? 'selected' : ''}>${g}</option>`).join('')}</select></div>
-                                       <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">CREDITS</label><select ${isSynced ? 'disabled' : `onchange="updateCourse(${yIdx},${cIdx},'${creditsField}',this.value)"`} class="w-full h-11 md:h-12 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-[16px] px-4 text-[13px] md:text-sm font-medium outline-none"><option value="0.25" ${courseCredits == 0.25 ? 'selected' : ''}>0.25</option><option value="0.5" ${courseCredits == 0.5 ? 'selected' : ''}>0.5</option><option value="1.0" ${courseCredits == 1.0 ? 'selected' : ''}>1.0</option></select></div>
-                                       <div class="space-y-1.5"><label class="text-[10px] font-bold text-shalhevet uppercase tracking-[0.16em]">WEIGHT</label><button ${(isSynced || isNonGpaGrade) ? 'disabled' : `onclick="toggleWeight(${yIdx},${cIdx},${sIdx})"`} class="w-full h-11 md:h-12 rounded-[16px] border border-zinc-200 dark:border-zinc-700 font-bold text-[11px] md:text-xs transition-all ${(isNonGpaGrade ? 'bg-amber-50 text-amber-700 dark:bg-amber-900/25 dark:text-amber-300 border-amber-200 dark:border-amber-800' : (weightOn ? 'bg-shalhevet text-white border-shalhevet' : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300'))}">${isNonGpaGrade ? 'NON-GPA' : (weightOn ? 'SAS/HON' : 'REGULAR')}</button></div>`
-                                }
-                                </div>
-                                <div class="hidden md:flex items-end justify-center h-11 md:h-12">${showDeleteAction ? `<button onclick="deleteCourse(${yIdx},${cIdx})" class="h-11 md:h-12 w-8 flex items-center justify-center text-zinc-300 hover:text-shalhevet transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>` : '<div></div>'}</div>
-                                </div>
-                            </div>`;
-                            const pts = GRADE_SCALE[gradeValue];
-                            if (pts !== null) {
-                                const credits = getSemesterCourseCredits(c, sIdx), wt = getSemesterCourseWeight(c, sIdx);
-                                tUW += pts * credits; tWT += (pts + (wt ? 1 : 0)) * credits; tCr += credits;
-                                yearUW += pts * credits; yearWT += (pts + (wt ? 1 : 0)) * credits; yearCr += credits;
+                            if (!isSemCollapsed) {
+                                semesterDisplayOrder.forEach(({ course: c, index: cIdx }) => {
+                                    const gradeKey = sIdx === 0 ? 's1grade' : 's2grade';
+                                    const isSynced = sIdx === 1 && c.sync;
+                                    const showDeleteAction = sIdx === 0 || (sIdx === 1 && !c.sync);
+                                    const nameField = sIdx === 0 ? 'name' : 's2name';
+                                    const creditsField = sIdx === 0 ? 'credits' : 's2credits';
+                                    const weightOn = getSemesterCourseWeight(c, sIdx);
+                                    const courseName = (getSemesterCourseName(c, sIdx) || '').trim();
+                                    const courseCredits = getSemesterCourseCredits(c, sIdx);
+                                    const isPECourse = !!c.pe || isPECourseName(courseName || ((c.name || '') + ' ' + (c.s2name || '')));
+                                    const gradeValue = normalizeImportedGrade(c[gradeKey]);
+                                    const peGradeDisplay = gradeValue && gradeValue !== '—' ? gradeValue : 'P';
+                                    const isNonGpaGrade = isNonGPAGrade(gradeValue);
+                                    const nonGpaBadge = isNonGpaGrade
+                                        ? '<span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/35 dark:text-amber-300 uppercase tracking-[0.12em]">NON-GPA</span>'
+                                        : '';
+                                    const hasSemesterData = !!courseName || (gradeValue && gradeValue !== '—') || courseCredits > 0;
+
+                                    if (!hasSemesterData) return;
+
+                                    html += buildCourseRow({
+                                        yIdx: yIdx,
+                                        cIdx: cIdx,
+                                        sIdx: sIdx,
+                                        c: c,
+                                        courseName: courseName,
+                                        gradeKey: gradeKey,
+                                        gradeValue: gradeValue,
+                                        courseCredits: courseCredits,
+                                        weightOn: weightOn,
+                                        isPECourse: isPECourse,
+                                        isNonGpaGrade: isNonGpaGrade,
+                                        nonGpaBadge: nonGpaBadge,
+                                        nameField: nameField,
+                                        creditsField: creditsField,
+                                        showDeleteAction: showDeleteAction,
+                                        isSynced: isSynced,
+                                        peGradeDisplay: peGradeDisplay
+                                    });
+                                });
                             }
-                            if (isPECourse && courseCredits > 0) tPECr += courseCredits;
-                            if (!isPECourse && gradeValue === 'P' && courseCredits > 0) tPassCr += courseCredits;
+
+                            html += '</div></div>';
                         });
-                        html += `</div></div>`;
-                    });
+                    }
+
+                    const yearAvgUW = yearCr > 0 ? (yearUW / yearCr).toFixed(2) : '0.00';
+                    const yearAvgWT = yearCr > 0 ? (yearWT / yearCr).toFixed(2) : '0.00';
+                    html += '<div class="gpa-year-footer px-6 md:px-8 py-3.5 md:py-4 flex flex-row items-center justify-between gap-3">';
+                    html += '<div class="flex items-center gap-4 md:gap-5 text-sm md:text-base font-bold">';
+                    html += '<div><span class="text-zinc-500 dark:text-zinc-400">UW:</span> <span class="text-shalhevet">' + yearAvgUW + '</span></div>';
+                    html += '<div><span class="text-zinc-500 dark:text-zinc-400">WT:</span> <span class="text-shalhevet">' + yearAvgWT + '</span></div>';
+                    html += '</div>';
+                    html += '<button onclick="addCourse(' + yIdx + ')" class="h-9 md:h-10 px-4 md:px-5 rounded-[14px] border border-zinc-300 dark:border-zinc-700 bg-transparent hover:border-shalhevet hover:text-shalhevet font-bold text-xs md:text-sm text-zinc-500 dark:text-zinc-400 transition-all flex-shrink-0">+ Add Course</button>';
+                    html += '</div>';
+                    html += '</div>';
                 }
-                const yearAvgUW = yearCr > 0 ? (yearUW / yearCr).toFixed(2) : '0.00';
-                const yearAvgWT = yearCr > 0 ? (yearWT / yearCr).toFixed(2) : '0.00';
-                html += `</div><div class="gpa-year-footer px-6 md:px-8 py-3.5 md:py-4 flex flex-row items-center justify-between gap-3">
-                    <div class="flex items-center gap-4 md:gap-5 text-sm md:text-base font-bold">
-                        <div><span class="text-zinc-500 dark:text-zinc-400">UW:</span> <span class="text-shalhevet">${yearAvgUW}</span></div>
-                        <div><span class="text-zinc-500 dark:text-zinc-400">WT:</span> <span class="text-shalhevet">${yearAvgWT}</span></div>
-                    </div>
-                    <button onclick="addCourse(${yIdx})" class="h-9 md:h-10 px-4 md:px-5 rounded-[14px] border border-zinc-300 dark:border-zinc-700 bg-transparent hover:border-shalhevet hover:text-shalhevet font-bold text-xs md:text-sm text-zinc-500 dark:text-zinc-400 transition-all flex-shrink-0">+ Add Course</button>
-                </div>`;
+
+                html += '</div>';
                 container.innerHTML += html;
             });
-            document.getElementById('total-uw').innerText = tCr > 0 ? (tUW / tCr).toFixed(2) : "0.00";
-            document.getElementById('total-wt').innerText = tCr > 0 ? (tWT / tCr).toFixed(2) : "0.00";
+
+            document.getElementById('total-uw').innerText = tCr > 0 ? (tUW / tCr).toFixed(2) : '0.00';
+            document.getElementById('total-wt').innerText = tCr > 0 ? (tWT / tCr).toFixed(2) : '0.00';
             document.getElementById('total-credits').innerText = (tCr + tPECr + tPassCr).toFixed(1);
             renderTranscriptPrint();
             renderGraduationRequirements();
@@ -2605,15 +2995,15 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
             const row = COLLEGE_STATUS_OPTIONS.find(o => o.value === u);
             return row ? row.label : s;
         }
-        function collegeStatusBadgeClass(status) {
-            const u = String(status || '').toUpperCase();
-            if (u === 'ACCEPTED' || u === 'COMMITTED') return 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-400';
-            if (u === 'REJECTED') return 'bg-red-50 text-red-600 dark:bg-red-950/20 dark:text-red-400';
-            if (u === 'WAITLISTED') return 'bg-amber-50 text-amber-700 dark:bg-amber-950/25 dark:text-amber-400';
-            if (u === 'DEFERRED') return 'bg-violet-50 text-violet-700 dark:bg-violet-950/25 dark:text-violet-300';
-            if (u === 'RESEARCHING') return 'bg-amber-50 text-amber-700 dark:bg-amber-950/25 dark:text-amber-400';
-            return 'bg-blue-50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400';
-        }
+	        function collegeStatusBadgeClass(status) {
+	            const u = String(status || '').toUpperCase();
+	            if (u === 'ACCEPTED' || u === 'COMMITTED') return 'bg-emerald-200 text-emerald-900 dark:bg-emerald-900/70 dark:text-emerald-50';
+	            if (u === 'REJECTED') return 'bg-red-200 text-red-900 dark:bg-red-900/70 dark:text-red-50';
+	            if (u === 'WAITLISTED') return 'bg-amber-200 text-amber-900 dark:bg-amber-900/70 dark:text-amber-50';
+	            if (u === 'DEFERRED') return 'bg-violet-200 text-violet-900 dark:bg-violet-900/70 dark:text-violet-50';
+                if (u === 'RESEARCHING') return 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400';
+	            return 'bg-blue-200 text-blue-900 dark:bg-blue-900/70 dark:text-blue-50';
+	        }
         function renderCollegeStatusOptions(selected) {
             return COLLEGE_STATUS_OPTIONS.map(o => `<option value="${o.value}" ${String(selected || '').toUpperCase() === o.value ? 'selected' : ''}>${o.label}</option>`).join('');
         }
@@ -2707,10 +3097,10 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
                     const card = document.createElement('div');
                     card.className = "bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm flex flex-col";
                     const sColor = collegeStatusBadgeClass(c.status);
-                    let rColor = 'bg-zinc-100 text-zinc-600';
-                    if (c.rank === 'REACH') rColor = 'bg-red-50 text-red-600';
-                    else if (c.rank === 'TARGET') rColor = 'bg-amber-50 text-amber-600';
-                    else if (c.rank === 'SAFETY') rColor = 'bg-emerald-50 text-emerald-600';
+	                    let rColor = 'bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-100';
+	                    if (c.rank === 'REACH') rColor = 'bg-red-200 text-red-900 dark:bg-red-900/70 dark:text-red-50';
+	                    else if (c.rank === 'TARGET') rColor = 'bg-amber-200 text-amber-900 dark:bg-amber-900/70 dark:text-amber-50';
+	                    else if (c.rank === 'SAFETY') rColor = 'bg-emerald-200 text-emerald-900 dark:bg-emerald-900/70 dark:text-emerald-50';
                     let tColor = 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500';
                     if (c.type === 'College') tColor = 'text-white' + ' ' + 'bg-[#1a5c3a]';
                     else if (c.type === 'Yeshiva') tColor = 'text-white' + ' ' + 'bg-[#2645c7]';
@@ -2718,23 +3108,23 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
                     else if (c.type === 'Other') tColor = 'text-white' + ' ' + 'bg-[#1e3a5f]';
                     const isCollegeAppHub = c.type === 'College' && COLLEGE_APP_HUB_STATUSES.includes(String(c.status || '').toUpperCase());
                     const statusBadgeText = collegeStatusLabel(c.status).toUpperCase();
-                    card.innerHTML = `
-                        <div class="p-5 border-b border-zinc-100 dark:border-zinc-800 space-y-4">
-                            <div class="flex items-start justify-between gap-4">
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="inst-name font-bold text-base leading-tight break-words">${c.name}</h3>
-                                </div>
-                                <div class="flex items-start gap-2 flex-shrink-0">
-                                    <span class="badge text-[10px] font-bold px-3 py-1 rounded-full tracking-wide uppercase ${sColor}">${statusBadgeText}</span>
-                                    <button onclick="startEditCol('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors -mt-0.5"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
-                                    <button onclick="deleteCollege('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors -mt-0.5 -mr-1"><i data-lucide="x" class="w-4 h-4"></i></button>
-                                </div>
-                            </div>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 uppercase tracking-wider ${tColor}">${c.type.toUpperCase()}</span>
-                                ${c.rank ? `<span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 uppercase tracking-wider ${rColor}">${String(c.rank).toUpperCase()}</span>` : ''}
-                                ${c.appType ? `<span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 bg-shalhevet/10 text-shalhevet uppercase tracking-wider">${c.appType}</span>` : ''}
-                            </div>
+	                    card.innerHTML = `
+	                        <div class="p-5 border-b border-zinc-100 dark:border-zinc-800 space-y-4">
+	                            <div class="flex items-start justify-between gap-4">
+	                                <div class="flex-1 min-w-0">
+	                                    <h3 class="inst-name font-bold text-base leading-tight break-words">${c.name}</h3>
+	                                </div>
+	                                <div class="flex items-start gap-2 flex-shrink-0">
+	                                    <button onclick="startEditCol('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors -mt-0.5"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
+	                                    <button onclick="deleteCollege('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors -mt-0.5 -mr-1"><i data-lucide="x" class="w-4 h-4"></i></button>
+	                                </div>
+	                            </div>
+	                            <div class="flex flex-wrap gap-2">
+	                                <span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 uppercase tracking-wider ${sColor}">${statusBadgeText}</span>
+	                                <span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 uppercase tracking-wider ${tColor}">${c.type.toUpperCase()}</span>
+	                                ${c.rank ? `<span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 uppercase tracking-wider ${rColor}">${String(c.rank).toUpperCase()}</span>` : ''}
+	                                ${c.appType ? `<span class="badge text-[10px] font-bold rounded-md px-2 py-0.5 bg-shalhevet/10 text-shalhevet uppercase tracking-wider">${c.appType}</span>` : ''}
+	                            </div>
                             ${c.type === 'College' && c.portalStatus ? `
                             <div class="flex items-center gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800">
                                 <div class="w-2 h-2 rounded-full ${c.portalStatus === 'Action Required' ? 'bg-red-500' : c.portalStatus === 'Decided' ? 'bg-emerald-500' : 'bg-amber-500'}"></div>
@@ -3076,6 +3466,7 @@ function renderSmartTimeline(force = false) {
             if (window.cloudSave) window.cloudSave();
             resetCCForm();
             renderCoCurr();
+            safeRender('Home panels', renderHomePanels);
         }
         function startEditCoCurr(id) {
             const c = window.cocurrs.find(x => x.id === id);
@@ -3100,6 +3491,7 @@ function renderSmartTimeline(force = false) {
             if (window.cloudSave) window.cloudSave();
             closeEditCCModal();
             renderCoCurr();
+            safeRender('Home panels', renderHomePanels);
         }
 
         function toggleGradeSelection(btn) {
@@ -3135,7 +3527,7 @@ function renderSmartTimeline(force = false) {
         }
 
         function resetCCForm() { document.getElementById('cc-name').value = ''; document.getElementById('cc-role').value = ''; document.getElementById('cc-desc').value = ''; document.getElementById('cc-hours').value = ''; document.getElementById('cc-status').value = 'IN_PROGRESS'; setSelectedGrades('cc-grade-selector', []); }
-        function deleteCoCurr(id) { window.cocurrs = window.cocurrs.filter(x => x.id !== id); if (window.cloudSave) window.cloudSave(); renderCoCurr(); }
+        function deleteCoCurr(id) { window.cocurrs = window.cocurrs.filter(x => x.id !== id); if (window.cloudSave) window.cloudSave(); renderCoCurr(); safeRender('Home panels', renderHomePanels); }
 
         // ── GOALS ──────────────────────────────────────────────
         const GOAL_COLORS = {
@@ -4683,17 +5075,291 @@ Recovery mode:
             safeRender('Co-curricular', renderCoCurr);
             safeRender('Goals', renderGoals);
             safeRender('Icons', () => lucide.createIcons());
+            safeRender('Home panels', renderHomePanels);
         }
 
-        function updateClock() {
-            const now = new Date();
-            const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-            const h = now.getHours() % 12 || 12;
-            const m = now.getMinutes().toString().padStart(2, '0');
-            const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
-            document.getElementById('nav-clock').innerText = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()} · ${h}:${m} ${ampm}`;
+        let homeGpaChart = null;
+        let homeCoCurrChart = null;
+        function renderHomePanels() {
+            // --- My Goals preview ---
+            const goalsPreview = document.getElementById('home-goals-preview');
+            if (goalsPreview) {
+                const goals = window.goals || [];
+                const active = goals.filter(g => !g.done);
+                if (!active.length) {
+                    goalsPreview.innerHTML = '<div class="bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-2xl p-4"><p class="text-xs text-zinc-400 dark:text-zinc-500 italic">No goals yet.</p></div>';
+                } else {
+                    goalsPreview.innerHTML = active.slice(0, 3).map(g => {
+                        const c = (typeof GOAL_COLORS !== 'undefined' ? GOAL_COLORS[g.category] : null) || { bg: '#f4f4f5', border: '#e4e4e7', label: '#71717a', dot: '#a1a1aa' };
+                        return `<div style="background:${c.bg};border:1.5px solid ${c.border};border-radius:12px;padding:8px 12px;display:flex;align-items:center;gap:8px;">
+                            <span style="width:7px;height:7px;border-radius:50%;background:${c.dot};flex-shrink:0;"></span>
+                            <span style="font-size:12px;font-weight:700;color:#18181b;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${g.text}</span>
+                        </div>`;
+                    }).join('') + (active.length > 3 ? `<p class="text-[10px] font-bold text-zinc-400 mt-1">+${active.length - 3} more</p>` : '');
+                }
+            }
+
+            // --- Today's tasks ---
+            const container = document.getElementById('home-today-tasks');
+            if (container) {
+                const todayStr = new Date().toISOString().split('T')[0];
+                const todayTasks = (window.tasks || []).filter(t => t.date === todayStr);
+                if (todayTasks.length === 0) {
+                    container.innerHTML = '<p class="text-xs text-zinc-400 dark:text-zinc-500 italic py-1">No assignments due today.</p>';
+                } else {
+                    const priorityColor = { HIGH: 'bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400', MEDIUM: 'bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400', LOW: 'bg-zinc-100 dark:bg-zinc-700 text-zinc-500 dark:text-zinc-400' };
+                    container.innerHTML = todayTasks.map(t => `
+                        <div class="flex items-center gap-3 px-3 py-2.5 bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-xl">
+                            <div class="w-1.5 h-1.5 rounded-full flex-shrink-0 ${t.priority === 'HIGH' ? 'bg-shalhevet' : t.priority === 'MEDIUM' ? 'bg-amber-400' : 'bg-zinc-300'}"></div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-xs font-bold text-zinc-900 dark:text-white truncate">${t.title}</div>
+                                <div class="text-[10px] text-zinc-400 mt-0.5">${t.category || 'General'}</div>
+                            </div>
+                            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0 ${priorityColor[t.priority] || priorityColor.LOW}">${t.type || t.priority}</span>
+                        </div>`).join('');
+                }
+            }
+
+            // --- GPA table + line chart ---
+            const canvas = document.getElementById('home-gpa-chart');
+            if (canvas && window.gpaData) {
+                const GRADE_SCALE_LOCAL = { '—': null, 'P': null, 'W': null, 'NG': null, 'A+': 4.0, 'A': 4.0, 'A-': 3.67, 'B+': 3.33, 'B': 3.0, 'B-': 2.67, 'C+': 2.33, 'C': 2.0, 'C-': 1.67, 'D+': 1.33, 'D': 1.0, 'F': 0.0 };
+                const yearNames = ['9th', '10th', '11th', '12th'];
+	                const uwData = [], wtData = [], crData = [];
+	                let totalUW = 0, totalWT = 0, totalGpaCR = 0, totalCredits = 0;
+	                window.gpaData.forEach((year, i) => {
+	                    let uw = 0, wt = 0, gpaCr = 0;
+	                    year.courses.forEach(c => {
+	                        [['s1grade','credits','wt'],['s2grade','s2credits','s2wt']].forEach(([gk,ck,wk]) => {
+	                            const pts = GRADE_SCALE_LOCAL[c[gk]];
+	                            const credits = parseFloat(c[ck]) || 0.5;
+	                            const isPECourse = !!c.pe || isPECourseName(`${c.name || ''} ${c.s2name || ''}`);
+	                            const isPass = c[gk] === 'P';
+	                            if (pts !== null && pts !== undefined) {
+	                                uw += pts * credits;
+	                                wt += (pts + (c[wk] ? 1 : 0)) * credits;
+	                                gpaCr += credits;
+	                            }
+	                        });
+	                    });
+	                    const creditCr = transcriptTotalCredits(year);
+	                    const uwVal = gpaCr > 0 ? parseFloat((uw / gpaCr).toFixed(2)) : null;
+	                    const wtVal = gpaCr > 0 ? parseFloat((wt / gpaCr).toFixed(2)) : null;
+	                    uwData.push(uwVal);
+	                    wtData.push(wtVal);
+	                    crData.push(creditCr > 0 ? parseFloat(creditCr.toFixed(1)) : null);
+	                    if (gpaCr > 0) { totalUW += uw; totalWT += wt; totalGpaCR += gpaCr; }
+	                    if (creditCr > 0) totalCredits += creditCr;
+	                });
+
+                // Populate table
+                const tbody = document.getElementById('home-gpa-table-body');
+                if (tbody) {
+                    tbody.innerHTML = yearNames.map((yr, i) => `
+                        <tr class="border-b border-zinc-50 dark:border-zinc-700/50">
+                            <td class="px-3 py-2.5 font-bold text-zinc-900 dark:text-white">${yr}</td>
+                            <td class="text-center px-1 py-2.5 font-bold text-zinc-700 dark:text-zinc-300">${uwData[i] !== null ? uwData[i].toFixed(2) : '<span class="text-zinc-300 dark:text-zinc-600">—</span>'}</td>
+                            <td class="text-center px-1 py-2.5 font-bold text-zinc-700 dark:text-zinc-300">${wtData[i] !== null ? wtData[i].toFixed(2) : '<span class="text-zinc-300 dark:text-zinc-600">—</span>'}</td>
+                            <td class="text-center px-1 py-2.5 text-zinc-500">${crData[i] !== null ? crData[i] : '<span class="text-zinc-300 dark:text-zinc-600">—</span>'}</td>
+                        </tr>`).join('') +
+                        `<tr>
+                            <td class="px-3 py-2.5 font-bold text-zinc-400 uppercase text-[9px] tracking-wider">Cumul.</td>
+	                            <td class="text-center px-1 py-2.5 font-bold text-zinc-700 dark:text-zinc-300">${totalGpaCR > 0 ? (totalUW/totalGpaCR).toFixed(2) : '<span class="text-zinc-300 dark:text-zinc-600">—</span>'}</td>
+	                            <td class="text-center px-1 py-2.5 font-bold text-zinc-700 dark:text-zinc-300">${totalGpaCR > 0 ? (totalWT/totalGpaCR).toFixed(2) : '<span class="text-zinc-300 dark:text-zinc-600">—</span>'}</td>
+	                            <td class="text-center px-1 py-2.5 text-zinc-500">${totalCredits > 0 ? parseFloat(totalCredits.toFixed(1)) : '<span class="text-zinc-300 dark:text-zinc-600">—</span>'}</td>
+	                        </tr>`;
+                }
+
+                const isDark = document.documentElement.classList.contains('dark');
+                const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+                const labelColor = isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)';
+                if (homeGpaChart) homeGpaChart.destroy();
+                homeGpaChart = new Chart(canvas, {
+                    type: 'bar',
+                    data: {
+                        labels: yearNames,
+                        datasets: [
+                            {
+                                label: 'Unweighted',
+                                data: uwData,
+                                backgroundColor: '#f3e8e4',
+                                borderColor: '#e6d8d2',
+                                borderWidth: 1,
+	                                borderRadius: 2,
+                                barPercentage: 0.76,
+                                categoryPercentage: 0.62,
+                                maxBarThickness: 22
+                            },
+                            {
+                                label: 'Weighted',
+                                data: wtData,
+                                backgroundColor: '#d60000',
+                                borderColor: '#d60000',
+                                borderWidth: 1,
+	                                borderRadius: 2,
+                                barPercentage: 0.76,
+                                categoryPercentage: 0.62,
+                                maxBarThickness: 22
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: '#000000',
+                                titleColor: '#ffffff',
+                                bodyColor: '#ffffff',
+                                borderColor: '#7f1d1d',
+                                borderWidth: 1,
+                                cornerRadius: 14,
+                                padding: 14,
+                                displayColors: true,
+                                titleFont: { size: 16, weight: '700' },
+                                bodyFont: { size: 14, weight: '700' },
+                                callbacks: {
+                                    label: ctx => ctx.parsed.y !== null ? ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}` : '',
+                                    labelColor: ctx => ({
+                                        borderColor: ctx.dataset.borderColor || ctx.dataset.backgroundColor,
+                                        backgroundColor: ctx.dataset.backgroundColor
+                                    })
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: { color: labelColor, font: { size: 9, weight: '700' } },
+                                grid: { display: false },
+                                border: { display: false }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                min: 0,
+                                max: 5,
+                                ticks: {
+                                    stepSize: 1,
+                                    color: labelColor,
+                                    font: { size: 9, weight: '600' },
+                                    callback: value => String(value)
+                                },
+                                grid: { color: gridColor },
+                                border: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // --- College preview card ---
+            const collegePreview = document.getElementById('home-college-preview');
+            if (collegePreview) {
+                const collegeItems = (window.colleges || [])
+                    .map(c => ({ name: String(c?.name || '').trim(), id: c?.id }))
+                    .filter(c => c.name)
+                    .slice(0, 3);
+
+	                if (collegeItems.length === 0) {
+	                    collegePreview.innerHTML = `
+	                        <div class="rounded-2xl border border-zinc-100 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-2.5">
+	                            <p class="text-[11px] text-zinc-400 dark:text-zinc-500 italic">No colleges added yet.</p>
+	                        </div>`;
+	                } else {
+	                    collegePreview.innerHTML = `
+	                        <div class="rounded-2xl border border-zinc-100 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-3">
+	                            <ul class="space-y-2">
+	                                ${collegeItems.map(college => `
+	                                    <li class="flex items-start gap-2">
+	                                        <span class="mt-[8px] h-2 w-2 shrink-0 rounded-full bg-shalhevet"></span>
+	                                        <span class="min-w-0 flex-1 text-[13px] font-bold text-zinc-800 dark:text-zinc-200 truncate">${college.name}</span>
+	                                    </li>
+	                                `).join('')}
+	                            </ul>
+	                        </div>`;
+                }
+            }
+
+            // --- Co-Curricular donut preview ---
+            const cocurrPreview = document.getElementById('home-cocurr-preview');
+            if (cocurrPreview) {
+                const normalizedItems = (window.cocurrs || []).map(c => ({ ...c, status: (c.status === 'IN_PROGRESS' || c.status === 'in_progress' || (!c.status)) ? 'IN_PROGRESS' : c.status }));
+                const active = normalizedItems.filter(c => c.status === 'IN_PROGRESS' && parseInt(c.hours || 0) > 0);
+                const totalHours = active.reduce((sum, c) => sum + parseInt(c.hours || 0), 0);
+
+                if (active.length === 0) {
+                    cocurrPreview.innerHTML = `
+                        <p class="text-xs text-zinc-400 dark:text-zinc-500 italic">No active activities logged yet.</p>`;
+                    if (homeCoCurrChart) { homeCoCurrChart.destroy(); homeCoCurrChart = null; }
+	                } else {
+		                    // Group and color by activity title so each co-curricular gets its own slice.
+		                    const nameTotals = {};
+		                    active.forEach(c => {
+		                        const key = String(c.name || '').trim();
+		                        if (!key) return;
+		                        if (!nameTotals[key]) nameTotals[key] = 0;
+		                        nameTotals[key] += parseInt(c.hours || 0);
+		                    });
+	                    const nameKeys = Object.keys(nameTotals).sort((a, b) => a.localeCompare(b));
+	                    const nameValues = nameKeys.map(k => nameTotals[k]);
+		                    const COCURR_PALETTE = [
+		                        '#4a0404', '#fde7e7', '#7f1111', '#f8c7c7', '#a00000', '#ffb3b3',
+		                        '#b91c1c', '#ffd1d1', '#d60000', '#fca5a5', '#5f0f0f', '#ffc0c0',
+		                        '#8b0000', '#ff9b9b', '#c81e1e', '#ffe0e0', '#ef4444', '#ffdddd',
+		                        '#6b0f0f', '#fda4af', '#991b1b', '#fee2e2', '#dc2626', '#ffcece',
+		                        '#7a1717', '#fbb3b3', '#5b0b0b', '#ffd8d8', '#9f1239', '#fff1f1'
+		                    ];
+		                    const nameColors = nameKeys.map((_, i) => COCURR_PALETTE[i % COCURR_PALETTE.length]);
+		                    const cocurrRows = nameKeys.map((name, i) => ({
+		                        name,
+		                        hours: nameValues[i],
+		                        color: nameColors[i]
+		                    })).sort((a, b) => b.hours - a.hours || a.name.localeCompare(b.name));
+
+		                    cocurrPreview.innerHTML = `
+			                        <div class="grid grid-cols-[72px_minmax(0,1fr)] gap-3 items-start">
+			                            <div class="flex items-start justify-center pt-0.5">
+		                                <div style="position:relative;width:72px;height:72px;flex-shrink:0;">
+		                                    <canvas id="home-cocurr-donut" width="72" height="72"></canvas>
+		                                </div>
+		                            </div>
+		                            <div class="min-w-0 flex flex-col justify-start">
+		                                <div class="flex items-baseline gap-1 leading-none mb-2">
+		                                    <div class="text-2xl md:text-[30px] font-extrabold text-zinc-900 dark:text-white">${totalHours}h</div>
+		                                    <div class="text-sm md:text-base font-bold text-zinc-400 dark:text-zinc-500">/ week</div>
+		                                </div>
+		                                <div class="space-y-1.5">
+		                                    ${cocurrRows.map(item => `
+		                                        <div class="flex items-center justify-between gap-3 min-w-0">
+		                                            <div class="flex items-center gap-2.5 min-w-0">
+		                                                <span style="width:10px;height:10px;border-radius:9999px;background:${item.color};flex-shrink:0;display:inline-block;"></span>
+		                                                <span class="text-xs md:text-sm font-bold text-zinc-700 dark:text-zinc-300 truncate">${item.name}</span>
+		                                            </div>
+		                                            <span class="text-xs md:text-sm font-bold text-zinc-400 dark:text-zinc-500 flex-shrink-0">${item.hours}h</span>
+		                                        </div>`).join('')}
+		                                </div>
+		                            </div>
+		                        </div>`;
+
+	                    // Draw donut
+	                    requestAnimationFrame(() => {
+		                        const dc = document.getElementById('home-cocurr-donut');
+		                        if (!dc) return;
+		                        if (homeCoCurrChart) homeCoCurrChart.destroy();
+		                        homeCoCurrChart = new Chart(dc, {
+		                            type: 'doughnut',
+		                            data: { labels: nameKeys, datasets: [{ data: nameValues, backgroundColor: nameColors, borderWidth: 0, hoverOffset: 2 }] },
+		                            options: {
+		                                responsive: false, cutout: '68%',
+		                                plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}h` } } }
+		                            }
+		                        });
+		                    });
+                }
+            }
         }
+
 
         document.addEventListener('DOMContentLoaded', function() {
             const courseCatalog = document.getElementById('course-catalog');
@@ -4703,8 +5369,6 @@ Recovery mode:
             const actCatalog = document.getElementById('activity-catalog');
             SHALHEVET_ACTIVITIES.sort().forEach(item => { const opt = document.createElement('option'); opt.value = item; actCatalog.appendChild(opt); });
 
-            updateClock();
-            setInterval(updateClock, 30000);
             // Ensure application hub fields reflect default dropdown values on first load
             // Status bar replaced with native select — no init needed
             try { togglePortalFields(); } catch {}
