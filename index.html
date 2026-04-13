@@ -5152,7 +5152,7 @@ Recovery mode:
             const container = document.getElementById('home-today-tasks');
             if (container) {
                 const todayStr = new Date().toLocaleDateString('en-CA');
-                const todayTasks = (window.tasks || []).filter(t => t.date === todayStr);
+                const todayTasks = (window.tasks || []).filter(t => t.date === todayStr && !t.completed);
                 if (todayTasks.length === 0) {
                     container.innerHTML = '<p class="text-xs text-zinc-400 dark:text-zinc-500 italic py-1">No assignments due today.</p>';
                 } else {
