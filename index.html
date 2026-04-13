@@ -95,6 +95,10 @@
     <style>
         body { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
         .nav-logo-text { text-transform: uppercase; letter-spacing: 0.1em; }
+		.college-drag-handle { cursor: grab; touch-action: none; }
+.college-drag-handle:active { cursor: grabbing; }
+.college-card-dragging { opacity: 0.4; }
+.college-card-dragover { outline: 2px solid #cc0000; outline-offset: -2px; border-radius: 24px; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.5; }
@@ -666,16 +670,16 @@
                     <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3">Your tools</p>
 
                     <!-- GPA featured -->
-                    <button onclick="showPage('gpa')" class="group w-full flex items-center gap-3 p-4 bg-shalhevet hover:bg-red-700 rounded-2xl mb-2 transition-all duration-200 text-left">
-                        <div class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="bar-chart-3" class="text-white w-4 h-4"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="text-sm font-bold text-white leading-tight">GPA Tracker</div>
-                            <div class="text-xs text-white/70 mt-0.5">Weighted & unweighted for all four years</div>
-                        </div>
-                        <i data-lucide="arrow-right" class="w-4 h-4 text-white/60 flex-shrink-0 transition-transform group-hover:translate-x-0.5"></i>
-                    </button>
+                   <button onclick="showPage('gpa')" class="group w-full flex items-center gap-3 p-3.5 bg-zinc-50 dark:bg-zinc-800 hover:border-shalhevet border border-zinc-100 dark:border-zinc-700 rounded-2xl mb-2 transition-all duration-200 text-left hover:bg-red-50 dark:hover:bg-red-950/20">
+    <div class="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950/30 flex items-center justify-center flex-shrink-0">
+        <i data-lucide="bar-chart-3" class="text-shalhevet w-4 h-4"></i>
+    </div>
+    <div class="flex-1 min-w-0">
+        <div class="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-shalhevet transition-colors leading-tight">GPA Tracker</div>
+        <div class="text-xs text-zinc-400 mt-0.5">Weighted & unweighted for all four years</div>
+    </div>
+    <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-zinc-300 flex-shrink-0 group-hover:text-shalhevet transition-colors"></i>
+</button>
 
                     <!-- Other tools -->
                     <button onclick="showPage('activities')" class="group w-full flex items-center gap-3 p-3.5 bg-zinc-50 dark:bg-zinc-800 hover:border-shalhevet border border-zinc-100 dark:border-zinc-700 rounded-2xl mb-2 transition-all duration-200 text-left hover:bg-red-50 dark:hover:bg-red-950/20">
@@ -2880,11 +2884,12 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
                             <div class="space-y-1 min-w-0">
                                 <h3 class="task-name font-bold text-[0.8rem] md:text-[0.9rem] truncate ${t.completed ? 'line-through text-zinc-400' : ''}">${t.title}</h3>
                                 <div class="flex flex-wrap items-center gap-2 md:gap-3">
-                                    <span class="text-[10px] font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1 truncate uppercase tracking-wider"><i data-lucide="tag" class="w-2 h-2 md:w-2.5 md:h-2.5 ${tagColor} flex-shrink-0"></i> ${t.category.toUpperCase()}</span>
-                                    ${isUndated ? '<span class="text-[8px] font-bold px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-300 uppercase tracking-[0.14em]">No Due Date</span>' : ''}
-                                    ${isOverdue ? '<span class="text-[8px] font-bold px-2 py-0.5 rounded-md bg-red-600 text-white shadow-sm shadow-red-900/25 uppercase tracking-[0.14em]">Overdue</span>' : ''}
-                                    <span class="text-[8px] font-bold px-1.5 py-0 rounded-md ${pColor} flex-shrink-0 uppercase tracking-wider">${t.priority}</span>
-                                </div>
+    <span class="text-[10px] font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1 truncate uppercase tracking-wider"><i data-lucide="tag" class="w-2 h-2 md:w-2.5 md:h-2.5 ${tagColor} flex-shrink-0"></i> ${t.category.toUpperCase()}</span>
+    ${t.type ? `<span class="text-[8px] font-bold px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-300 uppercase tracking-[0.14em]">${t.type}</span>` : ''}
+    ${isUndated ? '<span class="text-[8px] font-bold px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-300 uppercase tracking-[0.14em]">No Due Date</span>' : `<span class="text-[8px] font-bold px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-300 uppercase tracking-[0.14em]">${new Date(t.date + 'T12:00:00').toLocaleDateString('en-US', {month:'short',day:'numeric'})}</span>`}
+    ${isOverdue ? '<span class="text-[8px] font-bold px-2 py-0.5 rounded-md bg-red-600 text-white shadow-sm shadow-red-900/25 uppercase tracking-[0.14em]">Overdue</span>' : ''}
+    <span class="text-[8px] font-bold px-1.5 py-0 rounded-md ${pColor} flex-shrink-0 uppercase tracking-wider">${t.priority}</span>
+</div>
                             </div>
                         </div>
                         ${t.derived
@@ -3096,6 +3101,8 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
                 window.colleges.forEach(c => {
                     const card = document.createElement('div');
                     card.className = "bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm flex flex-col";
+					card.setAttribute('draggable', 'true');
+					card.dataset.id = c.id;
                     const sColor = collegeStatusBadgeClass(c.status);
 	                    let rColor = 'bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-100';
 	                    if (c.rank === 'REACH') rColor = 'bg-red-200 text-red-900 dark:bg-red-900/70 dark:text-red-50';
@@ -3115,6 +3122,7 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
 	                                    <h3 class="inst-name font-bold text-base leading-tight break-words">${c.name}</h3>
 	                                </div>
 	                                <div class="flex items-start gap-2 flex-shrink-0">
+										<button class="college-drag-handle text-zinc-300 hover:text-zinc-500 p-1 transition-colors -mt-0.5" title="Drag to reorder"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><circle cx="9" cy="5" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="19" r="1"/></svg></button>
 	                                    <button onclick="startEditCol('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors -mt-0.5"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
 	                                    <button onclick="deleteCollege('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors -mt-0.5 -mr-1"><i data-lucide="x" class="w-4 h-4"></i></button>
 	                                </div>
@@ -3195,7 +3203,47 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
                 });
             }
             lucide.createIcons();
-
+			let dragSrcId = null;
+grid.querySelectorAll('[draggable="true"]').forEach(card => {
+    card.addEventListener('dragstart', e => {
+        dragSrcId = card.dataset.id;
+        card.classList.add('college-card-dragging');
+        e.dataTransfer.effectAllowed = 'move';
+    });
+    card.addEventListener('dragend', () => {
+        card.classList.remove('college-card-dragging');
+        grid.querySelectorAll('.college-card-dragover').forEach(el => el.classList.remove('college-card-dragover'));
+    });
+    card.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        grid.querySelectorAll('.college-card-dragover').forEach(el => el.classList.remove('college-card-dragover'));
+        if (card.dataset.id !== dragSrcId) card.classList.add('college-card-dragover');
+    });
+    card.addEventListener('dragleave', () => card.classList.remove('college-card-dragover'));
+    card.addEventListener('drop', e => {
+        e.preventDefault();
+        card.classList.remove('college-card-dragover');
+        const targetId = card.dataset.id;
+        if (!dragSrcId || dragSrcId === targetId) return;
+        const srcIdx = window.colleges.findIndex(x => x.id === dragSrcId);
+        const tgtIdx = window.colleges.findIndex(x => x.id === targetId);
+        if (srcIdx === -1 || tgtIdx === -1) return;
+        const [moved] = window.colleges.splice(srcIdx, 1);
+        window.colleges.splice(tgtIdx, 0, moved);
+        if (window.cloudSave) window.cloudSave();
+        renderCollege();
+    });
+    const handle = card.querySelector('.college-drag-handle');
+    if (handle) {
+        card.addEventListener('mousedown', e => {
+            card.draggable = !!e.target.closest('.college-drag-handle');
+        });
+        card.addEventListener('touchstart', e => {
+            card.draggable = !!e.target.closest('.college-drag-handle');
+        }, { passive: true });
+    }
+});
             // If Smart Timeline is visible, refresh it after any college changes
             const timelineEl = document.getElementById('college-smart-timeline');
             if (timelineEl && !timelineEl.classList.contains('hidden') && typeof renderSmartTimeline === 'function') {
@@ -5102,7 +5150,7 @@ Recovery mode:
             // --- Today's tasks ---
             const container = document.getElementById('home-today-tasks');
             if (container) {
-                const todayStr = new Date().toISOString().split('T')[0];
+                const todayStr = new Date().toLocaleDateString('en-CA');
                 const todayTasks = (window.tasks || []).filter(t => t.date === todayStr);
                 if (todayTasks.length === 0) {
                     container.innerHTML = '<p class="text-xs text-zinc-400 dark:text-zinc-500 italic py-1">No assignments due today.</p>';
@@ -5326,8 +5374,8 @@ Recovery mode:
 		                            </div>
 		                            <div class="min-w-0 flex flex-col justify-start">
 		                                <div class="flex items-baseline gap-1 leading-none mb-2">
-		                                    <div class="text-2xl md:text-[30px] font-extrabold text-zinc-900 dark:text-white">${totalHours}h</div>
-		                                    <div class="text-sm md:text-base font-bold text-zinc-400 dark:text-zinc-500">/ week</div>
+		                                    <div class="text-sm font-extrabold text-zinc-900 dark:text-white uppercase">${totalHours}H /</div>
+<div class="text-sm font-bold 				<div class="text-zinc-400 dark:text-zinc-500 uppercase">WEEK</div>
 		                                </div>
 		                                <div class="space-y-1.5">
 		                                    ${cocurrRows.map(item => `
