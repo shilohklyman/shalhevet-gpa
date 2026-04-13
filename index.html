@@ -508,8 +508,8 @@
                     <div class="space-y-1.5">
                         <label class="text-xs font-bold text-zinc-400">Status</label>
                         <select id="edit-cc-status" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
-                            <option value="IN_PROGRESS">In Progress</option>
-                            <option value="OFF_SEASON">Off-Season</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
                             <option value="ENDED">Ended</option>
                         </select>
                     </div>
@@ -1181,8 +1181,8 @@
                         <div class="space-y-2">
                             <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">STATUS</label>
                             <select id="cc-status" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
-                                <option value="IN_PROGRESS">In Progress</option>
-                                <option value="OFF_SEASON">Off-Season</option>
+                                <option value="ACTIVE">Active</option>
+                             	<option value="INACTIVE">Inactive</option>
                                 <option value="ENDED">Ended</option>
                             </select>
                         </div>
@@ -3488,12 +3488,12 @@ function renderSmartTimeline(force = false) {
                         IN_PROGRESS: {
                             card: 'bg-white dark:bg-zinc-900 border-transparent',
                             dot: 'bg-emerald-500 dark:bg-emerald-400',
-                            label: 'IN PROGRESS'
+                            label: 'ACTIVE'
                         },
                         OFF_SEASON: {
                             card: 'bg-amber-50/50 dark:bg-amber-900/15 border-amber-100 dark:border-amber-900/30',
                             dot: 'bg-amber-500 dark:bg-amber-400',
-                            label: 'OFF-SEASON'
+                            label: 'INACTIVE'
                         },
                         ENDED: {
                             card: 'bg-zinc-50/30 dark:bg-zinc-900/30 border-zinc-100 dark:border-zinc-800/50',
