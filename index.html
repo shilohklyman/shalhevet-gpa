@@ -2551,11 +2551,12 @@ function transcriptRowsForCourse(course) {
         }
 
         function toggleDarkMode() {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.setItem('darkMode', isDark);
-            document.getElementById('dark-icon-svg').setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-            lucide.createIcons();
-        }
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('darkMode', isDark);
+    document.getElementById('dark-icon-svg').setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+    lucide.createIcons();
+    renderHomePanels();
+}
 
         // Collapse state: yearCollapsed[yIdx] = bool, semCollapsed[yIdx][sIdx] = bool
         const yearCollapsed = {};
