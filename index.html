@@ -1066,7 +1066,7 @@
                             <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">OUTCOME</label>
                             <select id="col-outcome-status" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
                                 <option value="">— Select outcome —</option>
-                                <option value="AWAITING">Awaiting Decision</option>
+								<option value="AWAITING">Awaiting Decision</option>
                                 <option value="DEFERRED">Deferred</option>
                                 <option value="WAITLISTED">Waitlisted</option>
                                 <option value="ACCEPTED">Admitted</option>
@@ -2976,7 +2976,7 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
         function deleteTask(id) { window.tasks = window.tasks.filter(t => t.id !== id); if (window.cloudSave) window.cloudSave(); renderActivities(); }
         function changeMonth(delta) { currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta); renderActivities(); }
 
-        const COLLEGE_APP_HUB_STATUSES = ['APPLYING', 'APPLIED', 'DEFERRED', 'WAITLISTED', 'ACCEPTED', 'REJECTED', 'COMMITTED'];
+        const COLLEGE_APP_HUB_STATUSES = ['APPLIED', 'DEFERRED', 'WAITLISTED', 'ACCEPTED', 'REJECTED', 'COMMITTED'];
         const COLLEGE_STATUS_OPTIONS = [
             { value: 'RESEARCHING', label: 'Researching' },
             { value: 'APPLYING', label: 'Applying' },
@@ -3002,14 +3002,16 @@ const allVisible = [...selectedTasks, ...overdueTasks, ...upcomingTasks, ...unda
             return row ? row.label : s;
         }
 	        function collegeStatusBadgeClass(status) {
-	            const u = String(status || '').toUpperCase();
-	            if (u === 'ACCEPTED' || u === 'COMMITTED') return 'bg-emerald-200 text-emerald-900 dark:bg-emerald-900/70 dark:text-emerald-50';
-	            if (u === 'REJECTED') return 'bg-red-200 text-red-900 dark:bg-red-900/70 dark:text-red-50';
-	            if (u === 'WAITLISTED') return 'bg-amber-200 text-amber-900 dark:bg-amber-900/70 dark:text-amber-50';
-	            if (u === 'DEFERRED') return 'bg-violet-200 text-violet-900 dark:bg-violet-900/70 dark:text-violet-50';
-                if (u === 'RESEARCHING') return 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400';
-	            return 'bg-blue-200 text-blue-900 dark:bg-blue-900/70 dark:text-blue-50';
-	        }
+    const u = String(status || '').toUpperCase();
+    if (u === 'ACCEPTED' || u === 'COMMITTED') return 'bg-emerald-200 text-emerald-900 dark:bg-emerald-900/70 dark:text-emerald-50';
+    if (u === 'REJECTED') return 'bg-red-200 text-red-900 dark:bg-red-900/70 dark:text-red-50';
+    if (u === 'WAITLISTED') return 'bg-amber-200 text-amber-900 dark:bg-amber-900/70 dark:text-amber-50';
+    if (u === 'DEFERRED') return 'bg-violet-200 text-violet-900 dark:bg-violet-900/70 dark:text-violet-50';
+    if (u === 'RESEARCHING') return 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400';
+    if (u === 'APPLYING') return 'bg-blue-200 text-blue-900 dark:bg-blue-900/70 dark:text-blue-50';
+    if (u === 'APPLIED') return 'bg-blue-600 text-white dark:bg-blue-500 dark:text-white';
+    return 'bg-blue-200 text-blue-900 dark:bg-blue-900/70 dark:text-blue-50';
+}
         function renderCollegeStatusOptions(selected) {
             return COLLEGE_STATUS_OPTIONS.map(o => `<option value="${o.value}" ${String(selected || '').toUpperCase() === o.value ? 'selected' : ''}>${o.label}</option>`).join('');
         }
