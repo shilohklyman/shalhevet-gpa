@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Dashboard</title>
-    <link rel="icon" type="image/png" href="logo1.png" />
-    <link rel="apple-touch-icon" href="logo1.png" />
+    <link rel="icon" type="image/png" href="logo.png" />
+    <link rel="apple-touch-icon" href="logo.png" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link
@@ -1609,7 +1609,7 @@
       <!-- Left: Logo -->
       <div class="flex-none flex items-center gap-2 md:gap-3 cursor-pointer" onclick="showPage('home')">
         <img
-          src="logo1.png"
+          src="logo.png"
           alt="Logo"
           class="h-[38px] md:h-[46px] w-auto object-contain"
         />
@@ -3403,53 +3403,125 @@
               </div>
               <div class="flex-1">
                 <h3 class="text-sm font-bold text-zinc-900">Sync Schoology Calendar</h3>
-                <p class="text-xs font-medium text-zinc-500 mt-1 leading-relaxed">Connect your Schoology assignment calendar so all your due dates, quizzes, and class events appear here automatically. All assignments — past and upcoming — are imported so nothing gets missed. Past-due ones will show under Overdue; check them off once done.</p>
+                <p class="text-xs font-medium text-zinc-500 mt-1 leading-relaxed">Connect your Schoology assignment calendar so all your due dates, quizzes, and class events appear here automatically. Once linked, your assignments stay in sync — no more switching between tabs to remember what's due. <strong class="text-amber-600">Heads up:</strong> <span class="text-amber-600">Past assignments are automatically marked as completed when imported. If you have overdue work you haven't actually submitted, find it in the Completed section, uncheck it, and it'll move back to Overdue.</span></p>
               </div>
             </div>
           </div>
 
-          <!-- Step-by-step instructions -->
-          <div class="px-6 py-5 border-b border-zinc-100">
-            <p class="text-[11px] font-black uppercase tracking-widest text-zinc-400 mb-4">How to export your calendar from Schoology</p>
-            <ol class="space-y-3">
-              <li class="flex items-start gap-3">
-                <span class="flex-shrink-0 w-6 h-6 rounded-full bg-shalhevet text-white text-[11px] font-black flex items-center justify-center">1</span>
-                <div>
-                  <p class="text-sm font-bold text-zinc-900">Open Schoology and go to <span class="text-blue-600">Calendar</span></p>
-                  <p class="text-xs text-zinc-500 mt-0.5">In the left sidebar, click "Calendar."</p>
-                </div>
-              </li>
-              <li class="flex items-start gap-3">
-                <span class="flex-shrink-0 w-6 h-6 rounded-full bg-shalhevet text-white text-[11px] font-black flex items-center justify-center">2</span>
-                <div>
-                  <p class="text-sm font-bold text-zinc-900">Click <span class="text-blue-600">Export</span> at the bottom of the page</p>
-                  <p class="text-xs text-zinc-500 mt-0.5">Choose a date range that covers the full school year, then click <strong>Export</strong> to download the <code class="bg-zinc-100 px-1 rounded text-[10px] font-mono">.ics</code> file.</p>
-                </div>
-              </li>
-              <li class="flex items-start gap-3">
-                <span class="flex-shrink-0 w-6 h-6 rounded-full bg-shalhevet text-white text-[11px] font-black flex items-center justify-center">3</span>
-                <div>
-                  <p class="text-sm font-bold text-zinc-900">Upload the <code class="bg-zinc-100 px-1 rounded text-[10px] font-mono">.ics</code> file below</p>
-                  <p class="text-xs text-zinc-500 mt-0.5">All your assignments and events will be imported instantly — no internet connection needed.</p>
-                </div>
-              </li>
-            </ol>
+          <!-- Tab switcher -->
+          <div class="px-6 pt-5 pb-0">
+            <div class="flex gap-1 bg-zinc-100 rounded-xl p-1 w-fit">
+              <button id="sch-tab-btn-file" onclick="setSchoologyTab('file')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-zinc-900 shadow-sm">Upload File</button>
+              <button id="sch-tab-btn-link" onclick="setSchoologyTab('link')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-500">iCal Link</button>
+            </div>
           </div>
 
-          <!-- File upload -->
-          <div class="px-6 py-5">
-            <div id="schoology-drop-zone"
-              class="border-2 border-dashed border-zinc-200 rounded-2xl p-6 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 transition-all"
-              onclick="document.getElementById('schoology-ics-input').click()"
-              ondragover="event.preventDefault();this.classList.add('border-blue-400','bg-blue-50/50')"
-              ondragleave="this.classList.remove('border-blue-400','bg-blue-50/50')"
-              ondrop="event.preventDefault();this.classList.remove('border-blue-400','bg-blue-50/50');handleSchoologyIcsDrop(event)">
-              <svg class="w-8 h-8 text-zinc-300 mx-auto mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <p class="text-sm font-bold text-zinc-500">Drop your <code class="bg-zinc-100 px-1 rounded text-[11px] font-mono">.ics</code> file here, or click to browse</p>
+          <!-- FILE TAB -->
+          <div id="sch-panel-file">
+            <div class="px-6 py-5 border-b border-zinc-100">
+              <p class="text-[11px] font-black uppercase tracking-widest text-zinc-400 mb-4">How to export your calendar from Schoology</p>
+              <ol class="space-y-3">
+                <li class="flex items-start gap-3">
+                  <span class="flex-shrink-0 w-6 h-6 rounded-full bg-shalhevet text-white text-[11px] font-black flex items-center justify-center">1</span>
+                  <div>
+                    <p class="text-sm font-bold text-zinc-900">Open Schoology and go to <span class="text-blue-600">Calendar</span></p>
+                    <p class="text-xs text-zinc-500 mt-0.5">In the left sidebar, click "Calendar."</p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="flex-shrink-0 w-6 h-6 rounded-full bg-shalhevet text-white text-[11px] font-black flex items-center justify-center">2</span>
+                  <div>
+                    <p class="text-sm font-bold text-zinc-900">Click <span class="text-blue-600">Export</span> at the bottom → select <span class="text-blue-600">Download Calendar</span></p>
+                    <p class="text-xs text-zinc-500 mt-0.5">A popup appears with two options — choose <strong>Download Calendar</strong> (not Share Calendar) to save the <code class="bg-zinc-100 px-1 rounded text-[10px] font-mono">.ics</code> file to your device.</p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="flex-shrink-0 w-6 h-6 rounded-full bg-shalhevet text-white text-[11px] font-black flex items-center justify-center">3</span>
+                  <div>
+                    <p class="text-sm font-bold text-zinc-900">Upload the <code class="bg-zinc-100 px-1 rounded text-[10px] font-mono">.ics</code> file below</p>
+                    <p class="text-xs text-zinc-500 mt-0.5">Imports all assignments instantly. Re-upload anytime to refresh.</p>
+                  </div>
+                </li>
+              </ol>
             </div>
-            <input id="schoology-ics-input" type="file" accept=".ics,text/calendar" class="hidden" onchange="handleSchoologyIcsUpload(this.files[0])">
-            <p id="schoology-sync-status" class="text-xs font-medium text-zinc-400 mt-2.5"></p>
+            <div class="px-6 py-5">
+              <!-- Drop zone -->
+              <div id="schoology-drop-zone"
+                class="border-2 border-dashed border-zinc-200 rounded-2xl p-6 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 transition-all"
+                onclick="document.getElementById('schoology-ics-input').click()"
+                ondragover="event.preventDefault();this.classList.add('border-blue-400','bg-blue-50/50')"
+                ondragleave="this.classList.remove('border-blue-400','bg-blue-50/50')"
+                ondrop="event.preventDefault();this.classList.remove('border-blue-400','bg-blue-50/50');handleSchoologyIcsDrop(event)">
+                <svg class="w-8 h-8 text-zinc-300 mx-auto mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <p class="text-sm font-bold text-zinc-500">Drop your <code class="bg-zinc-100 px-1 rounded text-[11px] font-mono">.ics</code> file here, or click to browse</p>
+              </div>
+              <!-- Loaded state -->
+              <div id="schoology-file-loaded" class="hidden border border-zinc-200 rounded-2xl p-4 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3 min-w-0">
+                  <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  </div>
+                  <div class="min-w-0">
+                    <p id="schoology-file-name" class="text-sm font-bold text-zinc-900 truncate">calendar.ics</p>
+                    <p id="schoology-last-synced" class="text-xs text-zinc-400 mt-0.5">Last synced just now</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                  <button onclick="refreshSchoologyIcs()" class="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl hover:bg-blue-700 transition-colors flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+                    Re-sync
+                  </button>
+                  <button onclick="clearSchoologyIcs()" class="px-3 py-2 text-xs font-bold text-zinc-400 hover:text-red-500 rounded-xl hover:bg-red-50 transition-colors">Remove</button>
+                </div>
+              </div>
+              <input id="schoology-ics-input" type="file" accept=".ics,text/calendar" class="hidden" onchange="handleSchoologyIcsUpload(this.files[0])">
+              <p id="schoology-file-status" class="text-xs font-medium text-zinc-400 mt-2.5"></p>
+            </div>
           </div>
+
+          <!-- LINK TAB -->
+          <div id="sch-panel-link" class="hidden">
+            <div class="px-6 py-5 border-b border-zinc-100">
+              <p class="text-[11px] font-black uppercase tracking-widest text-zinc-400 mb-4">How to get your iCal link from Schoology</p>
+              <ol class="space-y-3">
+                <li class="flex items-start gap-3">
+                  <span class="flex-shrink-0 w-6 h-6 rounded-full bg-shalhevet text-white text-[11px] font-black flex items-center justify-center">1</span>
+                  <div>
+                    <p class="text-sm font-bold text-zinc-900">Open Schoology and go to <span class="text-blue-600">Calendar</span></p>
+                    <p class="text-xs text-zinc-500 mt-0.5">In the left sidebar, click "Calendar."</p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="flex-shrink-0 w-6 h-6 rounded-full bg-shalhevet text-white text-[11px] font-black flex items-center justify-center">2</span>
+                  <div>
+                    <p class="text-sm font-bold text-zinc-900">Click <span class="text-blue-600">Export</span> at the bottom → select <span class="text-blue-600">Share Calendar</span></p>
+                    <p class="text-xs text-zinc-500 mt-0.5">A popup appears with two options — choose <strong>Share Calendar</strong> to get your personal iCal subscription link.</p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="flex-shrink-0 w-6 h-6 rounded-full bg-shalhevet text-white text-[11px] font-black flex items-center justify-center">3</span>
+                  <div>
+                    <p class="text-sm font-bold text-zinc-900">Copy the <span class="text-blue-600">iCal link</span> and paste it below</p>
+                    <p class="text-xs text-zinc-500 mt-0.5 break-all">It starts with <code class="bg-zinc-100 px-1 py-0.5 rounded text-[10px] font-mono">webcal://shalhevet.schoology.com/calendar/feed/ical/...</code></p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+            <div class="px-6 py-5">
+              <label class="block text-xs font-bold text-zinc-700 mb-2">Your Schoology iCal Link</label>
+              <div class="flex gap-2">
+                <input id="schoology-ical-input" type="text" placeholder="webcal://shalhevet.schoology.com/calendar/feed/ical/..."
+                  class="flex-1 px-4 py-2.5 text-sm font-medium rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:border-blue-400">
+                <button onclick="saveSchoologyIcal()" class="px-5 py-2.5 bg-shalhevet text-white text-sm font-bold rounded-xl hover:bg-red-700 transition-colors flex-shrink-0 flex items-center gap-2">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+                  Sync
+                </button>
+              </div>
+              <p id="schoology-link-status" class="text-xs font-medium text-zinc-400 mt-2.5"></p>
+            </div>
+          </div>
+          <!-- shared status (kept for any legacy references) -->
+          <p id="schoology-sync-status" class="hidden"></p>
         </div>
       </div>
 
@@ -7414,8 +7486,40 @@
                           return 'Schoology';
                         }
 
+                        function setSchoologyTab(tab) {
+                          localStorage.setItem('schoology_tab', tab);
+                          var filePanel = document.getElementById('sch-panel-file');
+                          var linkPanel = document.getElementById('sch-panel-link');
+                          var fileBtn = document.getElementById('sch-tab-btn-file');
+                          var linkBtn = document.getElementById('sch-tab-btn-link');
+                          if (tab === 'link') {
+                            if (filePanel) filePanel.classList.add('hidden');
+                            if (linkPanel) linkPanel.classList.remove('hidden');
+                            if (fileBtn) { fileBtn.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-500'; }
+                            if (linkBtn) { linkBtn.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-zinc-900 shadow-sm'; }
+                          } else {
+                            if (filePanel) filePanel.classList.remove('hidden');
+                            if (linkPanel) linkPanel.classList.add('hidden');
+                            if (fileBtn) { fileBtn.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-zinc-900 shadow-sm'; }
+                            if (linkBtn) { linkBtn.className = 'px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-zinc-500'; }
+                          }
+                        }
+
+                        function saveSchoologyIcal() {
+                          var inp = document.getElementById('schoology-ical-input');
+                          var status = document.getElementById('schoology-link-status');
+                          if (!inp) return;
+                          var url = inp.value.trim();
+                          if (!url) {
+                            if (status) { status.textContent = 'Please paste your Schoology iCal link first.'; status.className = 'text-xs text-red-500 font-medium'; }
+                            return;
+                          }
+                          localStorage.setItem('schoology_ical_url', url);
+                          fetchSchoologyIcal(url, false);
+                        }
+
                         function processSchoologyIcsText(text) {
-                          var status = document.getElementById('schoology-sync-status');
+                          var status = document.getElementById('schoology-file-status');
                           var events = parseIcal(text);
                           window.schoologyEvents = events;
                           try { localStorage.setItem('schoology_events', JSON.stringify(events)); } catch(e) {}
@@ -7436,7 +7540,7 @@
                             if (!existingIds.has(id) && !existingKeys.has(titleKey)) {
                               existingKeys.add(titleKey);
                               var cat = courseForTitle(ev.summary, rules);
-                              window.tasks.push({ id: id, title: ev.summary, category: cat, type: ev.time ? 'Due ' + ev.time : '', date: ev.dateStr, priority: '', completed: false, schoology: true });
+                              window.tasks.push({ id: id, title: ev.summary, category: cat, type: ev.time ? 'Due ' + ev.time : '', date: ev.dateStr, priority: '', completed: ev.dateStr < todayStr, schoology: true });
                               added++;
                             }
                           });
@@ -7446,9 +7550,60 @@
                           if (typeof renderActivities === 'function') renderActivities();
                         }
 
+                        function updateSchoologyFileUI(filename, syncedAt) {
+                          var dropZone = document.getElementById('schoology-drop-zone');
+                          var loadedBox = document.getElementById('schoology-file-loaded');
+                          var nameEl = document.getElementById('schoology-file-name');
+                          var syncedEl = document.getElementById('schoology-last-synced');
+                          if (!dropZone || !loadedBox) return;
+                          if (filename) {
+                            dropZone.classList.add('hidden');
+                            loadedBox.classList.remove('hidden');
+                            if (nameEl) nameEl.textContent = filename;
+                            if (syncedEl && syncedAt) {
+                              var d = new Date(syncedAt);
+                              syncedEl.textContent = 'Last synced ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' at ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                            }
+                          } else {
+                            dropZone.classList.remove('hidden');
+                            loadedBox.classList.add('hidden');
+                          }
+                        }
+
+                        function refreshSchoologyIcs() {
+                          var text = localStorage.getItem('schoology_ics_text');
+                          var status = document.getElementById('schoology-file-status');
+                          if (!text) {
+                            if (status) { status.textContent = 'No file saved — upload your .ics file first.'; status.className = 'text-xs text-red-500 font-medium'; }
+                            return;
+                          }
+                          window.tasks = (window.tasks || []).filter(function(t) { return !t.schoology; });
+                          if (status) { status.textContent = 'Syncing…'; status.className = 'text-xs text-blue-500 font-medium'; }
+                          try {
+                            processSchoologyIcsText(text);
+                            var now = Date.now();
+                            localStorage.setItem('schoology_ics_synced', now);
+                            updateSchoologyFileUI(localStorage.getItem('schoology_ics_filename'), now);
+                          } catch(err) {
+                            if (status) { status.textContent = 'Sync failed.'; status.className = 'text-xs text-red-500 font-medium'; }
+                          }
+                        }
+
+                        function clearSchoologyIcs() {
+                          localStorage.removeItem('schoology_ics_text');
+                          localStorage.removeItem('schoology_ics_filename');
+                          localStorage.removeItem('schoology_ics_synced');
+                          window.tasks = (window.tasks || []).filter(function(t) { return !t.schoology; });
+                          if (window.cloudSave) window.cloudSave();
+                          updateSchoologyFileUI(null, null);
+                          var status = document.getElementById('schoology-file-status');
+                          if (status) { status.textContent = ''; }
+                          if (typeof renderActivities === 'function') renderActivities();
+                        }
+
                         function handleSchoologyIcsDrop(event) {
                           var file = event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0];
-                          var status = document.getElementById('schoology-sync-status');
+                          var status = document.getElementById('schoology-file-status');
                           if (!file || (!file.name.toLowerCase().endsWith('.ics') && file.type !== 'text/calendar')) {
                             if (status) { status.textContent = 'Please drop an .ics file.'; status.className = 'text-xs text-red-500 font-medium'; }
                             return;
@@ -7458,12 +7613,19 @@
 
                         function handleSchoologyIcsUpload(file) {
                           if (!file) return;
-                          var status = document.getElementById('schoology-sync-status');
+                          var status = document.getElementById('schoology-file-status');
                           if (status) { status.textContent = 'Importing…'; status.className = 'text-xs text-blue-500 font-medium'; }
                           var reader = new FileReader();
                           reader.onload = function(e) {
                             try {
-                              processSchoologyIcsText(e.target.result);
+                              var text = e.target.result;
+                              try { localStorage.setItem('schoology_ics_text', text); } catch(storageErr) {}
+                              localStorage.setItem('schoology_ics_filename', file.name);
+                              var now = Date.now();
+                              localStorage.setItem('schoology_ics_synced', now);
+                              window.tasks = (window.tasks || []).filter(function(t) { return !t.schoology; });
+                              processSchoologyIcsText(text);
+                              updateSchoologyFileUI(file.name, now);
                             } catch(err) {
                               if (status) { status.textContent = 'Import failed — invalid .ics file.'; status.className = 'text-xs text-red-500 font-medium'; }
                             }
@@ -7475,7 +7637,7 @@
                         }
 
                         function fetchSchoologyIcal(rawUrl, silent) {
-                          var status = document.getElementById('schoology-sync-status');
+                          var status = document.getElementById('schoology-link-status');
                           var url = rawUrl.replace(/^webcal:\/\//i, 'https://');
                           var proxyUrl = 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url);
                           if (!silent && status) { status.textContent = 'Syncing…'; status.className = 'text-xs text-blue-500 font-medium'; }
@@ -7483,10 +7645,7 @@
                             .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
                             .then(processSchoologyIcsText)
                             .catch(function() {
-                              if (status) {
-                                status.textContent = 'Sync failed.';
-                                status.className = 'text-xs text-red-500 font-medium';
-                              }
+                              if (status) { status.textContent = 'Sync failed — check your iCal link and try again.'; status.className = 'text-xs text-red-500 font-medium'; }
                             });
                         }
 
@@ -7562,7 +7721,7 @@
                           return ov ? Object.assign({}, task, ov) : task;
                         }
 
-                        // Restore Schoology events and URL from last sync
+                        // Restore Schoology events and file state from last sync
                         (function() {
                           try {
                             var savedEvents = localStorage.getItem('schoology_events');
@@ -7573,6 +7732,21 @@
                             if (savedMap) {
                               var ta = document.getElementById('schoology-course-map');
                               if (ta) ta.value = savedMap;
+                            }
+                            // Restore tab preference
+                            var savedTab = localStorage.getItem('schoology_tab') || 'file';
+                            setSchoologyTab(savedTab);
+                            // Restore file loaded UI
+                            var savedFilename = localStorage.getItem('schoology_ics_filename');
+                            var savedSynced = localStorage.getItem('schoology_ics_synced');
+                            if (savedFilename) {
+                              updateSchoologyFileUI(savedFilename, savedSynced ? +savedSynced : null);
+                            }
+                            // Restore saved iCal URL
+                            var savedUrl = localStorage.getItem('schoology_ical_url');
+                            if (savedUrl) {
+                              var inp = document.getElementById('schoology-ical-input');
+                              if (inp) inp.value = savedUrl;
                             }
                           });
                         })();
