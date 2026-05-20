@@ -8,6 +8,7 @@
     <link rel="apple-touch-icon" href="logo.png" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -1204,23 +1205,18 @@
         <div class="space-y-4 max-h-[60vh] overflow-y-auto hide-scrollbar pr-1">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="space-y-1.5">
-              <label class="text-xs font-bold text-zinc-400"
-                >Activity Name</label
-              >
-              <input
-                id="edit-cc-name"
-                list="activity-catalog"
-                type="text"
-                class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none"
-              />
+              <label class="text-xs font-bold text-zinc-400">Activity Name</label>
+              <input id="edit-cc-name" list="activity-catalog" type="text" maxlength="100"
+                oninput="ccCharCounter(this,100)"
+                class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none"/>
+              <p id="edit-cc-name-counter" class="text-[10px] font-bold text-zinc-400">100 / 100</p>
             </div>
             <div class="space-y-1.5">
               <label class="text-xs font-bold text-zinc-400">Role</label>
-              <input
-                id="edit-cc-role"
-                type="text"
-                class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none"
-              />
+              <input id="edit-cc-role" type="text" maxlength="50"
+                oninput="ccCharCounter(this,50)"
+                class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none"/>
+              <p id="edit-cc-role-counter" class="text-[10px] font-bold text-zinc-400">50 / 50</p>
             </div>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -1301,12 +1297,36 @@
               </button>
             </div>
           </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-zinc-400">Timing</label>
+              <select id="edit-cc-timing" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                <option value="school_year">School Year</option>
+                <option value="summer">Summer</option>
+                <option value="both">School Year &amp; Summer</option>
+              </select>
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-zinc-400">Weeks/Year</label>
+              <input id="edit-cc-weeks" type="number" min="1" max="52"
+                class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold outline-none"/>
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-zinc-400">Continue in College?</label>
+              <div class="flex items-center h-11">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input id="edit-cc-college" type="checkbox" class="w-4 h-4 accent-shalhevet rounded"/>
+                  <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">Yes</span>
+                </label>
+              </div>
+            </div>
+          </div>
           <div class="space-y-1.5">
             <label class="text-xs font-bold text-zinc-400">Description</label>
-            <textarea
-              id="edit-cc-desc"
-              class="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl p-4 text-sm font-bold outline-none h-24 resize-none"
-            ></textarea>
+            <textarea id="edit-cc-desc" maxlength="150"
+              oninput="ccCharCounter(this,150)"
+              class="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl p-4 text-sm font-bold outline-none h-24 resize-none"></textarea>
+            <p id="edit-cc-desc-counter" class="text-[10px] font-bold text-zinc-400">150 / 150</p>
           </div>
         </div>
         <div class="flex gap-3 pt-2">
@@ -1616,32 +1636,16 @@
         <span class="text-[13px] md:text-[16px] font-black tracking-widest uppercase whitespace-nowrap leading-none"><span class="text-white">STUDENT</span> <span class="text-shalhevet">DASHBOARD</span></span>
       </div>
 
-      <!-- Center: Nav links -->
-      <div class="flex-1 min-w-0 flex items-center justify-center">
-        <div class="hidden xl:flex items-center gap-1 max-w-full">
-          <button onclick="showPage('home')" data-page="home" class="nav-link px-3 py-1.5 rounded-2xl text-[12px] font-bold text-white hover:bg-white/10 transition-all whitespace-nowrap">Home</button>
-          <button onclick="showPage('gpa')" data-page="gpa" class="nav-link px-3 py-1.5 rounded-2xl text-[12px] font-bold text-white hover:bg-white/10 transition-all whitespace-nowrap">GPA Tracker</button>
-          <button onclick="showPage('activities')" data-page="activities" class="nav-link px-3 py-1.5 rounded-2xl text-[12px] font-bold text-white hover:bg-white/10 transition-all whitespace-nowrap">Tasks & Activities</button>
-          <button onclick="showPage('college')" data-page="college" class="nav-link px-3 py-1.5 rounded-2xl text-[12px] font-bold text-white hover:bg-white/10 transition-all whitespace-nowrap">Upperclassmen Resources</button>
-          <button onclick="showPage('cocurr')" data-page="cocurr" class="nav-link px-3 py-1.5 rounded-2xl text-[12px] font-bold text-white hover:bg-white/10 transition-all whitespace-nowrap">Co-Curricular Log</button>
-          <button onclick="showPage('goals')" data-page="goals" class="nav-link px-3 py-1.5 rounded-2xl text-[12px] font-bold text-white hover:bg-white/10 transition-all whitespace-nowrap">Goals</button>
-          <button onclick="showPage('chesed')" data-page="chesed" class="nav-link px-3 py-1.5 rounded-2xl text-[12px] font-bold text-white hover:bg-white/10 transition-all whitespace-nowrap">Chesed Hours</button>
-          <button onclick="showPage('calendar')" data-page="calendar" class="nav-link px-3 py-1.5 rounded-2xl text-[12px] font-bold text-white hover:bg-white/10 transition-all whitespace-nowrap">Calendar</button>
-          <button onclick="showPage('study-tools')" data-page="study-tools" class="nav-link px-3 py-1.5 rounded-2xl text-[12px] font-bold text-white hover:bg-white/10 transition-all whitespace-nowrap">Study</button>
-          <button onclick="showPage('resources')" data-page="resources" class="nav-link px-3 py-1.5 rounded-2xl text-[12px] font-bold text-white hover:bg-white/10 transition-all whitespace-nowrap">Other</button>
-        </div>
-      </div>
-
       <!-- Right: Controls -->
       <div class="ml-auto flex items-center gap-1.5 flex-shrink-0">
         <div id="nav-btn-group" class="flex items-center gap-1.5 flex-shrink-0">
           <div id="auth-nav-area" class="flex-shrink-0">
           <button
             onclick="signInWithGoogle()"
-            class="w-8 h-8 md:w-auto md:h-9 md:px-4 md:rounded-xl rounded-full bg-[#222] border border-[#333] text-white hover:border-shalhevet font-bold text-[10px] md:text-xs flex items-center justify-center md:gap-1.5 whitespace-nowrap shrink-0 transition-all"
+            class="w-auto h-9 px-4 rounded-xl bg-[#222] border border-[#333] text-white hover:border-shalhevet font-bold text-xs flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0 transition-all"
           >
             <i data-lucide="user" class="w-3.5 h-3.5"></i>
-            <span class="hidden md:inline">Sign In</span>
+            <span>Sign In</span>
           </button>
           </div>
           <button
@@ -2315,7 +2319,13 @@
             </style>
             <div class="flex items-center justify-between mb-1">
               <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">Block Schedule</p>
-              <span id="schedule-type-badge" class="text-[9px] font-black px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 uppercase tracking-wider">Normal</span>
+              <div class="flex items-center gap-2">
+                <button onclick="exportScheduleAsImage()" title="Share Schedule" class="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100 rounded-xl transition-all">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                  Share
+                </button>
+                <span id="schedule-type-badge" class="text-[9px] font-black px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-500 uppercase tracking-wider">Normal</span>
+              </div>
             </div>
             <p class="text-[9px] font-medium text-zinc-400 dark:text-zinc-500 -mt-1 mb-0.5">To show course names here, go to the <button onclick="showPage('gpa')" class="underline font-bold text-zinc-500 dark:text-zinc-400 hover:text-shalhevet transition-colors">GPA Tracker</button> — set your current year and its courses, then assign each course a block.</p>
             <div class="bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-[28px] overflow-hidden shadow-sm flex-1 flex flex-col">
@@ -3942,6 +3952,12 @@
             </div>
           </div>
         </div>
+        <div class="flex justify-end">
+          <button onclick="exportCoCurrPDF()" class="flex items-center gap-2 px-5 py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-bold rounded-xl hover:opacity-80 transition-all shadow-sm">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            Export as PDF
+          </button>
+        </div>
         <div
           id="cc-form-container"
           class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm"
@@ -3956,29 +3972,18 @@
           <div class="p-6 space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="space-y-2">
-                <label
-                  class="text-xs font-bold text-zinc-400 uppercase tracking-wider"
-                  >ACTIVITY NAME</label
-                >
-                <input
-                  id="cc-name"
-                  list="activity-catalog"
-                  type="text"
-                  placeholder="e.g. Model UN"
-                  class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold focus:ring-2 focus:ring-shalhevet outline-none"
-                />
+                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">ACTIVITY NAME</label>
+                <input id="cc-name" list="activity-catalog" type="text" placeholder="e.g. Model UN" maxlength="100"
+                  oninput="ccCharCounter(this,100)"
+                  class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold focus:ring-2 focus:ring-shalhevet outline-none"/>
+                <p id="cc-name-counter" class="text-[10px] font-bold text-zinc-400">100 / 100</p>
               </div>
               <div class="space-y-2">
-                <label
-                  class="text-xs font-bold text-zinc-400 uppercase tracking-wider"
-                  >ROLE</label
-                >
-                <input
-                  id="cc-role"
-                  type="text"
-                  placeholder="e.g. Captain, Founder"
-                  class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold focus:ring-2 focus:ring-shalhevet outline-none"
-                />
+                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">ROLE</label>
+                <input id="cc-role" type="text" placeholder="e.g. Captain, Founder" maxlength="50"
+                  oninput="ccCharCounter(this,50)"
+                  class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold focus:ring-2 focus:ring-shalhevet outline-none"/>
+                <p id="cc-role-counter" class="text-[10px] font-bold text-zinc-400">50 / 50</p>
               </div>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-[1fr_1fr_auto_1fr] gap-4 items-end">
@@ -4060,16 +4065,36 @@
                 </select>
               </div>
             </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="space-y-2">
+                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">TIMING</label>
+                <select id="cc-timing" class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none">
+                  <option value="school_year">School Year</option>
+                  <option value="summer">Summer</option>
+                  <option value="both">School Year &amp; Summer</option>
+                </select>
+              </div>
+              <div class="space-y-2">
+                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">WKS/YEAR</label>
+                <input id="cc-weeks" type="number" min="1" max="52" placeholder="e.g. 36"
+                  class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-4 text-sm font-bold focus:ring-2 focus:ring-shalhevet outline-none"/>
+              </div>
+              <div class="space-y-2">
+                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">CONTINUE IN COLLEGE?</label>
+                <div class="flex items-center h-11">
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input id="cc-college" type="checkbox" class="w-4 h-4 accent-shalhevet rounded"/>
+                    <span class="text-sm font-bold text-zinc-700 dark:text-zinc-300">Yes</span>
+                  </label>
+                </div>
+              </div>
+            </div>
             <div class="space-y-2">
-              <label
-                class="text-xs font-bold text-zinc-400 uppercase tracking-wider"
-                >DESCRIPTION</label
-              >
-              <textarea
-                id="cc-desc"
-                placeholder="What you actually did..."
-                class="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl p-4 text-sm font-bold outline-none h-20 resize-none focus:ring-2 focus:ring-shalhevet"
-              ></textarea>
+              <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">DESCRIPTION</label>
+              <textarea id="cc-desc" placeholder="What you actually did..." maxlength="150"
+                oninput="ccCharCounter(this,150)"
+                class="w-full bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl p-4 text-sm font-bold outline-none h-20 resize-none focus:ring-2 focus:ring-shalhevet"></textarea>
+              <p id="cc-desc-counter" class="text-[10px] font-bold text-zinc-400">150 / 150</p>
             </div>
             <button
               onclick="addCoCurr()"
@@ -9269,11 +9294,25 @@
                             }
                             lucide.createIcons();
                         }
+                        function ccCharCounter(inputEl, limit) {
+                          if (!inputEl) return;
+                          const counterId = inputEl.id + '-counter';
+                          let counter = document.getElementById(counterId);
+                          const remaining = limit - inputEl.value.length;
+                          if (counter) {
+                            counter.textContent = remaining + ' / ' + limit;
+                            counter.className = 'text-[10px] font-bold ' + (remaining <= 10 ? 'text-red-500' : remaining <= 25 ? 'text-amber-500' : 'text-zinc-400');
+                          }
+                        }
+
                         function addCoCurr() {
                             const name = document.getElementById('cc-name').value, role = document.getElementById('cc-role').value, desc = document.getElementById('cc-desc').value, hours = document.getElementById('cc-hours').value, category = document.getElementById('cc-category').value, status = document.getElementById('cc-status').value;
+                            const timing = document.getElementById('cc-timing')?.value || 'school_year';
+                            const weeks = document.getElementById('cc-weeks')?.value || '';
+                            const college = document.getElementById('cc-college')?.checked || false;
                             const grades = getSelectedGrades('cc-grade-selector');
                             if (!name) return;
-                            window.cocurrs.unshift(normalizeCoCurrRecord({ id: Date.now().toString(), name, role, desc, grades, hours, category, status }));
+                            window.cocurrs.unshift(normalizeCoCurrRecord({ id: Date.now().toString(), name, role, desc, grades, hours, category, status, timing, weeks, college }));
                             if (window.cloudSave) window.cloudSave();
                             resetCCForm();
                             renderCoCurr();
@@ -9290,15 +9329,31 @@
                             document.getElementById('edit-cc-category').value = c.category || 'Club';
                             document.getElementById('edit-cc-status').value = coCurrStatusSelectValue(c);
                             setSelectedGrades('edit-cc-grade-selector', c.grades || []);
+                            const timingEl = document.getElementById('edit-cc-timing');
+                            const weeksEl = document.getElementById('edit-cc-weeks');
+                            const collegeEl = document.getElementById('edit-cc-college');
+                            if (timingEl) timingEl.value = c.timing || 'school_year';
+                            if (weeksEl) weeksEl.value = c.weeks || '';
+                            if (collegeEl) collegeEl.checked = c.college || false;
+                            // update counters
+                            const nameEl = document.getElementById('edit-cc-name');
+                            const roleEl = document.getElementById('edit-cc-role');
+                            const descEl = document.getElementById('edit-cc-desc');
+                            if (nameEl) ccCharCounter(nameEl, 100);
+                            if (roleEl) ccCharCounter(roleEl, 50);
+                            if (descEl) ccCharCounter(descEl, 150);
                             document.getElementById('edit-cc-modal').classList.add('open');
                             lucide.createIcons();
                         }
                         function closeEditCCModal() { document.getElementById('edit-cc-modal').classList.remove('open'); editingCCId = null; }
                         function saveEditCC() {
                             const name = document.getElementById('edit-cc-name').value, role = document.getElementById('edit-cc-role').value, desc = document.getElementById('edit-cc-desc').value, hours = document.getElementById('edit-cc-hours').value, category = document.getElementById('edit-cc-category').value, status = document.getElementById('edit-cc-status').value, grades = getSelectedGrades('edit-cc-grade-selector');
+                            const timing = document.getElementById('edit-cc-timing')?.value || 'school_year';
+                            const weeks = document.getElementById('edit-cc-weeks')?.value || '';
+                            const college = document.getElementById('edit-cc-college')?.checked || false;
                             if (!name) return;
                             const idx = window.cocurrs.findIndex(c => c.id === editingCCId);
-                            if (idx !== -1) window.cocurrs[idx] = normalizeCoCurrRecord({ ...window.cocurrs[idx], name, role, desc, hours, category, status, grades });
+                            if (idx !== -1) window.cocurrs[idx] = normalizeCoCurrRecord({ ...window.cocurrs[idx], name, role, desc, hours, category, status, grades, timing, weeks, college });
                             if (window.cloudSave) window.cloudSave();
                             closeEditCCModal();
                             renderCoCurr();
@@ -9337,7 +9392,16 @@
                             });
                         }
 
-                        function resetCCForm() { document.getElementById('cc-name').value = ''; document.getElementById('cc-role').value = ''; document.getElementById('cc-desc').value = ''; document.getElementById('cc-hours').value = ''; document.getElementById('cc-status').value = 'ACTIVE'; setSelectedGrades('cc-grade-selector', []); }
+                        function resetCCForm() { document.getElementById('cc-name').value = ''; document.getElementById('cc-role').value = ''; document.getElementById('cc-desc').value = ''; document.getElementById('cc-hours').value = ''; document.getElementById('cc-status').value = 'ACTIVE'; setSelectedGrades('cc-grade-selector', []);
+                            const timingEl = document.getElementById('cc-timing');
+                            const weeksEl = document.getElementById('cc-weeks');
+                            const collegeEl = document.getElementById('cc-college');
+                            if (timingEl) timingEl.value = 'school_year';
+                            if (weeksEl) weeksEl.value = '';
+                            if (collegeEl) collegeEl.checked = false;
+                            // reset counters
+                            ['cc-name','cc-role','cc-desc'].forEach(id => { const el = document.getElementById(id+'-counter'); if(el) el.textContent = (id==='cc-name'?100:id==='cc-role'?50:150) + ' / ' + (id==='cc-name'?100:id==='cc-role'?50:150); });
+                        }
                         function deleteCoCurr(id) { window.cocurrs = window.cocurrs.filter(x => x.id !== id); if (window.cloudSave) window.cloudSave(); renderCoCurr(); safeRender('Home panels', renderHomePanels); }
                 // ── CHESED ─────────────────────────────────────────
                 let editingChesedId = null;
@@ -13091,6 +13155,89 @@
                             // Load published special schedules for guest/pre-auth view
                             if (window.loadPublishedSpecialSchedules) window.loadPublishedSpecialSchedules();
                         });
+
+                        function exportCoCurrPDF() {
+                            const items = window.cocurrs || [];
+                            if (!items.length) { alert('No co-curricular activities to export.'); return; }
+                            const timingLabel = t => t === 'summer' ? 'During school break' : t === 'both' ? 'All year' : 'During school year';
+                            const gradesLabel = g => Array.isArray(g) && g.length ? g.join(', ') : '—';
+                            const esc = s => (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                            const rows = items.map((item, i) => `
+                              <div class="activity-block">
+                                <p class="activity-header"><em>Activity ${i + 1}</em></p>
+                                <p class="field-line"><strong>Activity Type:</strong> ${esc(item.category) || '—'}</p>
+                                <p class="field-line"><strong>Position/Leadership description <span class="red-label">(Max characters: 50):</span></strong> ${esc(item.role) || '—'} <span class="char-note">${(item.role||'').length}/50</span></p>
+                                <p class="field-line"><strong>Organization Name <span class="red-label">(Max characters: 100):</span></strong> ${esc(item.name) || '—'} <span class="char-note">${(item.name||'').length}/100</span></p>
+                                <p class="field-line"><strong>Please describe this activity, including what you accomplished and any recognition you received, etc. <span class="red-label">(Max Characters: 150):</span></strong> ${esc(item.desc) || '—'} <span class="char-note">${(item.desc||'').length}/150</span></p>
+                                <p class="field-line"><strong>Participation grade levels:</strong> ${gradesLabel(item.grades)}</p>
+                                <p class="field-line"><strong>Timing of participation:</strong> ${timingLabel(item.timing)}</p>
+                                <p class="field-line"><strong>Hours spent per week:</strong> ${esc(item.hours) || '—'}</p>
+                                <p class="field-line"><strong>Weeks spent per year:</strong> ${esc(item.weeks) || '—'}</p>
+                                <p class="field-line"><strong>I intend to participate in a similar activity in college:</strong> ${item.college ? 'Yes' : 'No'}</p>
+                              </div>`).join('<hr class="activity-divider">');
+
+                            const exportDate = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+                            const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+                            <title>Extracurricular Activity Worksheet</title>
+                            <style>
+                              * { box-sizing: border-box; margin: 0; padding: 0; }
+                              body { font-family: Arial, Helvetica, sans-serif; font-size: 11pt; color: #111; background: #fff; padding: 40px 48px; }
+                              .doc-header { text-align: center; margin-bottom: 18px; }
+                              .school-name { font-size: 15pt; font-weight: bold; color: #cc0000; margin-bottom: 2px; }
+                              .office-name { font-size: 12pt; font-weight: bold; color: #111; margin-bottom: 2px; }
+                              .worksheet-title { font-size: 12pt; font-weight: bold; color: #111; margin-bottom: 10px; }
+                              .export-date { font-size: 10pt; color: #555; font-style: italic; margin-bottom: 28px; text-align: center; }
+                              .activity-block { page-break-inside: avoid; margin-bottom: 16px; }
+                              .activity-header { font-size: 11pt; font-weight: bold; margin-bottom: 8px; }
+                              .field-line { font-size: 11pt; color: #111; margin-bottom: 5px; line-height: 1.5; }
+                              .red-label { color: #cc0000; font-weight: bold; }
+                              .char-note { font-size: 9pt; color: #888; margin-left: 6px; }
+                              .activity-divider { border: none; border-top: 1px solid #ccc; margin: 16px 0; }
+                              @media print { body { padding: 20px 28px; } }
+                            </style></head><body>
+                            <div class="doc-header">
+                              <div class="school-name">Shalhevet High School</div>
+                              <div class="office-name">College Counseling Office</div>
+                              <div class="worksheet-title">Extracurricular Activity Worksheet for The Common Application</div>
+                            </div>
+                            <p class="export-date"><em>Exported from Student Dashboard &mdash; ${exportDate}</em></p>
+                            ${rows}
+                            <script>window.onload=function(){window.print();}<\/script>
+                            </body></html>`;
+
+                            const w = window.open('', '_blank');
+                            if (w) { w.document.write(html); w.document.close(); }
+                        }
+
+                        function exportScheduleAsImage() {
+                            const el = document.getElementById('sched-table');
+                            if (!el) return;
+                            const btn = document.querySelector('[onclick="exportScheduleAsImage()"]');
+                            if (btn) { btn.textContent = 'Capturing…'; btn.disabled = true; }
+                            const isDark = document.documentElement.classList.contains('dark');
+                            html2canvas(el, {
+                                scale: 2,
+                                useCORS: true,
+                                backgroundColor: isDark ? '#1c1c1e' : '#ffffff',
+                                logging: false
+                            }).then(canvas => {
+                                canvas.toBlob(blob => {
+                                    const url = URL.createObjectURL(blob);
+                                    const filename = 'schedule.png';
+                                    if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], filename, { type: 'image/png' })] })) {
+                                        navigator.share({ title: 'My Schedule', files: [new File([blob], filename, { type: 'image/png' })] })
+                                          .catch(() => { const a = document.createElement('a'); a.href = url; a.download = filename; a.click(); });
+                                    } else {
+                                        const a = document.createElement('a'); a.href = url; a.download = filename; a.click();
+                                    }
+                                    setTimeout(() => URL.revokeObjectURL(url), 5000);
+                                    if (btn) { btn.innerHTML = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Share'; btn.disabled = false; }
+                                }, 'image/png');
+                            }).catch(() => {
+                                if (btn) { btn.textContent = 'Share'; btn.disabled = false; }
+                                alert('Could not capture schedule.');
+                            });
+                        }
       </script>
     </main>
   </body>
