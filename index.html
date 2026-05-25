@@ -168,6 +168,11 @@
       .college-drag-handle:active { cursor: grabbing; }
       .college-card-dragging { opacity: 0.4; }
       .college-card-dragover { outline: 2px solid #cc0000; outline-offset: -2px; border-radius: 24px; }
+      .cc-card-dragging { opacity: 0.4; }
+      .cc-card-dragover { outline: 2px solid #cc0000; outline-offset: -2px; border-radius: 16px; }
+      .cc-drag-handle { cursor: grab; color: #d4d4d8; padding: 2px 4px; touch-action: none; }
+      .cc-drag-handle:hover { color: #a1a1aa; }
+      .cc-drag-handle:active { cursor: grabbing; }
               .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
               .calendar-grid-large { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 1px; column-gap: 0; background: #ececec; border-radius: 12px; overflow: hidden; }
               .dark .calendar-grid-large { background: #2d2d30; }
@@ -1221,23 +1226,42 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="space-y-1.5">
-              <label class="text-xs font-bold text-zinc-400">Category</label>
+              <label class="text-xs font-bold text-zinc-400">Activity Type</label>
               <select
                 id="edit-cc-category"
                 class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none"
               >
-                <option>Club</option>
-                <option>Organization</option>
-                <option>Youth Group</option>
-                <option>Sport</option>
-                <option>Volunteer</option>
-                <option>Job</option>
+                <option value="">— Select Type —</option>
+                <option>Academic</option>
+                <option>Art</option>
+                <option>Athletics: Club</option>
+                <option>Athletics: JV/Varsity</option>
+                <option>Career Oriented</option>
+                <option>Community Service (Volunteer)</option>
+                <option>Computer/Technology</option>
+                <option>Cultural</option>
+                <option>Dance</option>
+                <option>Debate/Speech</option>
+                <option>Environmental</option>
+                <option>Family Responsibilities</option>
+                <option>Foreign Exchange</option>
+                <option>Foreign Language</option>
                 <option>Internship</option>
-                <option>Project</option>
-                <option>Fellowship</option>
-                <option>Publication</option>
-                <option>Academic Team</option>
-                <option>Program</option>
+                <option>Journalism/Publication</option>
+                <option>Junior R.O.T.C.</option>
+                <option>LGBT</option>
+                <option>Music: Instrumental</option>
+                <option>Music: Vocal</option>
+                <option>Religious</option>
+                <option>Research</option>
+                <option>Robotics</option>
+                <option>School Spirit</option>
+                <option>Science/Math</option>
+                <option>Social Justice</option>
+                <option>Student Govt./Politics</option>
+                <option>Theater/Drama</option>
+                <option>Work (Paid)</option>
+                <option>Other Club/Activity</option>
               </select>
             </div>
             <div class="space-y-1.5">
@@ -3684,6 +3708,7 @@
                     <option value="">—</option>
                     <option value="RD">RD</option>
                     <option value="EA">EA</option>
+                    <option value="EA II">EA II</option>
                     <option value="ED">ED</option>
                     <option value="ED II">ED II</option>
                     <option value="REA">REA</option>
@@ -3953,9 +3978,9 @@
           </div>
         </div>
         <div class="flex justify-end">
-          <button onclick="exportCoCurrPDF()" class="flex items-center gap-2 px-5 py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-bold rounded-xl hover:opacity-80 transition-all shadow-sm">
+          <button id="cc-export-pdf-btn" onclick="exportCoCurrPDF()" class="flex items-center gap-2 px-5 py-2.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-xs font-bold rounded-xl hover:opacity-80 transition-all shadow-sm">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-            Export as PDF
+            <span id="cc-pdf-btn-label">Export PDF</span>
           </button>
         </div>
         <div
@@ -3990,24 +4015,43 @@
               <div class="space-y-2">
                 <label
                   class="text-xs font-bold text-zinc-400 uppercase tracking-wider"
-                  >CATEGORY</label
+                  >ACTIVITY TYPE</label
                 >
                 <select
                   id="cc-category"
                   class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-sm font-bold outline-none"
                 >
-                  <option>Club</option>
-                  <option>Organization</option>
-                  <option>Youth Group</option>
-                  <option>Sport</option>
-                  <option>Volunteer</option>
-                  <option>Job</option>
+                  <option value="">— Select Type —</option>
+                  <option>Academic</option>
+                  <option>Art</option>
+                  <option>Athletics: Club</option>
+                  <option>Athletics: JV/Varsity</option>
+                  <option>Career Oriented</option>
+                  <option>Community Service (Volunteer)</option>
+                  <option>Computer/Technology</option>
+                  <option>Cultural</option>
+                  <option>Dance</option>
+                  <option>Debate/Speech</option>
+                  <option>Environmental</option>
+                  <option>Family Responsibilities</option>
+                  <option>Foreign Exchange</option>
+                  <option>Foreign Language</option>
                   <option>Internship</option>
-                  <option>Project</option>
-                  <option>Fellowship</option>
-                  <option>Publication</option>
-                  <option>Academic Team</option>
-                  <option>Program</option>
+                  <option>Journalism/Publication</option>
+                  <option>Junior R.O.T.C.</option>
+                  <option>LGBT</option>
+                  <option>Music: Instrumental</option>
+                  <option>Music: Vocal</option>
+                  <option>Religious</option>
+                  <option>Research</option>
+                  <option>Robotics</option>
+                  <option>School Spirit</option>
+                  <option>Science/Math</option>
+                  <option>Social Justice</option>
+                  <option>Student Govt./Politics</option>
+                  <option>Theater/Drama</option>
+                  <option>Work (Paid)</option>
+                  <option>Other Club/Activity</option>
                 </select>
               </div>
               <div class="space-y-2">
@@ -7314,6 +7358,7 @@
                         })();
 
                         let editingCCId = null;
+                        let ccDragSrcIdx = null;
                         let editingTaskId = null;
                         let currentCalendarDate = new Date();
                         let selectedDate = new Date().toLocaleDateString('en-CA');
@@ -8924,7 +8969,7 @@
                                                     <div class="space-y-1.5">
                                                         <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Application type</label>
                                                         <select onchange="updateCollege('${c.id}','appType',this.value)" class="w-full h-10 bg-zinc-50 dark:bg-zinc-800 border-none rounded-xl px-3 text-[12px] font-bold outline-none">
-                                                            ${['','RD','EA','ED','ED II','REA'].map(v => `<option value="${v}" ${String(c.appType||'')===v?'selected':''}>${v || '—'}</option>`).join('')}
+                                                            ${['','RD','EA','EA II','ED','ED II','REA'].map(v => `<option value="${v}" ${String(c.appType||'')===v?'selected':''}>${v || '—'}</option>`).join('')}
                                                         </select>
                                                     </div>
                                                     <div class="space-y-1.5">
@@ -9247,7 +9292,7 @@
 
                         function normalizeCoCurrRecord(item) {
                             const status = normalizeCoCurrStatus(item);
-                            return { ...item, status, active: status === 'IN_PROGRESS' };
+                            return { ...item, status, active: status === 'IN_PROGRESS', inPDF: item.inPDF === true };
                         }
 
                         function normalizeCoCurrItems(items) {
@@ -9263,10 +9308,13 @@
                             document.getElementById('cc-stat-total').innerText = normalizedItems.length;
                             document.getElementById('cc-stat-leadership').innerText = normalizedItems.filter(c => ['Captain','Founder','President','Lead','Head'].some(k => String(c.role || '').toLowerCase().includes(k.toLowerCase()))).length;
                             document.getElementById('cc-stat-hours').innerText = normalizedItems.reduce((acc, c) => acc + (c.status === 'IN_PROGRESS' ? parseInt(c.hours || 0, 10) : 0), 0) + 'h';
+                            const _pdfCount = normalizedItems.filter(x => x.inPDF).length;
+                            const _pdfLabelEl = document.getElementById('cc-pdf-btn-label');
+                            if (_pdfLabelEl) _pdfLabelEl.textContent = _pdfCount > 0 ? `Export PDF (${_pdfCount})` : 'Export PDF';
                             if (normalizedItems.length === 0) {
                                 grid.innerHTML = `<div class="col-span-full text-center py-16 bg-zinc-50/50 dark:bg-zinc-900/30 rounded-[32px] border border-zinc-300 dark:border-zinc-600"><div class="w-12 h-12 bg-violet-50 dark:bg-violet-950/30 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-sm text-violet-400"><i data-lucide="clipboard-list"></i></div><h3 class="text-zinc-900 dark:text-white font-bold text-xs">No activities added</h3><p class="text-zinc-400 font-bold text-[11px] mt-1 mb-4">Log your first co-curricular.</p></div>`;
                             } else {
-                                normalizedItems.forEach(c => {
+                                normalizedItems.forEach((c, idx) => {
                                     const statusMeta = {
                                         IN_PROGRESS: {
                                             card: 'bg-white dark:bg-zinc-900 border-transparent',
@@ -9288,7 +9336,13 @@
                                     const card = document.createElement('div');
                                     card.className = `border-2 shadow-sm rounded-[16px] overflow-hidden p-4 space-y-3 transition-all ${statusInfo.card}`;
                                     card.dataset.searchKey = `cocurr-${c.id}`;
-                                    card.innerHTML = `<div class="flex items-start justify-between gap-2"><div class="space-y-1 flex-1 min-w-0"><h3 class="act-name font-bold text-sm truncate">${c.name}</h3><div class="flex flex-wrap items-center gap-2"><span class="badge text-[10px] font-bold px-1.5 py-0 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 uppercase tracking-wider">${c.role.toUpperCase()}</span>${c.hours ? `<span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">${c.hours}H/WK</span>` : ''}</div></div><div class="flex items-center gap-1"><button onclick="startEditCoCurr('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteCoCurr('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div></div><div class="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800/50"><div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full ${statusInfo.dot}"></div><span class="badge text-xs font-bold text-zinc-400 uppercase tracking-wider">${statusInfo.label}</span></div><div class="flex gap-1">${(c.grades || []).map(g => `<span class="w-5 h-5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-500 text-xs font-bold flex items-center justify-center">${g}</span>`).join('')}</div></div>`;
+                                    card.draggable = true;
+                                    card.dataset.ccidx = idx;
+                                    card.addEventListener('dragstart', e => onCCDragStart(e, idx));
+                                    card.addEventListener('dragover', e => onCCDragOver(e, card));
+                                    card.addEventListener('drop', e => onCCDragDrop(e, idx));
+                                    card.addEventListener('dragend', e => onCCDragEnd(e));
+                                    card.innerHTML = `<div class="flex items-start justify-between gap-2"><div class="cc-drag-handle flex items-center self-stretch pr-1" title="Drag to reorder"><i data-lucide="grip-vertical" class="w-3.5 h-3.5"></i></div><div class="space-y-1 flex-1 min-w-0"><h3 class="act-name font-bold text-sm truncate">${c.name}</h3><div class="flex flex-wrap items-center gap-2"><span class="badge text-[10px] font-bold px-1.5 py-0 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 uppercase tracking-wider">${c.role.toUpperCase()}</span>${c.hours ? `<span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">${c.hours}H/WK</span>` : ''}</div></div><div class="flex items-center gap-1"><button onclick="toggleCoCurrPDF('${c.id}')" title="${c.inPDF ? 'Remove from PDF export' : 'Add to PDF export'}" class="p-1 transition-colors ${c.inPDF ? 'text-shalhevet' : 'text-zinc-300 hover:text-zinc-500'}"><i data-lucide="file-text" class="w-3.5 h-3.5"></i></button><button onclick="startEditCoCurr('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteCoCurr('${c.id}')" class="text-zinc-300 hover:text-shalhevet p-1 transition-colors"><i data-lucide="x" class="w-3.5 h-3.5"></i></button></div></div><div class="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800/50"><div class="flex items-center gap-1.5"><div class="w-1.5 h-1.5 rounded-full ${statusInfo.dot}"></div><span class="badge text-xs font-bold text-zinc-400 uppercase tracking-wider">${statusInfo.label}</span></div><div class="flex gap-1">${(c.grades || []).map(g => `<span class="w-5 h-5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-500 text-xs font-bold flex items-center justify-center">${g}</span>`).join('')}</div></div>`;
                                     grid.appendChild(card);
                                 });
                             }
@@ -9326,7 +9380,7 @@
                             document.getElementById('edit-cc-role').value = c.role;
                             document.getElementById('edit-cc-desc').value = c.desc;
                             document.getElementById('edit-cc-hours').value = c.hours;
-                            document.getElementById('edit-cc-category').value = c.category || 'Club';
+                            document.getElementById('edit-cc-category').value = c.category || '';
                             document.getElementById('edit-cc-status').value = coCurrStatusSelectValue(c);
                             setSelectedGrades('edit-cc-grade-selector', c.grades || []);
                             const timingEl = document.getElementById('edit-cc-timing');
@@ -9401,6 +9455,43 @@
                             if (collegeEl) collegeEl.checked = false;
                             // reset counters
                             ['cc-name','cc-role','cc-desc'].forEach(id => { const el = document.getElementById(id+'-counter'); if(el) el.textContent = (id==='cc-name'?100:id==='cc-role'?50:150) + ' / ' + (id==='cc-name'?100:id==='cc-role'?50:150); });
+                        }
+                        function onCCDragStart(e, idx) {
+                            ccDragSrcIdx = idx;
+                            e.dataTransfer.effectAllowed = 'move';
+                            setTimeout(() => e.target.closest('[data-ccidx]')?.classList.add('cc-card-dragging'), 0);
+                        }
+                        function onCCDragOver(e, el) {
+                            e.preventDefault();
+                            e.dataTransfer.dropEffect = 'move';
+                            document.querySelectorAll('[data-ccidx]').forEach(c => c.classList.remove('cc-card-dragover'));
+                            el.classList.add('cc-card-dragover');
+                        }
+                        function onCCDragDrop(e, idx) {
+                            e.preventDefault();
+                            document.querySelectorAll('[data-ccidx]').forEach(c => { c.classList.remove('cc-card-dragover'); c.classList.remove('cc-card-dragging'); });
+                            if (ccDragSrcIdx === null || ccDragSrcIdx === idx) { ccDragSrcIdx = null; return; }
+                            const arr = window.cocurrs;
+                            const [moved] = arr.splice(ccDragSrcIdx, 1);
+                            arr.splice(idx, 0, moved);
+                            ccDragSrcIdx = null;
+                            if (window.cloudSave) window.cloudSave();
+                            renderCoCurr();
+                        }
+                        function onCCDragEnd(e) {
+                            ccDragSrcIdx = null;
+                            document.querySelectorAll('[data-ccidx]').forEach(c => { c.classList.remove('cc-card-dragover'); c.classList.remove('cc-card-dragging'); });
+                        }
+                        function toggleCoCurrPDF(id) {
+                            const idx = window.cocurrs.findIndex(x => x.id === id);
+                            if (idx === -1) return;
+                            const currentlySelected = window.cocurrs.filter(x => x.inPDF).length;
+                            if (!window.cocurrs[idx].inPDF && currentlySelected >= 10) {
+                                alert('The Common App allows a maximum of 10 activities.\n\nDeselect one before adding another.'); return;
+                            }
+                            window.cocurrs[idx].inPDF = !window.cocurrs[idx].inPDF;
+                            if (window.cloudSave) window.cloudSave();
+                            renderCoCurr();
                         }
                         function deleteCoCurr(id) { window.cocurrs = window.cocurrs.filter(x => x.id !== id); if (window.cloudSave) window.cloudSave(); renderCoCurr(); safeRender('Home panels', renderHomePanels); }
                 // ── CHESED ─────────────────────────────────────────
@@ -13157,8 +13248,8 @@
                         });
 
                         function exportCoCurrPDF() {
-                            const items = window.cocurrs || [];
-                            if (!items.length) { alert('No co-curricular activities to export.'); return; }
+                            const items = (window.cocurrs || []).filter(x => x.inPDF).slice(0, 10);
+                            if (!items.length) { alert('No activities selected for PDF export.\n\nClick the document icon on an activity card to include it.'); return; }
                             const timingLabel = t => t === 'summer' ? 'During school break' : t === 'both' ? 'All year' : 'During school year';
                             const gradesLabel = g => Array.isArray(g) && g.length ? g.join(', ') : '—';
                             const esc = s => (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
