@@ -1756,6 +1756,12 @@
           Calendar
         </button>
         <button
+          onclick="showPage('finals'); toggleHamburgerMenu();"
+          class="w-full px-5 py-2.5 text-left text-[13px] font-bold text-zinc-800 dark:text-zinc-200 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-shalhevet transition-colors"
+        >
+          Finals
+        </button>
+        <button
           onclick="showPage('study-tools'); toggleHamburgerMenu();"
           class="w-full px-5 py-2.5 text-left text-[13px] font-bold text-zinc-800 dark:text-zinc-200 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-shalhevet transition-colors"
         >
@@ -4322,6 +4328,52 @@
 
       </div>
 
+      <!-- FINALS PAGE -->
+      <div id="page-finals" class="page-content hidden space-y-8">
+        <!-- Header -->
+        <div class="space-y-1">
+          <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">Finals <span class="text-shalhevet">Schedule</span></h1>
+          <p id="finals-page-subtitle" class="text-zinc-500 dark:text-zinc-400 text-sm font-medium leading-relaxed">All of your exam dates, times, and subjects for finals week.</p>
+        </div>
+
+        <!-- No data state -->
+        <div id="finals-empty" class="text-center py-16 bg-zinc-50/50 dark:bg-zinc-900/30 rounded-[32px] border border-zinc-200 dark:border-zinc-700">
+          <div class="w-12 h-12 bg-red-50 dark:bg-red-950/30 rounded-2xl flex items-center justify-center mx-auto mb-3 text-shalhevet">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>
+          </div>
+          <h3 class="text-zinc-900 dark:text-white font-bold text-sm">No finals coming up. Carry on.</h3>
+          <p class="text-zinc-400 font-bold text-[11px] mt-1">Enjoy it while it lasts. Check back closer to finals week.</p>
+        </div>
+
+        <!-- Schedule content (shown when data exists) -->
+        <div id="finals-content" class="hidden space-y-6">
+          <!-- Notes / Reminders card -->
+          <div id="finals-notes-card" class="hidden bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 rounded-[20px] p-5 space-y-2">
+            <div class="flex items-center gap-2 mb-1">
+              <svg class="w-4 h-4 text-amber-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span class="text-xs font-black text-amber-700 dark:text-amber-400 uppercase tracking-wider">Important Reminders</span>
+            </div>
+            <ul id="finals-notes-list" class="space-y-1.5 text-sm font-medium text-amber-900 dark:text-amber-200 list-none pl-0"></ul>
+          </div>
+
+          <!-- Exam table -->
+          <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+            <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
+              <h2 id="finals-table-title" class="text-base font-bold text-zinc-900 dark:text-white">Exam Schedule</h2>
+              <p id="finals-table-subtitle" class="text-xs font-medium text-zinc-400 mt-0.5"></p>
+            </div>
+            <!-- Table header -->
+            <div class="grid grid-cols-[1fr_120px_1fr] bg-shalhevet text-white text-[10px] font-black uppercase tracking-widest px-6 py-2.5">
+              <span>Date</span>
+              <span class="text-center">Time</span>
+              <span>Subject</span>
+            </div>
+            <!-- Table rows -->
+            <div id="finals-table-body" class="divide-y divide-zinc-100 dark:divide-zinc-800"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- RESOURCES PAGE -->
       <div id="page-resources" class="page-content hidden space-y-8">
         <div class="text-left space-y-3">
@@ -6053,7 +6105,7 @@
             <div class="px-6 py-3 text-sm font-bold text-zinc-800 dark:text-zinc-100 text-center">Benjy Koleib &nbsp;·&nbsp; App Creator &nbsp;·&nbsp; '26</div>
             <div class="px-6 py-3 text-sm font-bold text-zinc-800 dark:text-zinc-100 text-center">Emma Kotzen &nbsp;·&nbsp; Graphic Designer &nbsp;·&nbsp; '26</div>
             <div class="px-6 py-3 text-sm font-bold text-zinc-800 dark:text-zinc-100 text-center">Zev Geller &nbsp;·&nbsp; Manager &nbsp;·&nbsp; '26</div>
-            <div class="px-6 py-3 text-sm font-bold text-zinc-800 dark:text-zinc-100 text-center">Shiloh Klyman &nbsp;·&nbsp; App Developer &nbsp;·&nbsp; '27</div>
+
             <div class="px-6 py-3 text-sm font-bold text-zinc-800 dark:text-zinc-100 text-center">Adam Sandler &nbsp;·&nbsp; Manager & Developer &nbsp;·&nbsp; '27</div>
           </div>
         </div>
@@ -6162,6 +6214,107 @@
             </div>
             <div id="acal-admin-published-list" class="p-4 space-y-2">
               <p class="text-sm text-zinc-400 text-center py-4">Loading…</p>
+            </div>
+          </div>
+
+          <!-- Published Finals Schedules -->
+          <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+            <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+              <div>
+                <h2 class="text-base font-bold text-zinc-900 dark:text-white">Published Finals Schedules</h2>
+              </div>
+              <button onclick="openFinalsUpload()" class="h-9 px-4 bg-shalhevet hover:bg-red-700 text-white text-sm font-bold rounded-xl transition-all shadow-sm flex items-center gap-1.5">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                New Finals Schedule
+              </button>
+            </div>
+            <div id="finals-admin-list" class="p-4 space-y-2">
+              <p class="text-sm text-zinc-400 text-center py-4">Loading…</p>
+            </div>
+          </div>
+
+          <!-- Finals Upload Card -->
+          <div id="finals-upload-card" class="hidden bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
+            <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+              <h2 id="finals-upload-title" class="text-base font-bold text-zinc-900 dark:text-white">New Finals Schedule</h2>
+              <button onclick="closeFinalsUpload()" class="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+            <div class="p-6 space-y-5">
+              <!-- PDF Import -->
+              <div class="space-y-2">
+                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Import from PDF <span class="font-medium normal-case text-zinc-400">(auto-fills fields below)</span></label>
+                <div id="finals-upload-zone" class="admin-upload-zone p-6 text-center space-y-2"
+                  ondragover="event.preventDefault();this.classList.add('dragover')"
+                  ondragleave="this.classList.remove('dragover')"
+                  ondrop="event.preventDefault();this.classList.remove('dragover');setFinalsPDFFile(event.dataTransfer.files[0])">
+                  <svg class="w-7 h-7 text-zinc-300 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  <p class="text-sm font-bold text-zinc-500">Drop finals PDF here or <label for="finals-file-input" class="text-shalhevet cursor-pointer hover:underline">browse</label></p>
+                  <input id="finals-file-input" type="file" accept=".pdf" class="hidden" onchange="setFinalsPDFFile(this.files[0])" />
+                </div>
+                <div id="finals-file-preview" class="hidden items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700">
+                  <svg class="w-8 h-8 text-shalhevet shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  <div class="flex-1 min-w-0">
+                    <p id="finals-file-name" class="text-sm font-bold text-zinc-800 dark:text-zinc-100 truncate"></p>
+                    <p id="finals-file-size" class="text-xs text-zinc-400"></p>
+                  </div>
+                  <button onclick="clearFinalsPDF()" class="text-zinc-300 hover:text-red-500 transition-colors p-1 ml-auto">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                  </button>
+                </div>
+                <button id="finals-parse-btn" onclick="parseFinalsPDF()" disabled
+                  class="w-full h-11 bg-zinc-200 dark:bg-zinc-700 text-zinc-400 dark:text-zinc-500 text-sm font-bold rounded-xl transition-all cursor-not-allowed flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4" data-lucide="sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+                  Parse PDF
+                </button>
+              </div>
+              <hr class="border-zinc-100 dark:border-zinc-800" />
+              <input id="finals-edit-key" type="hidden" value="" />
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="space-y-1.5">
+                  <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Title</label>
+                  <input id="finals-title-input" type="text" placeholder="e.g. June &amp; Finals Schedule 2026"
+                    class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Year Key</label>
+                  <input id="finals-year-input" type="text" placeholder="e.g. 2026"
+                    class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Goes Live On</label>
+                  <input id="finals-golive-input" type="date"
+                    class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Takes Down On</label>
+                  <input id="finals-takedown-input" type="date"
+                    class="w-full h-11 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                </div>
+              </div>
+              <!-- Notes -->
+              <div class="space-y-1.5">
+                <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Reminders / Notes <span class="font-medium normal-case text-zinc-400">(one per line)</span></label>
+                <textarea id="finals-notes-input" rows="4" placeholder="e.g. Students must be in dress code&#10;Davening at 8:00 am before morning finals"
+                  class="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm font-medium outline-none focus:ring-2 focus:ring-shalhevet resize-none"></textarea>
+              </div>
+              <!-- Days builder -->
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <label class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Exam Days</label>
+                  <button onclick="addFinalsDayRow()" class="text-xs font-bold text-shalhevet hover:text-red-700 transition-colors flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                    Add Day
+                  </button>
+                </div>
+                <div id="finals-days-builder" class="space-y-3"></div>
+              </div>
+              <!-- Publish button -->
+              <button onclick="publishFinalsSchedule()" class="w-full h-12 bg-shalhevet hover:bg-red-700 text-white text-sm font-bold rounded-xl transition-all shadow-sm flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-3-9-9-3 19-8z"/></svg>
+                Publish Finals Schedule
+              </button>
             </div>
           </div>
 
@@ -6504,6 +6657,7 @@
                     }
                     renderAll();
                     loadPublishedSpecialSchedules();
+                    if (window.loadAndRenderFinals) window.loadAndRenderFinals();
                 }
 
                 async function saveToFirestore(uid) {
@@ -6608,6 +6762,36 @@
                     const { deleteDoc, doc: d2 } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
                     await window.ensureSharedSetAuth?.();
                     await deleteDoc(d2(db, 'academicCalendar', key));
+                };
+
+                // ── Finals Schedules Firestore ────────────────────────────────────────
+                window.saveFinalsSchedule = async function(key, data) {
+                    const { setDoc, doc: d2 } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+                    await window.ensureSharedSetAuth?.();
+                    await setDoc(d2(db, 'finalsSchedules', key), { ...data, updatedAt: Date.now() });
+                };
+
+                window.loadAllFinalsSchedules = async function() {
+                    try {
+                        const { getDocs, collection } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+                        const snap = await getDocs(collection(db, 'finalsSchedules'));
+                        const items = [];
+                        snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+                        return items;
+                    } catch(e) { console.warn('finals load failed', e); return []; }
+                };
+
+                window.deleteFinalsSchedule = async function(key) {
+                    const { deleteDoc, doc: d2 } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+                    await window.ensureSharedSetAuth?.();
+                    await deleteDoc(d2(db, 'finalsSchedules', key));
+                };
+
+                window.loadAndRenderFinals = async function() {
+                    const items = await window.loadAllFinalsSchedules();
+                    items.sort((a,b) => (b.year||b.id||'').localeCompare(a.year||a.id||''));
+                    renderFinalsSchedule(items[0] || null);
+                    return items;
                 };
                 // ─────────────────────────────────────────────────────────────────────
 
@@ -12209,6 +12393,7 @@
                                 if (window.loadPublishedSpecialSchedules) window.loadPublishedSpecialSchedules();
                                 else renderAdminPublishedList([]);
                                 if (window.initAcalAdmin) window.initAcalAdmin();
+                                loadFinalsAdminList();
                             } else {
                                 err.classList.remove('hidden');
                                 input.value = '';
@@ -12614,6 +12799,359 @@
                             showAdminToast('Calendar removed.');
                             loadAcalAdminList();
                         };
+
+                        // ── Finals Admin Functions ────────────────────────────────────────────
+                        var _finalsPDFFile = null;
+
+                        window.setFinalsPDFFile = function(file) {
+                            if (!file || !file.name.toLowerCase().endsWith('.pdf')) { alert('Please select a PDF file.'); return; }
+                            _finalsPDFFile = file;
+                            document.getElementById('finals-file-name').textContent = file.name;
+                            document.getElementById('finals-file-size').textContent = (file.size / 1024).toFixed(0) + ' KB';
+                            document.getElementById('finals-file-preview').classList.remove('hidden');
+                            document.getElementById('finals-file-preview').style.display = 'flex';
+                            document.getElementById('finals-upload-zone').classList.add('hidden');
+                            const btn = document.getElementById('finals-parse-btn');
+                            btn.disabled = false;
+                            btn.className = 'w-full h-11 bg-shalhevet hover:bg-red-700 text-white text-sm font-bold rounded-xl transition-all shadow-sm flex items-center justify-center gap-2';
+                        };
+
+                        window.clearFinalsPDF = function() {
+                            _finalsPDFFile = null;
+                            document.getElementById('finals-file-preview').classList.add('hidden');
+                            document.getElementById('finals-file-preview').style.display = '';
+                            document.getElementById('finals-upload-zone').classList.remove('hidden');
+                            document.getElementById('finals-file-input').value = '';
+                            const btn = document.getElementById('finals-parse-btn');
+                            btn.disabled = true;
+                            btn.className = 'w-full h-11 bg-zinc-200 dark:bg-zinc-700 text-zinc-400 dark:text-zinc-500 text-sm font-bold rounded-xl transition-all cursor-not-allowed flex items-center justify-center gap-2';
+                        };
+
+                        window.parseFinalsPDF = async function() {
+                            if (!_finalsPDFFile) { alert('Please select a PDF first.'); return; }
+                            const btn = document.getElementById('finals-parse-btn');
+                            const origHTML = btn.innerHTML;
+                            btn.disabled = true;
+                            btn.innerHTML = '<svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Parsing PDF…';
+                            try {
+                                await loadPdfJs();
+                                const buf = await _finalsPDFFile.arrayBuffer();
+                                const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+                                const allItems = [];
+                                for (let p = 1; p <= pdf.numPages; p++) {
+                                    const page = await pdf.getPage(p);
+                                    const tc = await page.getTextContent();
+                                    const vp = page.getViewport({ scale: 1 });
+                                    tc.items.forEach(item => {
+                                        const str = item.str.trim();
+                                        if (!str) return;
+                                        allItems.push({ str, x: Math.round(item.transform[4]), y: Math.round(vp.height - item.transform[5]), page: p });
+                                    });
+                                }
+                                // Group into lines by y-position (±8pt tolerance)
+                                allItems.sort((a, b) => a.y - b.y || a.x - b.x);
+                                const lines = [];
+                                allItems.forEach(item => {
+                                    const line = lines.find(l => Math.abs(l.y - item.y) < 8);
+                                    if (line) line.items.push(item);
+                                    else lines.push({ y: item.y, items: [item] });
+                                });
+
+                                // ── Extract title ──────────────────────────────────────────────────────
+                                // Title is typically the first line containing "FINALS" or "SCHEDULE"
+                                let titleStr = '';
+                                let yearStr = '';
+                                for (const line of lines) {
+                                    const text = line.items.map(i => i.str).join(' ').trim();
+                                    if (/finals|schedule/i.test(text) && !titleStr) {
+                                        titleStr = text;
+                                        const yearMatch = text.match(/\b(20\d{2})\b/);
+                                        if (yearMatch) yearStr = yearMatch[1];
+                                        break;
+                                    }
+                                }
+
+                                // ── Extract notes (★ and ○ bullets) ───────────────────────────────────
+                                const notes = [];
+                                let inBullet = false;
+                                let currentNote = '';
+                                for (const line of lines) {
+                                    const texts = line.items.sort((a,b) => a.x - b.x).map(i => i.str.trim()).filter(Boolean);
+                                    const full = texts.join(' ').trim();
+                                    if (!full) continue;
+                                    if (/^[★✦•◆]/.test(full) || full.startsWith('★')) {
+                                        if (currentNote) notes.push(currentNote.trim());
+                                        currentNote = full.replace(/^[★✦•◆\s]+/, '').trim();
+                                        inBullet = true;
+                                    } else if (/^[○◦–\-]/.test(full) || (inBullet && line.items[0]?.x > 60)) {
+                                        // sub-bullet — append as separate note
+                                        const sub = full.replace(/^[○◦–\-\s]+/, '').trim();
+                                        if (sub && !/^(date|time|subject)$/i.test(sub)) notes.push(sub);
+                                    } else if (/^(date|time|subject|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i.test(full)) {
+                                        if (currentNote) { notes.push(currentNote.trim()); currentNote = ''; inBullet = false; }
+                                        break; // reached the table
+                                    }
+                                }
+                                if (currentNote) notes.push(currentNote.trim());
+                                const cleanNotes = notes.filter(n => n.length > 3 && !/^(date|time|subject)$/i.test(n));
+
+                                // ── Find table: header row with DATE TIME SUBJECT ─────────────────────
+                                let hdrLineIdx = -1;
+                                let colDate = -1, colTime = -1, colSubject = -1;
+                                lines.forEach((line, li) => {
+                                    if (hdrLineIdx !== -1) return;
+                                    const strs = line.items.map(i => i.str.trim().toUpperCase());
+                                    if (strs.includes('DATE') && strs.includes('TIME') && strs.includes('SUBJECT')) {
+                                        hdrLineIdx = li;
+                                        line.items.forEach(item => {
+                                            const t = item.str.trim().toUpperCase();
+                                            if (t === 'DATE') colDate = item.x;
+                                            else if (t === 'TIME') colTime = item.x;
+                                            else if (t === 'SUBJECT') colSubject = item.x;
+                                        });
+                                    }
+                                });
+
+                                // ── Parse table rows ───────────────────────────────────────────────────
+                                const days = [];
+                                if (hdrLineIdx !== -1 && colTime !== -1 && colSubject !== -1) {
+                                    const timeRe = /^\d{1,2}:\d{2}\s*(am|pm)?$/i;
+                                    let currentDay = null;
+                                    for (let li = hdrLineIdx + 1; li < lines.length; li++) {
+                                        const line = lines[li];
+                                        const sorted = line.items.sort((a, b) => a.x - b.x);
+                                        // Assign each token to closest column
+                                        let dateVal = '', timeVal = '', subjectVal = '';
+                                        sorted.forEach(item => {
+                                            const s = item.str.trim();
+                                            if (!s) return;
+                                            const dDist = colDate >= 0 ? Math.abs(item.x - colDate) : Infinity;
+                                            const tDist = Math.abs(item.x - colTime);
+                                            const sDist = Math.abs(item.x - colSubject);
+                                            if (dDist < tDist && dDist < sDist) dateVal += (dateVal ? ' ' : '') + s;
+                                            else if (tDist <= sDist) timeVal += (timeVal ? ' ' : '') + s;
+                                            else subjectVal += (subjectVal ? ' ' : '') + s;
+                                        });
+                                        dateVal = dateVal.trim(); timeVal = timeVal.trim(); subjectVal = subjectVal.trim();
+                                        if (!timeVal && !subjectVal && !dateVal) continue;
+                                        // Skip header-like rows
+                                        if (/^(date|time|subject)$/i.test(dateVal) || /^(date|time|subject)$/i.test(timeVal)) continue;
+                                        // Continuation line: no date, no time — append subject text to previous slot (e.g. wrapped "Halacha / Israel\nEducation")
+                                        if (!dateVal && !timeVal && subjectVal && currentDay && currentDay.slots.length > 0) {
+                                            currentDay.slots[currentDay.slots.length - 1].subject += ' ' + subjectVal;
+                                            continue;
+                                        }
+                                        // If dateVal looks like a real date label, start a new day
+                                        if (dateVal && !/^\d{1,2}:\d{2}/i.test(dateVal)) {
+                                            currentDay = { dateLabel: dateVal, slots: [] };
+                                            days.push(currentDay);
+                                        }
+                                        if ((timeVal || subjectVal) && currentDay) {
+                                            currentDay.slots.push({ time: timeVal, subject: subjectVal });
+                                        } else if ((timeVal || subjectVal) && !currentDay) {
+                                            // orphan slot — create unnamed day
+                                            currentDay = { dateLabel: '', slots: [{ time: timeVal, subject: subjectVal }] };
+                                            days.push(currentDay);
+                                        }
+                                    }
+                                }
+
+                                // ── Populate form ──────────────────────────────────────────────────────
+                                if (titleStr) document.getElementById('finals-title-input').value = titleStr;
+                                if (yearStr) document.getElementById('finals-year-input').value = yearStr;
+                                if (cleanNotes.length) document.getElementById('finals-notes-input').value = cleanNotes.join('\n');
+
+                                // Rebuild days builder
+                                const builder = document.getElementById('finals-days-builder');
+                                builder.innerHTML = '';
+                                if (days.length) {
+                                    days.forEach(day => {
+                                        addFinalsDayRow();
+                                        const dayEl = builder.lastElementChild;
+                                        dayEl.querySelector('.finals-day-label').value = day.dateLabel || '';
+                                        const slotsDiv = dayEl.querySelector('.finals-slots');
+                                        slotsDiv.innerHTML = '';
+                                        day.slots.forEach(slot => {
+                                            const row = document.createElement('div');
+                                            row.className = 'grid grid-cols-[110px_1fr_auto] gap-2 items-center';
+                                            row.innerHTML = `
+                                                <input type="text" value="${escHtml(slot.time||'')}" class="finals-slot-time h-9 bg-white dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                                                <input type="text" value="${escHtml(slot.subject||'')}" class="finals-slot-subject h-9 bg-white dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                                                <button onclick="this.closest('.grid').remove()" class="text-zinc-300 hover:text-red-500 transition-colors p-1"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>`;
+                                            slotsDiv.appendChild(row);
+                                        });
+                                    });
+                                } else {
+                                    addFinalsDayRow(); // at least one blank day if nothing parsed
+                                }
+
+                                showAdminToast(days.length ? `Parsed ${days.length} exam days — review and publish.` : 'Could not detect exam table — fill in manually.');
+                                btn.innerHTML = origHTML;
+                                btn.disabled = false;
+                            } catch(e) {
+                                console.error('Finals PDF parse error:', e);
+                                alert('Parse failed: ' + e.message);
+                                btn.innerHTML = origHTML;
+                                btn.disabled = false;
+                            }
+                        };
+
+                        window.openFinalsUpload = function() {
+                            document.getElementById('finals-edit-key').value = '';
+                            document.getElementById('finals-title-input').value = '';
+                            document.getElementById('finals-year-input').value = '';
+                            document.getElementById('finals-golive-input').value = '';
+                            document.getElementById('finals-takedown-input').value = '';
+                            document.getElementById('finals-notes-input').value = '';
+                            document.getElementById('finals-days-builder').innerHTML = '';
+                            document.getElementById('finals-upload-title').textContent = 'New Finals Schedule';
+                            addFinalsDayRow();
+                            const card = document.getElementById('finals-upload-card');
+                            card.classList.remove('hidden');
+                            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        };
+
+                        window.closeFinalsUpload = function() {
+                            document.getElementById('finals-upload-card').classList.add('hidden');
+                        };
+
+                        window.addFinalsDayRow = function() {
+                            const builder = document.getElementById('finals-days-builder');
+                            const div = document.createElement('div');
+                            div.className = 'finals-day-row bg-zinc-50 dark:bg-zinc-800 rounded-2xl p-4 space-y-3';
+                            div.innerHTML = `
+                                <div class="flex items-center justify-between">
+                                    <input type="text" placeholder="Date label (e.g. Monday, 06.08.26)" class="finals-day-label flex-1 h-9 bg-white dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                                    <button onclick="this.closest('.finals-day-row').remove()" class="ml-2 text-zinc-300 hover:text-red-500 transition-colors p-1"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                                </div>
+                                <div class="finals-slots space-y-2">
+                                    <div class="grid grid-cols-[110px_1fr_auto] gap-2 items-center">
+                                        <input type="text" placeholder="9:00 am" class="finals-slot-time h-9 bg-white dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                                        <input type="text" placeholder="Subject" class="finals-slot-subject h-9 bg-white dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                                        <button onclick="this.closest('.grid').remove()" class="text-zinc-300 hover:text-red-500 transition-colors p-1"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                                    </div>
+                                </div>
+                                <button onclick="addFinalsSlotRow(this)" class="text-xs font-bold text-zinc-400 hover:text-zinc-600 transition-colors flex items-center gap-1">
+                                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                    Add slot
+                                </button>
+                            `;
+                            builder.appendChild(div);
+                        };
+
+                        window.addFinalsSlotRow = function(btn) {
+                            const slotsDiv = btn.closest('.finals-day-row').querySelector('.finals-slots');
+                            const row = document.createElement('div');
+                            row.className = 'grid grid-cols-[110px_1fr_auto] gap-2 items-center';
+                            row.innerHTML = `
+                                <input type="text" placeholder="1:00 pm" class="finals-slot-time h-9 bg-white dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                                <input type="text" placeholder="Subject" class="finals-slot-subject h-9 bg-white dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                                <button onclick="this.closest('.grid').remove()" class="text-zinc-300 hover:text-red-500 transition-colors p-1"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                            `;
+                            slotsDiv.appendChild(row);
+                        };
+
+                        window.publishFinalsSchedule = async function() {
+                            const title = document.getElementById('finals-title-input').value.trim();
+                            const year = document.getElementById('finals-year-input').value.trim();
+                            const goLiveDate = document.getElementById('finals-golive-input').value;
+                            const takeDownDate = document.getElementById('finals-takedown-input').value;
+                            const notesRaw = document.getElementById('finals-notes-input').value;
+                            if (!year) { alert('Please enter a year key (e.g. 2026).'); return; }
+                            const notes = notesRaw.split('\n').map(s => s.trim()).filter(Boolean);
+                            const days = [];
+                            document.querySelectorAll('#finals-days-builder .finals-day-row').forEach(dayEl => {
+                                const dateLabel = dayEl.querySelector('.finals-day-label')?.value.trim() || '';
+                                const slots = [];
+                                dayEl.querySelectorAll('.finals-slots .grid').forEach(slotEl => {
+                                    const time = slotEl.querySelector('.finals-slot-time')?.value.trim() || '';
+                                    const subject = slotEl.querySelector('.finals-slot-subject')?.value.trim() || '';
+                                    if (time || subject) slots.push({ time, subject });
+                                });
+                                if (dateLabel || slots.length) days.push({ dateLabel, slots });
+                            });
+                            if (!days.length) { alert('Please add at least one exam day.'); return; }
+                            const editKey = document.getElementById('finals-edit-key').value;
+                            const key = editKey || year;
+                            const payload = { title: title || `Finals Schedule ${year}`, year, goLiveDate, takeDownDate, notes, days, publishedAt: Date.now() };
+                            try {
+                                if (!window.saveFinalsSchedule) throw new Error('Firestore not ready');
+                                await window.saveFinalsSchedule(key, payload);
+                                showAdminToast('Finals schedule published for ' + year);
+                                closeFinalsUpload();
+                                loadFinalsAdminList();
+                                if (window.loadAndRenderFinals) window.loadAndRenderFinals();
+                            } catch(e) { alert('Publish failed: ' + e.message); }
+                        };
+
+                        async function loadFinalsAdminList() {
+                            const container = document.getElementById('finals-admin-list');
+                            if (!container) return;
+                            if (!window.loadAllFinalsSchedules) {
+                                container.innerHTML = '<p class="text-sm text-zinc-400 text-center py-4">Firestore not ready.</p>'; return;
+                            }
+                            const items = await window.loadAllFinalsSchedules();
+                            if (!items.length) {
+                                container.innerHTML = '<p class="text-sm text-zinc-400 text-center py-4">No finals schedules published yet.</p>'; return;
+                            }
+                            container.innerHTML = items.map(s => `
+                                <div class="flex items-center justify-between gap-3 p-3 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+                                  <div>
+                                    <p class="text-sm font-bold text-zinc-800 dark:text-zinc-100">${escHtml(s.title || s.year || s.id)}</p>
+                                    <p class="text-xs text-zinc-400">Year: ${s.year || s.id} &nbsp;·&nbsp; ${(s.days||[]).length} days &nbsp;·&nbsp; Goes live: ${s.goLiveDate || '—'} &nbsp;·&nbsp; Published ${s.publishedAt ? new Date(s.publishedAt).toLocaleDateString() : '—'}</p>
+                                  </div>
+                                  <div class="flex items-center gap-2">
+                                    <button onclick="editFinalsSchedule('${escHtml(s.id)}')" class="text-xs font-bold text-blue-500 hover:text-blue-700 transition-colors px-2 py-1 rounded-lg border border-blue-100 dark:border-blue-900/30 hover:bg-blue-50 dark:hover:bg-blue-950/20">Edit</button>
+                                    <button onclick="confirmDeleteFinals('${escHtml(s.id)}')" class="text-xs font-bold text-red-400 hover:text-red-600 transition-colors px-2 py-1 rounded-lg border border-red-100 dark:border-red-900/30 hover:bg-red-50 dark:hover:bg-red-950/20">Remove</button>
+                                  </div>
+                                </div>
+                            `).join('');
+                        }
+
+                        window.editFinalsSchedule = async function(key) {
+                            const items = await window.loadAllFinalsSchedules();
+                            const s = items.find(x => x.id === key);
+                            if (!s) return;
+                            document.getElementById('finals-edit-key').value = key;
+                            document.getElementById('finals-title-input').value = s.title || '';
+                            document.getElementById('finals-year-input').value = s.year || key;
+                            document.getElementById('finals-golive-input').value = s.goLiveDate || '';
+                            document.getElementById('finals-takedown-input').value = s.takeDownDate || '';
+                            document.getElementById('finals-notes-input').value = (s.notes || []).join('\n');
+                            document.getElementById('finals-upload-title').textContent = 'Edit Finals Schedule';
+                            const builder = document.getElementById('finals-days-builder');
+                            builder.innerHTML = '';
+                            (s.days || []).forEach(day => {
+                                addFinalsDayRow();
+                                const dayEl = builder.lastElementChild;
+                                dayEl.querySelector('.finals-day-label').value = day.dateLabel || '';
+                                const slotsDiv = dayEl.querySelector('.finals-slots');
+                                slotsDiv.innerHTML = '';
+                                (day.slots || []).forEach((slot) => {
+                                    const row = document.createElement('div');
+                                    row.className = 'grid grid-cols-[110px_1fr_auto] gap-2 items-center';
+                                    row.innerHTML = `
+                                        <input type="text" value="${escHtml(slot.time||'')}" class="finals-slot-time h-9 bg-white dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                                        <input type="text" value="${escHtml(slot.subject||'')}" class="finals-slot-subject h-9 bg-white dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-shalhevet" />
+                                        <button onclick="this.closest('.grid').remove()" class="text-zinc-300 hover:text-red-500 transition-colors p-1"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                                    `;
+                                    slotsDiv.appendChild(row);
+                                });
+                            });
+                            document.getElementById('finals-upload-card').classList.remove('hidden');
+                            document.getElementById('finals-upload-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        };
+
+                        window.confirmDeleteFinals = async function(key) {
+                            if (!confirm('Remove this finals schedule?')) return;
+                            try {
+                                await window.deleteFinalsSchedule(key);
+                                showAdminToast('Finals schedule removed.');
+                                loadFinalsAdminList();
+                                if (window.loadAndRenderFinals) window.loadAndRenderFinals();
+                            } catch(e) { alert('Delete failed: ' + e.message); }
+                        };
+                        // ─────────────────────────────────────────────────────────────────────
 
                         // ── Upload card ───────────────────────────────────────────────────────
                         window.openAcalUpload = function() {
@@ -13227,6 +13765,85 @@
                         }
                         // ─────────────────────────────────────────────────────────────────────
 
+                        function renderFinalsSchedule(data) {
+                            const isEmpty = document.getElementById('finals-empty');
+                            const content = document.getElementById('finals-content');
+                            const notesCard = document.getElementById('finals-notes-card');
+                            const notesList = document.getElementById('finals-notes-list');
+                            const tableTitle = document.getElementById('finals-table-title');
+                            const tableSubtitle = document.getElementById('finals-table-subtitle');
+                            const tableBody = document.getElementById('finals-table-body');
+                            const pageSubtitle = document.getElementById('finals-page-subtitle');
+                            const emptyIcon = isEmpty?.querySelector('svg') || null;
+                            const emptyH3 = isEmpty?.querySelector('h3');
+                            const emptyP = isEmpty?.querySelector('p');
+
+                            const today = new Date().toISOString().slice(0, 10);
+
+                            // No data at all
+                            if (!data || !data.days || !data.days.length) {
+                                if (isEmpty) {
+                                    isEmpty.classList.remove('hidden');
+                                    if (emptyH3) emptyH3.textContent = 'No finals coming up. Carry on.';
+                                    if (emptyP) emptyP.textContent = 'Enjoy it while it lasts. Check back closer to finals week.';
+                                }
+                                if (content) content.classList.add('hidden');
+                                return;
+                            }
+
+                            const goLive = data.goLiveDate || '';
+                            const takeDown = data.takeDownDate || '';
+
+                            // Before go-live window — "come back for finals"
+                            if (goLive && today < goLive) {
+                                if (isEmpty) {
+                                    isEmpty.classList.remove('hidden');
+                                    if (emptyH3) emptyH3.textContent = 'Finals schedule coming soon';
+                                    const liveDate = new Date(goLive + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+                                    if (emptyP) emptyP.textContent = `Check back on ${liveDate} when the schedule goes live.`;
+                                }
+                                if (content) content.classList.add('hidden');
+                                return;
+                            }
+
+                            // After take-down — "finals have concluded"
+                            if (takeDown && today > takeDown) {
+                                if (isEmpty) {
+                                    isEmpty.classList.remove('hidden');
+                                    if (emptyH3) emptyH3.textContent = 'Finals have concluded.';
+                                    if (emptyP) emptyP.textContent = 'Have a great summer and see you next year!';
+                                }
+                                if (content) content.classList.add('hidden');
+                                return;
+                            }
+
+                            // In window — show schedule
+                            if (isEmpty) isEmpty.classList.add('hidden');
+                            if (content) content.classList.remove('hidden');
+                            if (pageSubtitle) pageSubtitle.textContent = data.title || 'All of your exam dates, times, and subjects for finals week.';
+                            if (tableTitle) tableTitle.textContent = data.title || 'Exam Schedule';
+                            if (tableSubtitle) tableSubtitle.textContent = data.year ? `${data.year} Finals` : '';
+
+                            if (notesList && data.notes && data.notes.length) {
+                                notesCard?.classList.remove('hidden');
+                                notesList.innerHTML = data.notes.map(n => `<li class="flex gap-2"><span class="text-amber-500 shrink-0 mt-0.5">★</span><span>${escHtml(n)}</span></li>`).join('');
+                            } else {
+                                notesCard?.classList.add('hidden');
+                            }
+
+                            if (tableBody) {
+                                tableBody.innerHTML = data.days.map((day, di) => {
+                                    const bg = di % 2 === 0 ? '' : 'bg-zinc-50/60 dark:bg-zinc-800/30';
+                                    return (day.slots || []).map((slot, si) => `
+                                        <div class="grid grid-cols-[1fr_120px_1fr] px-6 py-3 items-center gap-2 ${bg}">
+                                            <span class="text-xs font-bold text-zinc-800 dark:text-zinc-100">${si === 0 ? escHtml(day.dateLabel || '') : ''}</span>
+                                            <span class="text-xs font-bold text-shalhevet text-center">${escHtml(slot.time || '')}</span>
+                                            <span class="text-xs font-bold text-zinc-700 dark:text-zinc-200">${escHtml(slot.subject || '')}</span>
+                                        </div>`).join('');
+                                }).join('');
+                            }
+                        }
+
                         document.addEventListener('DOMContentLoaded', function() {
                             const courseCatalog = document.getElementById('course-catalog');
                             SHALHEVET_COURSES.sort().forEach(item => { const opt = document.createElement('option'); opt.value = item; courseCatalog.appendChild(opt); });
@@ -13245,6 +13862,7 @@
                             maybeShowDailyReminders();
                             // Load published special schedules for guest/pre-auth view
                             if (window.loadPublishedSpecialSchedules) window.loadPublishedSpecialSchedules();
+                            if (window.loadAndRenderFinals) window.loadAndRenderFinals();
                         });
 
                         function exportCoCurrPDF() {
