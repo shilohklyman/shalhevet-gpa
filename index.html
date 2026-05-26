@@ -4329,11 +4329,11 @@
       </div>
 
       <!-- FINALS PAGE -->
-      <div id="page-finals" class="page-content hidden space-y-8">
+      <div id="page-finals" class="page-content hidden space-y-4">
         <!-- Header -->
         <div class="space-y-1">
           <h1 class="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">Finals <span class="text-shalhevet">Schedule</span></h1>
-          <p id="finals-page-subtitle" class="text-zinc-500 dark:text-zinc-400 text-sm font-medium leading-relaxed">All of your exam dates, times, and subjects for finals week.</p>
+          <p id="finals-page-subtitle" class="text-zinc-500 dark:text-zinc-400 text-sm font-medium leading-relaxed">Every exam date and time, along with everything you need for finals week.</p>
         </div>
 
         <!-- No data state -->
@@ -4346,31 +4346,36 @@
         </div>
 
         <!-- Schedule content (shown when data exists) -->
-        <div id="finals-content" class="hidden space-y-6">
-          <!-- Notes / Reminders card -->
-          <div id="finals-notes-card" class="hidden bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 rounded-[20px] p-5 space-y-2">
-            <div class="flex items-center gap-2 mb-1">
-              <svg class="w-4 h-4 text-amber-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              <span class="text-xs font-black text-amber-700 dark:text-amber-400 uppercase tracking-wider">Important Reminders</span>
+        <div id="finals-content" class="hidden space-y-4">
+
+          <!-- Notes card -->
+          <div id="finals-notes-card" class="hidden bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 rounded-[20px] p-5 space-y-3">
+            <div class="flex items-center gap-2.5">
+              <span class="text-xs font-black text-amber-700 dark:text-amber-400 uppercase tracking-wider">What to Know</span>
             </div>
             <ul id="finals-notes-list" class="space-y-1.5 text-sm font-medium text-amber-900 dark:text-amber-200 list-none pl-0"></ul>
           </div>
 
-          <!-- Exam table -->
+          <!-- Exam schedule — day-by-day cards -->
           <div class="bg-white dark:bg-zinc-900 rounded-[24px] border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
-            <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
-              <h2 id="finals-table-title" class="text-base font-bold text-zinc-900 dark:text-white">Exam Schedule</h2>
-              <p id="finals-table-subtitle" class="text-xs font-medium text-zinc-400 mt-0.5"></p>
+            <div class="px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+              <div>
+                <h2 id="finals-table-title" class="text-base font-bold text-zinc-900 dark:text-white">Exam Schedule</h2>
+                <p id="finals-table-subtitle" class="text-xs font-medium text-zinc-400 mt-0.5"></p>
+              </div>
             </div>
-            <!-- Table header -->
-            <div class="grid grid-cols-[1fr_120px_1fr] bg-shalhevet text-white text-[10px] font-black uppercase tracking-widest px-6 py-2.5">
-              <span>Date</span>
-              <span class="text-center">Time</span>
-              <span>Subject</span>
-            </div>
-            <!-- Table rows -->
-            <div id="finals-table-body" class="divide-y divide-zinc-100 dark:divide-zinc-800"></div>
+            <table class="w-full border-collapse">
+              <thead>
+                <tr class="bg-shalhevet text-white">
+                  <th class="px-6 py-2.5 text-left text-[10px] font-black uppercase tracking-widest">Date</th>
+                  <th class="px-5 py-2.5 text-left text-[10px] font-black uppercase tracking-widest w-28">Time</th>
+                  <th class="px-5 py-2.5 text-left text-[10px] font-black uppercase tracking-widest">Subject</th>
+                </tr>
+              </thead>
+              <tbody id="finals-table-body"></tbody>
+            </table>
           </div>
+
         </div>
       </div>
 
@@ -12879,17 +12884,25 @@
                                     const texts = line.items.sort((a,b) => a.x - b.x).map(i => i.str.trim()).filter(Boolean);
                                     const full = texts.join(' ').trim();
                                     if (!full) continue;
-                                    if (/^[★✦•◆]/.test(full) || full.startsWith('★')) {
+                                    // ① Table header check FIRST — must come before any bullet/indent logic
+                                    const uppers = texts.map(t => t.toUpperCase());
+                                    if (uppers.includes('DATE') && uppers.includes('TIME') && uppers.includes('SUBJECT')) {
+                                        if (currentNote) { notes.push(currentNote.trim()); currentNote = ''; }
+                                        break;
+                                    }
+                                    if (/^[★✦•◆]/.test(full)) {
+                                        // ② Star bullet — save previous, start new
                                         if (currentNote) notes.push(currentNote.trim());
                                         currentNote = full.replace(/^[★✦•◆\s]+/, '').trim();
                                         inBullet = true;
-                                    } else if (/^[○◦–\-]/.test(full) || (inBullet && line.items[0]?.x > 60)) {
-                                        // sub-bullet — append as separate note
-                                        const sub = full.replace(/^[○◦–\-\s]+/, '').trim();
-                                        if (sub && !/^(date|time|subject)$/i.test(sub)) notes.push(sub);
-                                    } else if (/^(date|time|subject|monday|tuesday|wednesday|thursday|friday|saturday|sunday)/i.test(full)) {
+                                    } else if (/^[○◦◯○⊙]/.test(full)) {
+                                        // ③ Explicit circle sub-bullet only — no x-position heuristic
                                         if (currentNote) { notes.push(currentNote.trim()); currentNote = ''; inBullet = false; }
-                                        break; // reached the table
+                                        const sub = full.replace(/^[○◦◯○⊙\s]+/, '').trim();
+                                        if (sub) notes.push('○ ' + sub);
+                                    } else if (inBullet) {
+                                        // ④ Continuation of current ★ bullet — append, don't create new note
+                                        currentNote += ' ' + full;
                                     }
                                 }
                                 if (currentNote) notes.push(currentNote.trim());
@@ -12912,47 +12925,61 @@
                                     }
                                 });
 
-                                // ── Parse table rows ───────────────────────────────────────────────────
+                                // ── Parse table rows (two-pass, y-proximity matching) ──────────────────
+                                // Google Docs PDFs export merged date cells whose y lands between the
+                                // two time-slot rows, so a forward pass can never correctly associate
+                                // slots with dates. Instead: collect all items by column, pair times
+                                // with nearby subjects, then assign each slot to the nearest date by y.
                                 const days = [];
                                 if (hdrLineIdx !== -1 && colTime !== -1 && colSubject !== -1) {
-                                    const timeRe = /^\d{1,2}:\d{2}\s*(am|pm)?$/i;
-                                    let currentDay = null;
+                                    const dateItems = [], timeItems = [], subjItems = [];
                                     for (let li = hdrLineIdx + 1; li < lines.length; li++) {
-                                        const line = lines[li];
-                                        const sorted = line.items.sort((a, b) => a.x - b.x);
-                                        // Assign each token to closest column
-                                        let dateVal = '', timeVal = '', subjectVal = '';
-                                        sorted.forEach(item => {
+                                        lines[li].items.forEach(item => {
                                             const s = item.str.trim();
-                                            if (!s) return;
+                                            if (!s || /^(date|time|subject)$/i.test(s)) return;
                                             const dDist = colDate >= 0 ? Math.abs(item.x - colDate) : Infinity;
                                             const tDist = Math.abs(item.x - colTime);
                                             const sDist = Math.abs(item.x - colSubject);
-                                            if (dDist < tDist && dDist < sDist) dateVal += (dateVal ? ' ' : '') + s;
-                                            else if (tDist <= sDist) timeVal += (timeVal ? ' ' : '') + s;
-                                            else subjectVal += (subjectVal ? ' ' : '') + s;
+                                            const rec = { str: s, y: lines[li].y };
+                                            if (dDist < tDist && dDist < sDist) dateItems.push(rec);
+                                            else if (tDist <= sDist) timeItems.push(rec);
+                                            else subjItems.push(rec);
                                         });
-                                        dateVal = dateVal.trim(); timeVal = timeVal.trim(); subjectVal = subjectVal.trim();
-                                        if (!timeVal && !subjectVal && !dateVal) continue;
-                                        // Skip header-like rows
-                                        if (/^(date|time|subject)$/i.test(dateVal) || /^(date|time|subject)$/i.test(timeVal)) continue;
-                                        // Continuation line: no date, no time — append subject text to previous slot (e.g. wrapped "Halacha / Israel\nEducation")
-                                        if (!dateVal && !timeVal && subjectVal && currentDay && currentDay.slots.length > 0) {
-                                            currentDay.slots[currentDay.slots.length - 1].subject += ' ' + subjectVal;
-                                            continue;
-                                        }
-                                        // If dateVal looks like a real date label, start a new day
-                                        if (dateVal && !/^\d{1,2}:\d{2}/i.test(dateVal)) {
-                                            currentDay = { dateLabel: dateVal, slots: [] };
-                                            days.push(currentDay);
-                                        }
-                                        if ((timeVal || subjectVal) && currentDay) {
-                                            currentDay.slots.push({ time: timeVal, subject: subjectVal });
-                                        } else if ((timeVal || subjectVal) && !currentDay) {
-                                            // orphan slot — create unnamed day
-                                            currentDay = { dateLabel: '', slots: [{ time: timeVal, subject: subjectVal }] };
-                                            days.push(currentDay);
-                                        }
+                                    }
+                                    // Build days from date column (non-time-looking labels only)
+                                    dateItems
+                                        .filter(i => !/^\d{1,2}:\d{2}/.test(i.str))
+                                        .sort((a, b) => a.y - b.y)
+                                        .forEach(d => days.push({ dateLabel: d.str, y: d.y, slots: [] }));
+
+                                    if (days.length) {
+                                        // Pair each time item with nearby subject items (within 15pt y)
+                                        const usedSubj = new Set();
+                                        const slots = timeItems.sort((a, b) => a.y - b.y).map(t => {
+                                            let subject = '';
+                                            subjItems.forEach((s, si) => {
+                                                if (!usedSubj.has(si) && Math.abs(s.y - t.y) <= 15) {
+                                                    subject += (subject ? ' ' : '') + s.str;
+                                                    usedSubj.add(si);
+                                                }
+                                            });
+                                            return { time: t.str, subject, y: t.y };
+                                        });
+                                        // Append unmatched subject items to the preceding slot (wrapped text)
+                                        subjItems.forEach((s, si) => {
+                                            if (usedSubj.has(si)) return;
+                                            let prev = null;
+                                            slots.forEach(sl => { if (sl.y <= s.y && (!prev || sl.y > prev.y)) prev = sl; });
+                                            if (prev) prev.subject += ' ' + s.str;
+                                        });
+                                        // Assign each slot to the nearest day by y-distance
+                                        slots.forEach(slot => {
+                                            let best = days[0], bestDist = Math.abs(days[0].y - slot.y);
+                                            days.forEach(d => { const dist = Math.abs(d.y - slot.y); if (dist < bestDist) { bestDist = dist; best = d; } });
+                                            best.slots.push(slot);
+                                        });
+                                        // Sort slots within each day by y
+                                        days.forEach(d => d.slots.sort((a, b) => a.y - b.y));
                                     }
                                 }
 
@@ -13820,26 +13847,55 @@
                             // In window — show schedule
                             if (isEmpty) isEmpty.classList.add('hidden');
                             if (content) content.classList.remove('hidden');
-                            if (pageSubtitle) pageSubtitle.textContent = data.title || 'All of your exam dates, times, and subjects for finals week.';
                             if (tableTitle) tableTitle.textContent = data.title || 'Exam Schedule';
                             if (tableSubtitle) tableSubtitle.textContent = data.year ? `${data.year} Finals` : '';
 
                             if (notesList && data.notes && data.notes.length) {
-                                notesCard?.classList.remove('hidden');
-                                notesList.innerHTML = data.notes.map(n => `<li class="flex gap-2"><span class="text-amber-500 shrink-0 mt-0.5">★</span><span>${escHtml(n)}</span></li>`).join('');
+                                // Filter out redundant "Important Reminders:" header (card label already says it)
+                                const visibleNotes = data.notes.filter(n => !/^important reminders:?$/i.test(n.trim()));
+                                if (visibleNotes.length) {
+                                    notesCard?.classList.remove('hidden');
+                                    notesList.innerHTML = visibleNotes.map(n => {
+                                        // Sub-bullet: stored as "○ text" or starts with any circle character
+                                        if (/^[○◦◯○⊙]\s?/.test(n)) {
+                                            const text = n.replace(/^[○◦◯○⊙]\s*/, '').trim();
+                                            return `<li class="flex gap-2 items-start ml-4"><span class="text-amber-400 shrink-0 leading-5 text-xs mt-0.5">○</span><span>${escHtml(text)}</span></li>`;
+                                        }
+                                        // Section header: ends with colon
+                                        if (n.endsWith(':')) {
+                                            return `<li class="pt-1 pb-0.5 text-xs font-black text-amber-600 dark:text-amber-400 uppercase tracking-wider">${escHtml(n.slice(0,-1))}</li>`;
+                                        }
+                                        // Regular bullet — circle
+                                        return `<li class="flex gap-2 items-start"><span class="text-amber-500 shrink-0 mt-0.5">○</span><span>${escHtml(n)}</span></li>`;
+                                    }).join('');
+                                } else {
+                                    notesCard?.classList.add('hidden');
+                                }
                             } else {
                                 notesCard?.classList.add('hidden');
                             }
 
                             if (tableBody) {
-                                tableBody.innerHTML = data.days.map((day, di) => {
-                                    const bg = di % 2 === 0 ? '' : 'bg-zinc-50/60 dark:bg-zinc-800/30';
-                                    return (day.slots || []).map((slot, si) => `
-                                        <div class="grid grid-cols-[1fr_120px_1fr] px-6 py-3 items-center gap-2 ${bg}">
-                                            <span class="text-xs font-bold text-zinc-800 dark:text-zinc-100">${si === 0 ? escHtml(day.dateLabel || '') : ''}</span>
-                                            <span class="text-xs font-bold text-shalhevet text-center">${escHtml(slot.time || '')}</span>
-                                            <span class="text-xs font-bold text-zinc-700 dark:text-zinc-200">${escHtml(slot.subject || '')}</span>
-                                        </div>`).join('');
+                                tableBody.innerHTML = (data.days || []).map((day, di) => {
+                                    const slots = day.slots || [];
+                                    if (!slots.length) return '';
+                                    const isLastDay = di === (data.days || []).length - 1;
+                                    const bg = di % 2 === 0 ? 'bg-red-50/50 dark:bg-red-950/10' : '';
+                                    const labelParts = (day.dateLabel || '').split(',');
+                                    const dayName = labelParts[0].trim();
+                                    const datePart = labelParts.slice(1).join(',').trim();
+                                    return slots.map((slot, si) => {
+                                        const isLastRow = isLastDay && si === slots.length - 1;
+                                        const borderB = isLastRow ? '' : ' border-b border-zinc-100 dark:border-zinc-800';
+                                        const dateCell = si === 0
+                                            ? `<td rowspan="${slots.length}" class="px-6 py-3 font-bold text-sm text-zinc-900 dark:text-white border-r border-zinc-100 dark:border-zinc-800 align-middle ${bg}">${escHtml(dayName)}${datePart ? `<br><span class="text-xs font-medium text-zinc-400">${escHtml(datePart)}</span>` : ''}</td>`
+                                            : '';
+                                        return `<tr class="${bg}${borderB}">
+                                            ${dateCell}
+                                            <td class="px-5 py-3 text-sm font-bold text-shalhevet border-r border-zinc-100 dark:border-zinc-800">${escHtml(slot.time || '')}</td>
+                                            <td class="px-5 py-3 text-sm font-bold text-zinc-800 dark:text-zinc-200">${escHtml(slot.subject || '')}</td>
+                                        </tr>`;
+                                    }).join('');
                                 }).join('');
                             }
                         }
